@@ -1,0 +1,537 @@
+id,lema,oracion,clase,stat,dyn,tel,pun,transitivo,pronominal,fuente,revisar
+1,saber,Juan sabe la respuesta.,State,1,0,0,0,1,0,simple,False
+2,creer,Juan cree la historia.,State,1,0,0,0,1,0,simple,False
+3,tener,Juan tiene un coche.,State,1,0,0,0,1,0,simple,False
+4,contener,La caja contiene agua.,State,1,0,0,0,1,0,simple,False
+5,pertenecer,Juan pertenece al club.,State,1,0,0,0,0,0,simple,False
+6,existir,El problema existe.,State,1,0,0,0,0,0,simple,False
+7,costar,El libro cuesta diez euros.,State,1,0,0,0,0,0,simple,False
+8,necesitar,Juan necesita ayuda.,State,1,0,0,0,1,0,simple,False
+9,depender,El resultado depende de Juan.,State,1,0,0,0,0,0,simple,False
+10,ignorar,Juan ignora la respuesta.,State,1,0,0,0,1,0,simple,False
+11,odiar,Juan odia el ruido.,State,1,0,0,0,1,0,simple,False
+12,amar,Juan ama a María.,State,1,0,0,0,1,0,simple,False
+13,recordar,Juan recuerda la fecha.,State,1,0,0,0,1,0,simple,False
+14,olvidar,Juan olvida las fechas.,State,1,0,0,0,1,0,simple,False
+15,correr,Juan corrió.,Activity,0,1,0,0,0,0,simple,False
+16,nadar,Juan nadó.,Activity,0,1,0,0,0,0,simple,False
+17,hablar,Juan habló.,Activity,0,1,0,0,0,0,simple,False
+18,caminar,Juan caminó.,Activity,0,1,0,0,0,0,simple,False
+19,respirar,Juan respiró.,Activity,0,1,0,0,0,0,simple,False
+20,trabajar,Juan trabajó.,Activity,0,1,0,0,0,0,simple,False
+21,estudiar,Juan estudió matemáticas.,Activity,0,1,0,0,1,0,simple,False
+22,jugar,Juan jugó.,Activity,0,1,0,0,0,0,simple,False
+23,escuchar,Juan escuchó música.,Activity,0,1,0,0,1,0,simple,False
+24,llorar,Juan lloró.,Activity,0,1,0,0,0,0,simple,False
+25,reír,Juan rió.,Activity,0,1,0,0,0,0,simple,False
+26,volar,El pájaro voló.,Activity,0,1,0,0,0,0,simple,False
+27,brillar,La estrella brilló.,Activity,0,1,0,0,0,0,simple,False
+28,fluir,El río fluyó.,Activity,0,1,0,0,0,0,simple,False
+29,dormir,Juan durmió.,Activity,0,1,0,0,0,0,simple,False
+30,mirar,Juan miró el paisaje.,Activity,0,1,0,0,1,0,simple,False
+31,buscar,Juan buscó trabajo.,Activity,0,1,0,0,1,0,simple,False
+32,desear,Juan desea un cambio.,State,1,0,0,0,1,0,simple,False
+33,preferir,Juan prefiere el café.,State,1,0,0,0,1,0,simple,False
+34,suponer,Juan supone lo peor.,State,1,0,0,0,1,0,simple,False
+35,entender,Juan entiende la lección.,State,1,0,0,0,1,0,simple,False
+36,comprender,Juan comprende el problema.,State,1,0,0,0,1,0,simple,False
+37,dudar,Juan duda de todo.,State,1,0,0,0,0,0,simple,False
+38,temer,Juan teme la oscuridad.,State,1,0,0,0,1,0,simple,False
+39,respetar,Juan respeta las normas.,State,1,0,0,0,1,0,simple,False
+40,admirar,Juan admira a su maestro.,State,1,0,0,0,1,0,simple,False
+41,envidiar,Juan envidia a su hermano.,State,1,0,0,0,1,0,simple,False
+42,merecer,Juan merece un premio.,State,1,0,0,0,1,0,simple,False
+43,valer,El anillo vale mucho.,State,1,0,0,0,0,0,simple,False
+44,bastar,El dinero basta.,State,1,0,0,0,0,0,simple,False
+45,sobrar,La comida sobra.,State,1,0,0,0,0,0,simple,False
+46,bailar,Juan bailó.,Activity,0,1,0,0,0,0,simple,False
+47,cantar,Juan cantó canciones.,Activity,0,1,0,0,1,0,simple,False
+48,leer,Juan leyó novelas.,Activity,0,1,0,0,1,0,simple,False
+49,escribir,Juan escribió cartas.,Activity,0,1,0,0,1,0,simple,False
+50,escribir,Juan escribió la novela.,Accomplishment,0,0,1,0,1,0,simple,False
+51,pedalear,Juan pedaleó.,Activity,0,1,0,0,0,0,simple,False
+52,rodar,La pelota rodó.,Activity,0,1,0,0,0,0,simple,False
+53,temblar,El suelo tembló.,Activity,0,1,0,0,0,0,simple,False
+54,vibrar,El teléfono vibró.,Activity,0,1,0,0,0,0,simple,False
+55,ronronear,El gato ronroneó.,Activity,0,1,0,0,0,0,simple,False
+56,rugir,El león rugió.,Activity,0,1,0,0,0,0,simple,False
+57,susurrar,Juan susurró secretos.,Activity,0,1,0,0,1,0,simple,False
+58,gotear,El grifo goteó.,Activity,0,1,0,0,0,0,simple,False
+59,escalar,Juan escaló montañas.,Activity,0,1,0,0,1,0,simple,False
+60,navegar,Juan navegó.,Activity,0,1,0,0,0,0,simple,False
+61,vagar,Juan vagó.,Activity,0,1,0,0,0,0,simple,False
+62,merodear,Juan merodeó.,Activity,0,1,0,0,0,0,simple,False
+63,llegar,Juan llegó.,Achievement,0,0,1,1,1,1,simple,False
+64,morir,El abuelo se murió.,Achievement,0,0,1,1,0,1,simple,False
+65,nacer,El bebé nació.,Achievement,0,0,1,1,0,0,simple,False
+66,encontrar,Juan se encontró una moneda.,Achievement,0,0,1,1,1,1,simple,False
+67,perder,Juan se perdió.,Achievement,0,0,1,1,1,1,simple,False
+68,ganar,Juan ganó el premio.,Achievement,0,0,1,1,1,0,simple,False
+69,romper,El vaso se rompió.,Achievement,0,0,1,1,1,1,simple,False
+70,reconocer,Juan reconoció el error.,Achievement,0,0,1,1,0,0,simple,False
+71,descubrir,Juan descubrió el secreto.,Achievement,0,0,1,1,1,0,simple,False
+72,despertar,Juan se despertó.,Achievement,0,0,1,1,0,1,simple,False
+73,caer,Juan se cayó.,Achievement,0,0,1,1,1,1,simple,False
+74,salir,Juan salió.,Achievement,0,0,1,1,0,0,simple,False
+75,entrar,Juan entró.,Achievement,0,0,1,1,0,0,simple,False
+76,terminar,Juan terminó el trabajo.,Achievement,0,0,1,1,1,0,simple,False
+77,empezar,Juan empezó el discurso.,Achievement,0,0,1,1,1,0,simple,False
+78,estallar,La bomba estalló.,Achievement,0,0,1,1,0,0,simple,False
+79,estornudar,Juan estornudó.,Semelfactive,0,0,0,1,0,0,simple,False
+80,toser,Juan tosió.,Semelfactive,0,0,0,1,0,0,simple,False
+81,parpadear,Juan parpadeó.,Semelfactive,0,0,0,1,0,0,simple,False
+82,golpear,Juan golpeó la mesa.,Semelfactive,0,1,0,1,1,0,simple,False
+83,saltar,Juan saltó la valla.,Semelfactive,0,1,0,1,1,0,simple,False
+84,tocar,Juan tocó el timbre.,Semelfactive,0,0,0,1,1,0,simple,False
+85,gritar,Juan gritó.,Semelfactive,0,0,0,1,0,0,simple,False
+86,latir,El corazón latió.,Semelfactive,0,0,0,1,0,0,simple,False
+87,destellar,La luz destelló.,Semelfactive,0,0,0,1,0,0,simple,False
+88,pitar,El árbitro pitó la falta.,Semelfactive,0,0,0,1,1,0,simple,False
+89,disparar,La alarma se disparó.,Semelfactive,0,1,0,1,0,1,simple,False
+90,picar,El mosquito picó.,Semelfactive,0,1,0,1,0,0,simple,False
+91,chocar,El coche chocó.,Achievement,0,0,1,1,0,0,simple,False
+92,aparecer,El fantasma se apareció.,Accomplishment,0,0,1,0,1,0,simple,False
+93,desaparecer,La mancha desapareció.,Accomplishment,0,0,1,0,1,0,simple,False
+94,abrir,La puerta se abrió.,Achievement,0,0,1,1,1,1,simple,False
+95,cerrar,La puerta se cerró.,Achievement,0,0,1,1,1,1,simple,False
+96,aterrizar,El avión aterrizó.,Achievement,0,0,1,1,0,0,simple,False
+97,despegar,El avión despegó.,Achievement,0,0,1,1,0,0,simple,False
+98,arrancar,Juan arrancó el motor.,Achievement,0,0,1,1,1,0,simple,False
+99,detenerse,El tren se detuvo.,Achievement,0,0,1,1,0,1,simple,False
+100,fallecer,El abuelo falleció.,Achievement,0,0,1,1,0,0,simple,False
+101,vencer,Juan venció.,Achievement,0,0,1,1,0,0,simple,False
+102,fracasar,Juan fracasó.,Achievement,0,0,1,1,0,0,simple,False
+103,alcanzar,Juan alcanzó la cima.,Achievement,0,0,1,1,0,0,simple,False
+104,lograr,El plan se logró.,Achievement,0,0,1,1,0,1,simple,False
+105,conseguir,Juan consiguió el empleo.,Achievement,0,0,1,1,1,0,simple,False
+106,obtener,Juan obtuvo el premio.,Achievement,0,0,1,1,0,0,simple,False
+107,recibir,Juan recibió la carta.,Achievement,0,0,1,1,0,0,simple,False
+108,ceder,La cuerda cedió.,Achievement,0,0,1,1,1,1,simple,False
+109,rendirse,El soldado se rindió.,Achievement,0,0,1,1,0,1,simple,False
+110,explotar,La bomba explotó.,Achievement,0,0,1,1,0,0,simple,False
+111,hundirse,El barco se hundió.,Achievement,0,0,1,1,0,0,simple,False
+112,derrumbarse,El edificio se derrumbó.,Achievement,0,0,1,1,0,1,simple,False
+113,encenderse,La luz se encendió.,Achievement,0,0,1,1,1,1,simple,False
+114,apagarse,La luz se apagó.,Achievement,0,0,1,1,1,1,simple,False
+115,pestañear,Juan pestañeó.,Semelfactive,0,1,0,1,0,0,simple,False
+116,bostezar,Juan bostezó.,Semelfactive,0,1,0,1,0,0,simple,False
+117,jadear,Juan jadeó.,Semelfactive,0,1,0,1,0,0,simple,False
+118,sacudir,El perro se sacudió.,Semelfactive,0,1,0,1,1,1,simple,False
+119,agitar,El pájaro se agitó.,Semelfactive,0,1,0,1,1,1,simple,False
+120,chasquear,Juan chasqueó los dedos.,Semelfactive,0,1,0,1,0,1,simple,False
+121,silbar,Juan silbó.,Semelfactive,0,1,0,1,0,0,simple,False
+122,asentir,Juan asintió.,Semelfactive,0,1,0,1,0,0,simple,False
+123,aullar,El lobo aulló.,Semelfactive,0,1,0,1,0,0,simple,False
+124,maullar,El gato maulló.,Semelfactive,0,1,0,1,0,0,simple,False
+125,rebotar,La pelota rebotó.,Semelfactive,0,1,0,1,1,0,simple,False
+126,construir,Juan construyó la casa.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+127,pintar,Juan pintó el cuadro.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+128,hornear,Juan horneó el pan.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+129,tejer,Juan tejió la bufanda.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+130,diseñar,Juan diseñó el logotipo.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+131,componer,Juan compuso la canción.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+132,traducir,Juan tradujo el documento.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+133,resolver,Juan resolvió el acertijo.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+134,aprender,Juan aprendió el oficio.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+135,memorizar,Juan memorizó el poema.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+136,preparar,Juan preparó la cena.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+137,reparar,Juan reparó el coche.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+138,limpiar,Juan limpió ventanas.,Activity,0,1,0,0,1,0,simple,False
+139,organizar,Juan organizó el evento.,Accomplishment,0,0,1,0,1,0,simple,False
+140,demoler,Juan demolió el muro.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+141,convencer,Juan convenció a su amigo.,Achievement,0,0,1,1,1,0,simple,False
+142,curar,El médico curó al paciente.,Accomplishment,0,0,1,0,1,0,simple,False
+143,restaurar,Juan restauró la iglesia.,Accomplishment,0,0,1,0,1,0,simple,False
+144,reformar,Juan reformó la cocina.,Accomplishment,0,0,1,0,1,0,simple,False
+145,elaborar,Juan elaboró el informe.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+146,fabricar,Juan fabricó la pieza.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+147,producir,Juan produjo la película.,Accomplishment,0,0,1,0,1,0,simple,False
+148,desarrollar,Juan desarrolló el programa.,Accomplishment,0,0,1,0,1,0,simple,False
+149,redactar,Juan redactó el contrato.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+150,calcular,Juan calculó el presupuesto.,Accomplishment,0,0,1,0,1,0,simple,False
+151,planificar,Juan planificó el viaje.,Accomplishment,0,0,1,0,1,0,simple,False
+152,ensamblar,Juan ensambló la máquina.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+153,fundar,Juan fundó la empresa.,Accomplishment,0,0,1,0,1,0,simple,False
+154,establecer,Juan estableció las reglas.,Accomplishment,0,0,1,0,1,0,simple,False
+155,erradicar,Juan erradicó la enfermedad.,Accomplishment,0,0,1,0,1,0,simple,False
+156,sanar,El médico sanó al paciente.,Accomplishment,0,0,1,0,1,0,simple,False
+157,cicatrizar,La herida cicatrizó.,Accomplishment,0,0,1,0,0,0,simple,False
+158,madurar,La fruta maduró.,Accomplishment,0,0,1,0,0,0,simple,False
+159,fermentar,El vino fermentó.,Accomplishment,0,0,1,0,0,0,simple,False
+160,hipar,Juan hipó.,Semelfactive,0,1,0,1,0,0,multiword,False
+161,negar,Juan negó con la cabeza.,Semelfactive,0,1,0,1,0,1,multiword,False
+162,correr,Juan corrió cinco kilómetros.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+163,leer,Juan leyó el libro.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+164,comer,Juan comió la sopa.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+165,beber,Juan bebió el vaso.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+166,dibujar,Juan dibujó el mapa.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+167,cruzar,Juan cruzó el río.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+168,escalar,Juan escaló el cerro.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+169,cocinar,Juan cocinó el arroz.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+170,buscar,Juan buscó las llaves.,Activity,0,1,0,0,1,0,multiword,False
+171,traducir,Juan tradujo el texto.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+172,limpiar,Juan limpió la casa.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+173,escribir,Juan escribió la carta.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+174,hacer,Juan hizo la tarea.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+175,pintar,Juan pintó la barda.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+176,construir,Juan construyó el muro.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+177,armar,Juan armó el mueble.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+178,plantar,Juan plantó el árbol.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+179,consumir,Juan consumió el tanque.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+180,recorrer,Juan recorrió el camino.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+181,terminar,Juan terminó el proyecto.,Achievement,0,0,1,1,1,0,multiword,False
+182,vaciar,Juan vació la botella.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+183,llenar,Juan llenó el formulario.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+184,agotar,Juan agotó las reservas.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+185,revisar,Juan revisó el documento.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+186,demoler,Juan demolió el edificio.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+187,recorrer,Juan recorrió la ciudad.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+188,aprender,Juan aprendió la lección.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+189,ganar,Juan ganó el partido.,Achievement,0,0,1,1,1,0,multiword,False
+190,resolver,Juan resolvió el problema.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+191,completar,Juan completó el curso.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+192,cubrir,Juan cubrió la distancia.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+193,agotar,Juan agotó el tiempo.,Active_Accomplishment,0,1,1,0,1,0,multiword,False
+194,comer,Juan comió sopa.,Activity,0,1,0,0,1,0,augment_od,False
+195,beber,Juan bebió agua.,Activity,0,1,0,0,1,0,augment_od,False
+196,cocinar,Juan cocinó.,Activity,0,1,0,0,0,0,augment_od,False
+197,dibujar,Juan dibujó paisajes.,Activity,0,1,0,0,1,0,augment_od,False
+198,cantar,Juan cantó el himno.,Active_Accomplishment,0,1,1,0,1,0,augment_od,False
+199,nadar,Juan nadó dos kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_od,False
+200,caminar,Juan caminó diez kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_od,False
+201,patear,Juan pateó el balón.,Semelfactive,0,0.5,0,1,1,0,augment_semilla,False
+202,aplaudir,Juan aplaudió.,Activity,0,1,0,0,0,0,augment_semilla,False
+203,guiñar,Juan guiñó un ojo.,Semelfactive,0,0.5,0,1,1,0,augment_semilla,False
+204,palmear,Juan palmeó la mesa.,Semelfactive,0,0.5,0,1,1,0,augment_semilla,False
+205,tamborilear,Juan tamborileó en la mesa.,Semelfactive,0,0.5,0,1,0,0,augment_semilla,False
+206,repicar,La campana repicó.,Semelfactive,0,0,0,1,0,0,augment_semilla,False
+207,suspirar,Juan suspiró.,Semelfactive,0,0,0,1,0,0,augment_semilla,False
+208,escupir,Juan escupió.,Semelfactive,0,0.5,0,1,0,0,augment_semilla,False
+209,soplar,Juan sopló.,Activity,0,1,0,0,0,0,augment_semilla,False
+210,pellizcar,Juan pellizcó a su hermano.,Semelfactive,0,0.5,0,1,1,0,augment_semilla,False
+211,vislumbrar,Juan vislumbró la costa.,Semelfactive,0,0,0,1,1,0,augment_semilla,False
+212,crujir,La rama crujió.,Semelfactive,0,0,0,1,0,0,augment_semilla,False
+213,chirriar,La puerta chirrió.,Activity,0,1,0,0,0,0,augment_semilla,False
+214,cabecear,Juan cabeceó.,Semelfactive,0,0.5,0,1,0,0,augment_semilla,False
+215,resoplar,Juan resopló.,Semelfactive,0,0,0,1,0,0,augment_semilla,False
+216,eructar,Juan eructó.,Semelfactive,0,0,0,1,0,0,augment_semilla,False
+217,derretirse,El hielo se derritió.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+218,congelarse,El agua se congeló.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+219,evaporarse,El agua se evaporó.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+220,oxidarse,El metal se oxidó.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+221,disolverse,El azúcar se disolvió.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+222,marchitarse,La flor se marchitó.,Accomplishment,0,0.5,1,0,0,1,augment_semilla,False
+223,agrietarse,El muro se agrietó.,Achievement,0,0,1,1,0,1,augment_semilla,False
+224,quebrarse,La rama se quebró.,Achievement,0,0,1,1,0,1,augment_semilla,False
+225,desplomarse,El puente se desplomó.,Achievement,0,0,1,1,0,1,augment_semilla,False
+226,volcarse,El camión se volcó.,Achievement,0,0,1,1,0,1,augment_semilla,False
+227,reventar,El globo reventó.,Achievement,0,0,1,1,0,0,augment_semilla,False
+228,correr,Juan corre.,Activity,0,1,0,0,0,0,augment_presente,False
+229,nadar,Los atletas nadan en el río.,Activity,0,1,0,0,0,0,augment_presente,True
+230,hablar,Juan habla.,Activity,0,1,0,0,0,0,augment_presente,False
+231,caminar,Juan camina.,Activity,0,1,0,0,0,0,augment_presente,False
+232,respirar,Juan respira.,Activity,0,1,0,0,0,0,augment_presente,False
+233,trabajar,Juan trabaja.,Activity,0,1,0,0,0,0,augment_presente,False
+234,estudiar,Juan estudia matemáticas.,Activity,0,1,0,0,1,0,augment_presente,False
+235,jugar,Juan juega.,Activity,0,1,0,0,0,0,augment_presente,False
+236,escuchar,Juan escucha música.,Activity,0,1,0,0,1,0,augment_presente,False
+237,llorar,Juan llora.,Activity,0,1,0,0,0,0,augment_presente,False
+238,volar,El pájaro vuela.,Activity,0,1,0,0,0,0,augment_presente,False
+239,brillar,La estrella brilla.,Activity,0,1,0,0,0,0,augment_presente,False
+240,fluir,El río fluye.,Activity,0,1,0,0,0,0,augment_presente,False
+241,dormir,Juan duerme.,Activity,0,1,0,0,0,0,augment_presente,False
+242,mirar,Juan mira el paisaje.,Activity,0,1,0,0,1,0,augment_presente,False
+243,buscar,Juan busca trabajo.,Activity,0,1,0,0,1,0,augment_presente,False
+244,bailar,Juan baila.,Activity,0,1,0,0,0,0,augment_presente,False
+245,cantar,Juan canta canciones.,Activity,0,1,0,0,1,0,augment_presente,False
+246,leer,Juan lee novelas.,Activity,0,1,0,0,1,0,augment_presente,False
+247,escribir,Juan escribe cartas.,Activity,0,1,0,0,1,0,augment_presente,False
+248,escribir,Juan escribe la novela.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+249,pedalear,Juan pedalea con fuerza.,Activity,0,1,0,0,0,0,augment_presente,False
+250,rodar,La pelota rueda cuesta abajo.,Activity,0,1,0,0,0,0,augment_presente,False
+251,temblar,El suelo tiembla.,Activity,0,1,0,0,0,0,augment_presente,False
+252,vibrar,El teléfono vibra.,Activity,0,1,0,0,0,0,augment_presente,False
+253,ronronear,El gato ronronea suavemente.,Activity,0,1,0,0,0,0,augment_presente,False
+254,rugir,El león siempre ruge con fuerza.,Activity,0,1,0,0,0,0,augment_presente,False
+255,susurrar,Juan susurra secretos.,Activity,0,1,0,0,1,0,augment_presente,False
+256,gotear,El grifo gotea.,Activity,0,1,0,0,0,0,augment_presente,False
+257,escalar,Juan escala montañas cada verano.,Activity,0,1,0,0,1,0,augment_presente,False
+258,navegar,Juan navega.,Activity,0,1,0,0,0,0,augment_presente,False
+259,vagar,Juan vaga por la ciudad.,Activity,0,1,0,0,0,0,augment_presente,False
+260,merodear,Juan merodea.,Activity,0,1,0,0,0,0,augment_presente,False
+261,llegar,Juan llega.,Achievement,0,0,1,1,1,1,augment_presente,False
+262,morir,El abuelo se muere.,Achievement,0,0,1,1,0,1,augment_presente,False
+263,nacer,El bebé nace.,Achievement,0,0,1,1,0,0,augment_presente,False
+264,encontrar,Juan se encuentra una moneda.,Achievement,0,0,1,1,1,1,augment_presente,False
+265,perder,Juan se pierde.,Achievement,0,0,1,1,1,1,augment_presente,False
+266,ganar,Juan gana el premio.,Achievement,0,0,1,1,1,0,augment_presente,False
+267,romper,El vaso se rompe.,Achievement,0,0,1,1,1,1,augment_presente,False
+268,reconocer,Juan reconoce el error.,Achievement,0,0,1,1,0,0,augment_presente,False
+269,descubrir,Juan descubre el secreto.,Achievement,0,0,1,1,1,0,augment_presente,False
+270,despertar,Juan se despierta.,Achievement,0,0,1,1,0,1,augment_presente,False
+271,caer,Juan se cae.,Achievement,0,0,1,1,1,1,augment_presente,False
+272,salir,Juan sale.,Achievement,0,0,1,1,0,0,augment_presente,False
+273,entrar,Juan entra.,Achievement,0,0,1,1,0,0,augment_presente,False
+274,terminar,Juan termina el trabajo.,Achievement,0,0,1,1,1,0,augment_presente,False
+275,empezar,Juan empieza el discurso.,Achievement,0,0,1,1,1,0,augment_presente,False
+276,estallar,La bomba estalla.,Achievement,0,0,1,1,0,0,augment_presente,False
+277,estornudar,Juan estornuda.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+278,toser,Juan tose.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+279,parpadear,Juan parpadea.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+280,golpear,Juan golpea la mesa.,Semelfactive,0,1,0,1,1,0,augment_presente,False
+281,saltar,Juan salta la valla.,Semelfactive,0,1,0,1,1,0,augment_presente,False
+282,tocar,Juan toca el timbre.,Semelfactive,0,0,0,1,1,0,augment_presente,False
+283,gritar,Juan grita.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+284,latir,El corazón late con fuerza.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+285,destellar,La luz destella.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+286,pitar,El árbitro pita la falta.,Semelfactive,0,0,0,1,1,0,augment_presente,False
+287,disparar,La alarma se dispara.,Semelfactive,0,1,0,1,0,1,augment_presente,False
+288,picar,El mosquito siempre pica de noche.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+289,chocar,El coche choca.,Achievement,0,0,1,1,0,0,augment_presente,False
+290,aparecer,El fantasma se aparece.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+291,desaparecer,La mancha desaparece.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+292,abrir,La puerta se abre.,Achievement,0,0,1,1,1,1,augment_presente,False
+293,cerrar,La puerta se cierra.,Achievement,0,0,1,1,1,1,augment_presente,False
+294,aterrizar,El avión aterriza.,Achievement,0,0,1,1,0,0,augment_presente,False
+295,despegar,El avión despega.,Achievement,0,0,1,1,0,0,augment_presente,False
+296,arrancar,Juan arranca el motor.,Achievement,0,0,1,1,1,0,augment_presente,False
+297,detenerse,El tren se detiene.,Achievement,0,0,1,1,0,1,augment_presente,False
+298,fallecer,El abuelo fallece.,Achievement,0,0,1,1,0,0,augment_presente,False
+299,vencer,Juan vence.,Achievement,0,0,1,1,0,0,augment_presente,False
+300,fracasar,Juan fracasa.,Achievement,0,0,1,1,0,0,augment_presente,False
+301,alcanzar,Juan alcanza la cima.,Achievement,0,0,1,1,0,0,augment_presente,False
+302,lograr,El plan se logra.,Achievement,0,0,1,1,0,1,augment_presente,False
+303,conseguir,Juan consigue el empleo.,Achievement,0,0,1,1,1,0,augment_presente,False
+304,obtener,Juan obtiene el premio.,Achievement,0,0,1,1,0,0,augment_presente,False
+305,recibir,Juan recibe la carta.,Achievement,0,0,1,1,0,0,augment_presente,False
+306,ceder,La cuerda cede.,Achievement,0,0,1,1,1,1,augment_presente,False
+307,rendirse,El soldado se rinde.,Achievement,0,0,1,1,0,1,augment_presente,False
+308,explotar,La bomba explota.,Achievement,0,0,1,1,0,0,augment_presente,False
+309,hundirse,El barco se hunde.,Achievement,0,0,1,1,0,0,augment_presente,False
+310,derrumbarse,El edificio se derrumba.,Achievement,0,0,1,1,0,1,augment_presente,False
+311,encenderse,La luz se enciende.,Achievement,0,0,1,1,1,1,augment_presente,False
+312,apagarse,La luz se apaga.,Achievement,0,0,1,1,1,1,augment_presente,False
+313,pestañear,Juan pestañea.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+314,bostezar,Juan siempre bosteza de sueño.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+315,jadear,Juan jadea tras la carrera.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+316,sacudir,El perro se sacude.,Semelfactive,0,1,0,1,1,1,augment_presente,False
+317,agitar,El pájaro se agita.,Semelfactive,0,1,0,1,1,1,augment_presente,False
+318,chasquear,Juan chasquea los dedos.,Semelfactive,0,1,0,1,0,1,augment_presente,False
+319,silbar,Juan silba.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+320,asentir,Juan asiente.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+321,aullar,El lobo aúlla.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+322,maullar,Los gatos maúllan por la noche.,Semelfactive,0,1,0,1,0,0,augment_presente,False
+323,rebotar,La pelota rebota.,Semelfactive,0,1,0,1,1,0,augment_presente,False
+324,construir,Juan construye la casa.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+325,pintar,Juan pinta el cuadro.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+326,hornear,Juan hornea el pan.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+327,tejer,Juan teje la bufanda.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+328,diseñar,Juan diseña el logotipo.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+329,componer,Juan compone la canción.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+330,traducir,Juan traduce el documento.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+331,resolver,Juan resuelve el acertijo.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+332,aprender,Juan aprende el oficio.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+333,memorizar,Juan memoriza el poema.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+334,preparar,Juan prepara la cena.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+335,reparar,Juan repara el coche.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+336,limpiar,Cada sábado Juan limpia ventanas.,Activity,0,1,0,0,1,0,augment_presente,False
+337,organizar,Juan organiza el evento.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+338,demoler,Juan demuele el muro.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+339,convencer,Juan convence a su amigo.,Achievement,0,0,1,1,1,0,augment_presente,False
+340,curar,El médico cura al paciente.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+341,restaurar,Juan restaura la iglesia.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+342,reformar,Juan reforma la cocina.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+343,elaborar,Juan elabora el informe.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+344,fabricar,Juan fabrica la pieza.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+345,producir,Juan produce la película.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+346,desarrollar,Juan desarrolla el programa.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+347,redactar,Juan redacta el contrato.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+348,calcular,Juan calcula el presupuesto.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+349,planificar,Juan planifica el viaje.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+350,ensamblar,Juan ensambla la máquina.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+351,fundar,Juan funda la empresa.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+352,establecer,Juan establece las reglas.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+353,erradicar,Juan erradica la enfermedad.,Accomplishment,0,0,1,0,1,0,augment_presente,False
+354,sanar,Los médicos sanan a los pacientes.,Accomplishment,0,0,1,0,1,0,augment_presente,True
+355,cicatrizar,La herida cicatriza.,Accomplishment,0,0,1,0,0,0,augment_presente,False
+356,madurar,Las frutas maduran al sol.,Accomplishment,0,0,1,0,0,0,augment_presente,False
+357,fermentar,El vino fermenta.,Accomplishment,0,0,1,0,0,0,augment_presente,False
+358,hipar,Los niños hipan tras llorar.,Semelfactive,0,1,0,1,0,0,augment_presente,True
+359,negar,Juan niega con la cabeza.,Semelfactive,0,1,0,1,0,1,augment_presente,False
+360,correr,Juan corre cinco kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+361,leer,Juan lee el libro.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+362,comer,Juan come la sopa.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+363,beber,Juan bebe el vaso.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+364,dibujar,Juan dibuja el mapa.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+365,cruzar,Juan cruza el río.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+366,escalar,Juan escala el cerro cada domingo.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+367,cocinar,Juan cocina el arroz.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+368,buscar,Juan busca las llaves.,Activity,0,1,0,0,1,0,augment_presente,False
+369,traducir,Juan traduce el texto.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+370,limpiar,Juan limpia la casa.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+371,escribir,Juan escribe la carta.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+372,hacer,Juan hace la tarea.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+373,pintar,Juan pinta la barda.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+374,construir,Juan construye el muro.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+375,armar,Juan arma el mueble.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+376,plantar,Juan planta el árbol.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+377,consumir,Juan consume el tanque.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+378,recorrer,Juan recorre el camino.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+379,terminar,Juan termina el proyecto.,Achievement,0,0,1,1,1,0,augment_presente,False
+380,vaciar,Juan vacía la botella.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+381,llenar,Juan llena el formulario.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+382,agotar,Juan agota las reservas.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+383,revisar,Juan revisa el documento.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+384,demoler,Juan demuele el edificio.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+385,recorrer,Juan recorre la ciudad.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+386,aprender,Juan aprende la lección.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+387,ganar,Juan gana el partido.,Achievement,0,0,1,1,1,0,augment_presente,False
+388,resolver,Juan resuelve el problema.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+389,completar,Juan completa el curso.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+390,cubrir,Juan cubre la distancia.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+391,agotar,Juan agota el tiempo.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+392,comer,Juan come sopa.,Activity,0,1,0,0,1,0,augment_presente,False
+393,beber,Juan bebe agua.,Activity,0,1,0,0,1,0,augment_presente,False
+394,cocinar,Juan cocina.,Activity,0,1,0,0,0,0,augment_presente,False
+395,dibujar,Juan dibuja paisajes.,Activity,0,1,0,0,1,0,augment_presente,False
+396,cantar,Juan canta el himno.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+397,nadar,Los nadadores nadan dos kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+398,caminar,Juan camina diez kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_presente,False
+399,patear,Juan patea el balón.,Semelfactive,0,0.5,0,1,1,0,augment_presente,False
+400,aplaudir,Juan aplaude.,Activity,0,1,0,0,0,0,augment_presente,False
+401,guiñar,Juan guiña un ojo.,Semelfactive,0,0.5,0,1,1,0,augment_presente,False
+402,palmear,Juan siempre palmea la mesa.,Semelfactive,0,0.5,0,1,1,0,augment_presente,True
+403,tamborilear,Juan tamborilea en la mesa con los dedos.,Semelfactive,0,0.5,0,1,0,0,augment_presente,False
+404,repicar,La campana repica.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+405,suspirar,Juan suspira.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+406,escupir,Juan escupe.,Semelfactive,0,0.5,0,1,0,0,augment_presente,False
+407,soplar,Juan sopla.,Activity,0,1,0,0,0,0,augment_presente,False
+408,pellizcar,Juan pellizca a su hermano.,Semelfactive,0,0.5,0,1,1,0,augment_presente,False
+409,vislumbrar,Juan vislumbra la costa.,Semelfactive,0,0,0,1,1,0,augment_presente,False
+410,crujir,La rama siempre cruje con el viento.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+411,chirriar,La puerta chirría.,Activity,0,1,0,0,0,0,augment_presente,False
+412,cabecear,Juan cabecea.,Semelfactive,0,0.5,0,1,0,0,augment_presente,False
+413,resoplar,Juan resopla.,Semelfactive,0,0,0,1,0,0,augment_presente,False
+414,eructar,Juan siempre eructa tras la comida.,Semelfactive,0,0,0,1,0,0,augment_presente,True
+415,derretirse,El hielo se derrite.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+416,congelarse,El agua se congela.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+417,evaporarse,El agua se evapora.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+418,oxidarse,El metal se oxida.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+419,disolverse,El azúcar se disuelve.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+420,marchitarse,La flor se marchita.,Accomplishment,0,0.5,1,0,0,1,augment_presente,False
+421,agrietarse,El muro se agrieta.,Achievement,0,0,1,1,0,1,augment_presente,False
+422,quebrarse,La rama se quiebra.,Achievement,0,0,1,1,0,1,augment_presente,False
+423,desplomarse,El puente se desploma.,Achievement,0,0,1,1,0,1,augment_presente,False
+424,volcarse,El camión se vuelca.,Achievement,0,0,1,1,0,1,augment_presente,False
+425,reventar,El globo revienta.,Achievement,0,0,1,1,0,0,augment_presente,False
+426,reír,Juan ríe.,Activity,0,1,0,0,0,0,augment_presente,False
+427,saber,María sabe la verdad.,State,1,0,0,0,1,0,augment_state,False
+428,creer,El niño cree en los fantasmas.,State,1,0,0,0,1,0,augment_state,False
+429,tener,La empresa tiene problemas.,State,1,0,0,0,1,0,augment_state,False
+430,contener,El frasco contiene azúcar.,State,1,0,0,0,1,0,augment_state,False
+431,necesitar,La ciudad necesita agua.,State,1,0,0,0,1,0,augment_state,False
+432,ignorar,El alumno ignora la regla.,State,1,0,0,0,1,0,augment_state,False
+433,odiar,María odia el frío.,State,1,0,0,0,1,0,augment_state,False
+434,amar,La abuela ama las flores.,State,1,0,0,0,1,0,augment_state,False
+435,recordar,El testigo recuerda el accidente.,State,1,0,0,0,1,0,augment_state,False
+436,olvidar,El paciente olvida los nombres.,State,1,0,0,0,1,0,augment_state,False
+437,pertenecer,La finca pertenece al municipio.,State,1,0,0,0,0,0,augment_state,False
+438,existir,La injusticia existe.,State,1,0,0,0,0,0,augment_state,False
+439,costar,La entrada cuesta veinte euros.,State,1,0,0,0,0,0,augment_state,False
+440,depender,La cosecha depende de la lluvia.,State,1,0,0,0,0,0,augment_state,False
+441,desear,El equipo desea la victoria.,State,1,0,0,0,1,0,augment_state,False
+442,preferir,La niña prefiere el helado.,State,1,0,0,0,1,0,augment_state,False
+443,suponer,El juez supone su inocencia.,State,1,0,0,0,1,0,augment_state,False
+444,entender,La alumna entiende el problema.,State,1,0,0,0,1,0,augment_state,False
+445,comprender,El lector comprende la novela.,State,1,0,0,0,1,0,augment_state,False
+446,temer,El perro teme los truenos.,State,1,0,0,0,1,0,augment_state,False
+447,respetar,El pueblo respeta la tradición.,State,1,0,0,0,1,0,augment_state,False
+448,admirar,La crítica admira su obra.,State,1,0,0,0,1,0,augment_state,False
+449,envidiar,El vecino envidia su suerte.,State,1,0,0,0,1,0,augment_state,False
+450,merecer,La actriz merece el premio.,State,1,0,0,0,1,0,augment_state,False
+451,dudar,El científico duda del resultado.,State,1,0,0,0,0,0,augment_state,False
+452,bastar,Una firma basta.,State,1,0,0,0,0,0,augment_state,False
+453,costar,El libro costó diez euros.,State,1,0,0,0,0,0,augment_state,False
+454,tener,Juan tuvo tres coches.,State,1,0,0,0,1,0,augment_state,False
+455,pertenecer,La casa perteneció a su familia durante décadas.,State,1,0,0,0,0,0,augment_state,False
+456,amar,Juan amó a María toda su vida.,State,1,0,0,0,1,0,augment_state,False
+457,valer,El cuadro valió una fortuna.,State,1,0,0,0,0,0,augment_state,False
+458,temer,La abuela temió las tormentas toda su vida.,State,1,0,0,0,1,0,augment_state,False
+459,correr,Juan corrió diez kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+460,correr,María corrió la maratón.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+461,caminar,María caminó una milla.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+462,recorrer,El excursionista recorrió el sendero.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+463,nadar,Ana nadó tres kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+464,pedalear,El ciclista pedaleó veinte kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+465,volar,El piloto voló mil kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+466,navegar,El barco navegó cien millas.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+467,escalar,Juan escaló mil metros.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+468,cruzar,Juan cruzó el puente.,Active_Accomplishment,0,1,1,0,1,0,augment_medida,False
+469,comer,Juan come manzanas.,Activity,0,1,0,0,1,0,augment_habitual,False
+470,beber,María bebe todos los días.,Activity,0,1,0,0,0,0,augment_habitual,False
+471,leer,El niño lee novelas.,Activity,0,1,0,0,1,0,augment_habitual,False
+472,escribir,Ella escribe por las mañanas.,Activity,0,1,0,0,0,0,augment_habitual,False
+473,correr,El perro corre en el parque.,Activity,0,1,0,0,0,0,augment_habitual,False
+474,caminar,Los abuelos caminan lentamente.,Activity,0,1,0,0,0,0,augment_habitual,False
+475,trabajar,El ingeniero trabaja mucho.,Activity,0,1,0,0,0,0,augment_habitual,False
+476,estudiar,Ana estudia física.,Activity,0,1,0,0,1,0,augment_habitual,False
+477,cantar,El coro canta hermoso.,Activity,0,1,0,0,0,0,augment_habitual,False
+478,bailar,Ellos bailan salsa.,Activity,0,1,0,0,1,0,augment_habitual,False
+479,jugar,Los niños juegan afuera.,Activity,0,1,0,0,0,0,augment_habitual,False
+480,fumar,El hombre fuma puros.,Activity,0,1,0,0,1,0,augment_habitual,False
+481,comer,Los gatos comen pescado.,Activity,0,1,0,0,1,0,augment_habitual,False
+482,beber,El equipo bebe agua.,Activity,0,1,0,0,1,0,augment_habitual,False
+483,leer,Mi madre lee todas las noches.,Activity,0,1,0,0,0,0,augment_habitual,False
+484,escribir,El autor escribe cuentos.,Activity,0,1,0,0,1,0,augment_habitual,False
+485,correr,Los atletas corren rápido.,Activity,0,1,0,0,0,0,augment_habitual,False
+486,trabajar,Mis amigos trabajan los domingos.,Activity,0,1,0,0,0,0,augment_habitual,False
+487,comer,Juan se come la manzana.,Active_Accomplishment,0,1,1,0,1,1,augment_habitual,False
+488,beber,María se bebe el café.,Active_Accomplishment,0,1,1,0,1,1,augment_habitual,False
+489,leer,El niño lee el libro.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+490,escribir,Ella escribe la carta.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+491,correr,El atleta corre los cien metros.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+492,caminar,Ana camina los dos kilómetros.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+493,fumar,El hombre se fuma el cigarrillo.,Active_Accomplishment,0,1,1,0,1,1,augment_habitual,False
+494,cantar,El artista canta la canción entera.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+495,bailar,Ellos bailan la pieza completa.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+496,comer,El perro se come el hueso.,Active_Accomplishment,0,1,1,0,1,1,augment_habitual,False
+497,beber,El equipo se bebe el barril.,Active_Accomplishment,0,1,1,0,1,1,augment_habitual,False
+498,escribir,El autor escribe la novela final.,Active_Accomplishment,0,1,1,0,1,0,augment_habitual,False
+499,saber,La maestra sabe la respuesta.,State,1,0,0,0,1,0,augment_habitual,False
+500,amar,La niña ama a los animales.,State,1,0,0,0,1,0,augment_habitual,False
+501,odiar,El gato odia el agua.,State,1,0,0,0,1,0,augment_habitual,False
+502,tener,La casa tiene tres ventanas.,State,1,0,0,0,1,0,augment_habitual,False
+503,necesitar,El coche necesita gasolina.,State,1,0,0,0,1,0,augment_habitual,False
+504,creer,El sacerdote cree en la historia.,State,1,0,0,0,1,0,augment_habitual,False
+505,preferir,El cliente prefiere el té.,State,1,0,0,0,1,0,augment_habitual,False
+506,conocer,El guía conoce la ciudad.,State,1,0,0,0,1,0,augment_habitual,False
+507,vivir,La familia vive en Madrid.,State,1,0,0,0,0,0,augment_habitual,False
+508,tener,Los estudiantes tienen dudas.,State,1,0,0,0,1,0,augment_habitual,False
+509,toser,Juan tose frecuentemente.,Activity,0,1,0,0,0,0,augment_habitual,False
+510,estornudar,Juan estornuda mucho.,Activity,0,1,0,0,0,0,augment_habitual,False
+511,parpadear,La luz parpadea en la oscuridad.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+512,suspirar,La mujer suspira de cansancio.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+513,golpear,El boxeador golpea el saco.,Semelfactive,0,1,0,1,1,0,augment_habitual,False
+514,saltar,El canguro salta alto.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+515,tocar,El cartero toca el timbre.,Semelfactive,0,1,0,1,1,0,augment_habitual,False
+516,toser,El paciente tose sin parar.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+517,estornudar,Los niños estornudan por el polvo.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+518,parpadear,El semáforo parpadea en rojo.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+519,golpear,La lluvia golpea la ventana.,Semelfactive,0,1,0,1,1,0,augment_habitual,False
+520,saltar,La rana salta al agua.,Semelfactive,0,1,0,1,0,0,augment_habitual,False
+521,cicatrizar,La herida cicatriza lentamente.,Accomplishment,0,0,1,0,0,0,augment_habitual,False
+522,derretirse,El hielo se derrite al sol.,Accomplishment,0,0,1,0,0,1,augment_habitual,False
+523,secarse,La ropa se seca con el viento.,Accomplishment,0,0,1,0,0,1,augment_habitual,False
+524,crecer,La planta crece cada día.,Accomplishment,0,0,1,0,0,0,augment_habitual,False
+525,madurar,Las frutas maduran en el árbol.,Accomplishment,0,0,1,0,0,0,augment_habitual,False
+526,hornearse,El pan se hornea a fuego lento.,Accomplishment,0,0,1,0,0,1,augment_habitual,False
+527,derretirse,La nieve se derrite en primavera.,Accomplishment,0,0,1,0,0,1,augment_habitual,False
+528,secarse,El charco se seca rápido.,Accomplishment,0,0,1,0,0,1,augment_habitual,False
+529,llegar,El tren llega a la estación.,Achievement,0,0,1,1,0,0,augment_habitual,False
+530,explotar,La bomba explota de repente.,Achievement,0,0,1,1,0,0,augment_habitual,False
+531,estallar,El globo estalla por la presión.,Achievement,0,0,1,1,0,0,augment_habitual,False
+532,aparecer,El mago aparece en el escenario.,Achievement,0,0,1,1,0,0,augment_habitual,False
+533,romperse,El vaso se rompe en mil pedazos.,Achievement,0,0,1,1,0,1,augment_habitual,False
+534,llegar,Los invitados llegan tarde.,Achievement,0,0,1,1,0,0,augment_habitual,False
+535,explotar,El volcán explota con furia.,Achievement,0,0,1,1,0,0,augment_habitual,False
+536,aparecer,La luna aparece en el cielo.,Achievement,0,0,1,1,0,0,augment_habitual,False

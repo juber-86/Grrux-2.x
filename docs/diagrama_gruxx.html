@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>gruxx — diagrama del flujo completo</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #2b2b2b;
+    overflow: auto;
+  }
+  .wrap {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+  img {
+    max-width: 100%;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    background: #fff;
+  }
+  /* F para pantalla completa del navegador, Esc para salir (atajo estándar) */
+  .hint {
+    position: fixed;
+    bottom: 8px;
+    right: 12px;
+    color: #aaa;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img src="diagrama_gruxx.svg" alt="Diagrama del flujo completo de gruxx">
+  </div>
+  <div class="hint">F11 (o el botón de pantalla completa del navegador) para proyectar</div>
+</body>
+</html>

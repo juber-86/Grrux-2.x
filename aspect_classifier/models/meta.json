@@ -1,0 +1,10 @@
+{
+ "n_train": 187,
+ "features": [
+  "stat",
+  "dyn",
+  "tel",
+  "pun"
+ ],
+ "embedding_dim": 768
+}

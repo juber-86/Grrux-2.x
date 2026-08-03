@@ -1,0 +1,703 @@
+"""Tests de la Fase L5 — §3 (traducción), §4 (glosario), §5 (bucle de
+corrección). Puros salvo el manejo de archivos temporales.
+
+Ejecutar:
+    python -m aspect_classifier.test_l5
+    RUN_SLOW=1 pytest aspect_classifier/test_l5.py
+"""
+
+import csv
+import os
+import shutil
+import sys
+import tempfile
+
+from . import correccion as c
+from . import display_grr as d
+from . import glosario as g
+
+RUN_SLOW = os.environ.get("RUN_SLOW") == "1" or "--slow" in sys.argv
+
+_DATA_REAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+
+
+# ═══════════════════════ §3 — traducción user-friendly ════════════════════
+def test_linea_rasgos_traduce_vector():
+    ls = {"vector": {"stat": 0.02, "dyn": 0.75, "tel": 0.40, "pun": 0.05},
+          "confianza": 0.84}
+    assert d.linea_rasgos(ls) == ("Rasgos: estático 0.02 · dinámico 0.75 · "
+                                  "télico 0.40 · puntual 0.05 · confianza 0.84")
+
+
+def test_linea_rasgos_none_sin_vector():
+    assert d.linea_rasgos({"ls_type": "state"}) is None
+
+
+def test_traducir_apendices_gate_y_ditrans():
+    note = "stat=0.1 gate=obj_medida→AA ditrans=transferencia(léxico)"
+    fr = d.traducir_apendices(note)
+    assert "corrección: objeto de medida (numeral) → Realización activa" in fr
+    assert "construcción: transferencia (léxico)" in fr
+
+
+def test_integridad_ok_y_alerta():
+    comp_ok = {"ok": True, "checks": [
+        {"tipo": "argumento", "elemento": "x1", "estado": "ok", "detalle": "x1(morf)"},
+        {"tipo": "agx", "elemento": "AGX", "estado": "ok", "detalle": "AGX✓"}]}
+    li = d.linea_integridad(comp_ok)
+    assert li.startswith("Integridad: ✓")
+    assert "x1 en la terminación verbal" in li and "concordancia (AGX) ✓" in li
+
+    comp_warn = {"ok": False, "checks": [
+        {"tipo": "argumento", "elemento": "x2", "estado": "falta_en_arbol",
+         "detalle": 'x2 ("participar") sin constituyente en el árbol'}]}
+    lw = d.linea_integridad(comp_warn)
+    assert lw.count("⚠") == 1   # un solo símbolo, no duplicado
+    assert 'x2 ("participar") NO aparece como constituyente en el árbol' in lw
+
+
+def test_render_bloque_orden_grr():
+    """Árbol PRIMERO, EL léxica INMEDIATAMENTE DEBAJO, luego el resto."""
+    ls = {"ls_type": "activity", "ls_formal": "do'(x1,[correr'(x1)])",
+          "ls_lexical": "do'(Juan,[correr'(Juan)])"}
+    out = d.render_bloque(ls, "[arbol]", None, verbose=False)
+    i_arbol = out.index("ÁRBOL SINTÁCTICO RRG")
+    i_lex = out.index("EL léxica")
+    i_tipo = out.index("Tipo")
+    assert i_arbol < i_lex < i_tipo
+
+
+# ═══════════════════════ §4 — glosario / -help ════════════════════════════
+def test_glosario_busqueda_tolerante():
+    gl = g.cargar_glosario()
+    assert [e["termino"] for e in g.buscar("agx", gl)] == ["AGX"]
+    assert g.buscar("telico", gl)[0]["termino"] == "télico (tel)"
+    assert len(g.buscar("peri", gl)) >= 2   # -PERI, PERI@CORE...
+
+
+def test_glosario_no_encontrado():
+    r = g.respuesta_help("zzz", g.cargar_glosario())
+    assert "no encontrado" in r and '"-help"' in r
+
+
+def test_es_comando_help_formas():
+    assert g.es_comando_help("-help") == (True, None)
+    assert g.es_comando_help("--ayuda telico") == (True, "telico")
+    assert g.es_comando_help("hola") == (False, None)
+
+
+# ═══════════════════════ §5 — validación de la EL (3 niveles) ═════════════
+_TOKS = "Juan le dio un regalo a María".split()
+
+
+def test_el_valida_transferencia():
+    v = c.validar_el("[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]", _TOKS, "dar")
+    assert v["ok"] and v["plantilla"] == "ditrans_transferencia"
+
+
+def test_el_rechazo_nivel1_parentesis():
+    v = c.validar_el("do'(Juan,[correr'(Juan)]", _TOKS, "dar")
+    assert not v["ok"] and v["nivel"] == 1
+
+
+def test_el_rechazo_nivel2_argumento_ajeno():
+    v = c.validar_el("do'(Pedro,[dar'(Pedro,regalo)])", _TOKS, "dar")
+    assert not v["ok"] and v["nivel"] == 2 and "Pedro" in v["error"]
+
+
+def test_el_rechazo_nivel3_plantilla_desconocida():
+    # 'correr'' primado, lema presente, pero sin estructura de plantilla.
+    v = c.validar_el("dar'", _TOKS, "dar")
+    assert not v["ok"] and v["nivel"] == 3
+
+
+# ═══════════════════════ §5 — orquestador (input inyectado) ═══════════════
+class _Entrada:
+    """input() falso: devuelve respuestas encoladas; EOFError si se agotan."""
+    def __init__(self, respuestas):
+        self.r = list(respuestas)
+
+    def __call__(self, _prompt=""):
+        if not self.r:
+            raise EOFError
+        return self.r.pop(0)
+
+
+def _tmp_data():
+    """Copia los léxicos vivos a un dir temporal para no tocar los reales."""
+    tmp = tempfile.mkdtemp()
+    for f in ("verbos_ditransitivos.xlsx", "causative_lexicon.csv"):
+        shutil.copy(os.path.join(_DATA_REAL, f), os.path.join(tmp, f))
+    return tmp
+
+
+def _res(ls_lexical="do'(Juan,[dar'(Juan)])", ls_type="activity", oracion="Juan le dio un regalo a María"):
+    return {"oracion": oracion, "ls_lista": [{
+        "ls_type": ls_type, "ls_lexical": ls_lexical, "ls_formal": "",
+        "morph_note": "stat=0.1", "core": [], "periferia": [], "agx": []}]}
+
+
+def test_correccion_clase_va_a_staging_sin_tocar_contextual():
+    tmp = _tmp_data()
+    salida = []
+    ctx = os.path.join(_DATA_REAL, "contextual_sentences.csv")
+    mtime_antes = os.path.getmtime(ctx)
+    ent = _Entrada(["1", "2"])   # menú→clase, clase→Actividad(2)
+    r = c.bucle_correccion(_res(), lambda o: _res(), sub_idx=0, entrada=ent,
+                           salida=salida.append, data_dir=tmp)
+    assert r["accion"] == "staging_clase"
+    assert os.path.exists(os.path.join(tmp, "correcciones_clase.csv"))
+    assert os.path.getmtime(ctx) == mtime_antes   # contextual JAMÁS tocado
+    # log maestro escrito
+    assert os.path.exists(os.path.join(tmp, "correcciones_log.csv"))
+    shutil.rmtree(tmp)
+
+
+def test_correccion_el_ditransitiva_persiste_con_confirmacion():
+    tmp = _tmp_data()
+    # el re-análisis confirma: devuelve un res cuya ditransitiva coincide
+    def reanalizar(_o):
+        return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
+                                              "ls_lexical": "", "core": [], "periferia": [],
+                                              "agx": []}]}
+    ent = _Entrada(["2", "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]"])
+    r = c.bucle_correccion(_res(), reanalizar, sub_idx=0, entrada=ent,
+                           salida=lambda *_: None, data_dir=tmp)
+    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
+    # el lema quedó en el xlsx con la marca
+    import pandas as pd
+    df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
+    fila = df[df["lema"] == "dar"].iloc[-1]
+    assert c.FUENTE in str(fila["notas"])
+    shutil.rmtree(tmp)
+
+
+def test_correccion_el_no_confirmada_cae_a_staging_y_revierte():
+    tmp = _tmp_data()
+    import pandas as pd
+    n_antes = len(pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx")))
+    # re-análisis NO confirma (ditransitiva None)
+    def reanalizar(_o):
+        return {"oracion": "x", "ls_lista": [{"ditransitiva": None, "ls_lexical": "",
+                                              "core": [], "periferia": [], "agx": []}]}
+    ent = _Entrada(["2", "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]"])
+    r = c.bucle_correccion(_res(), reanalizar, sub_idx=0, entrada=ent,
+                           salida=lambda *_: None, data_dir=tmp)
+    assert r["accion"] == "staging_no_confirmado"
+    # revert: el xlsx vuelve a su tamaño original (nada en vivo sin confirmar)
+    n_despues = len(pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx")))
+    assert n_despues == n_antes
+    assert os.path.exists(os.path.join(tmp, "correcciones_el.csv"))
+    shutil.rmtree(tmp)
+
+
+def test_correccion_enrutado_a_lista_config():
+    tmp = _tmp_data()
+    cfg = os.path.join(tmp, "config.yaml")
+    with open(cfg, "w", encoding="utf-8") as f:
+        f.write("nucleo_periferia:\n  verbos_movimiento: [ir, venir]\n")
+    ls = {"ls_type": "activity", "ls_lexical": "do'(Juan,[trotar'(Juan)])",
+          "core": [], "periferia": [{"id": 3, "text": "cima", "lemma": "cima", "tipo": "otro"}],
+          "agx": []}
+    res = {"oracion": "Juan trotó hasta la cima", "ls_lista": [ls]}
+
+    def reanalizar(_o):
+        nuevo = dict(ls)
+        nuevo["core"] = [{"text": "cima", "macropapel": "Meta"}]
+        nuevo["periferia"] = []
+        return {"oracion": res["oracion"], "ls_lista": [nuevo]}
+
+    # menú→enrutado(3), elemento 'cima'(1), destino argumento_core(1)
+    ent = _Entrada(["3", "1", "1"])
+    r = c.bucle_correccion(res, reanalizar, sub_idx=0, entrada=ent,
+                           salida=lambda *_: None, data_dir=tmp, config_path=cfg)
+    assert r["accion"] == "persistido_enrutado"
+    with open(cfg, encoding="utf-8") as f:
+        contenido = f.read()
+    assert "trotar" in contenido and "correccion_usuario" in contenido
+    shutil.rmtree(tmp)
+
+
+# ═══════════════════ G0.4 — API de corrección no-interactiva (GUI) ════════
+def test_g0_corregir_clase_staging_sin_menu():
+    tmp = _tmp_data()
+    ctx = os.path.join(_DATA_REAL, "contextual_sentences.csv")
+    mtime_antes = os.path.getmtime(ctx)
+    r = c.corregir_clase(_res(), 0, "activity", data_dir=tmp)
+    assert r == {"accion": "staging_clase", "clase": "activity"}
+    assert os.path.exists(os.path.join(tmp, "correcciones_clase.csv"))
+    assert os.path.getmtime(ctx) == mtime_antes
+    shutil.rmtree(tmp)
+
+
+def test_g0_corregir_el_persiste_con_confirmacion():
+    tmp = _tmp_data()
+
+    def reanalizar(_o):
+        return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
+                                              "ls_lexical": "", "core": [], "periferia": [],
+                                              "agx": []}]}
+    r = c.corregir_el(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                      reanalizar, data_dir=tmp)
+    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
+    shutil.rmtree(tmp)
+
+
+def test_g0_corregir_el_rechazada_nivel1():
+    r = c.corregir_el(_res(), 0, "dar'(", lambda o: _res())
+    assert r["accion"] == "rechazado" and r["nivel"] == 1
+
+
+def test_g0_corregir_el_no_confirmada_cae_a_staging():
+    tmp = _tmp_data()
+
+    def reanalizar(_o):
+        return {"oracion": "x", "ls_lista": [{"ditransitiva": None, "ls_lexical": "",
+                                              "core": [], "periferia": [], "agx": []}]}
+    r = c.corregir_el(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                      reanalizar, data_dir=tmp)
+    assert r["accion"] == "staging_no_confirmado"
+    shutil.rmtree(tmp)
+
+
+def test_g0_corregir_enrutado_por_id_sin_menu():
+    tmp = _tmp_data()
+    cfg = os.path.join(tmp, "config.yaml")
+    with open(cfg, "w", encoding="utf-8") as f:
+        f.write("nucleo_periferia:\n  verbos_movimiento: [ir, venir]\n")
+    ls = {"ls_type": "activity", "ls_lexical": "do'(Juan,[trotar'(Juan)])",
+          "core": [], "periferia": [{"id": 3, "text": "cima", "lemma": "cima", "tipo": "otro"}],
+          "agx": []}
+    res = {"oracion": "Juan trotó hasta la cima", "ls_lista": [ls]}
+
+    def reanalizar(_o):
+        nuevo = dict(ls)
+        nuevo["core"] = [{"text": "cima", "macropapel": "Meta"}]
+        nuevo["periferia"] = []
+        return {"oracion": res["oracion"], "ls_lista": [nuevo]}
+
+    r = c.corregir_enrutado(res, 0, elemento_id=3, destino="argumento_core",
+                            reanalizar_fn=reanalizar, data_dir=tmp, config_path=cfg)
+    assert r["accion"] == "persistido_enrutado"
+    with open(cfg, encoding="utf-8") as f:
+        contenido = f.read()
+    assert "trotar" in contenido and "correccion_usuario" in contenido
+    shutil.rmtree(tmp)
+
+
+def test_g0_corregir_enrutado_elemento_inexistente():
+    r = c.corregir_enrutado(_res(), 0, elemento_id=999, destino="agx",
+                            reanalizar_fn=lambda o: _res())
+    assert r["accion"] == "cancelado" and "error" in r
+
+
+def test_g0_corregir_enrutado_destino_desconocido():
+    ls = {"ls_type": "activity", "ls_lexical": "", "core": [{"id": 1, "text": "x"}],
+          "periferia": [], "agx": []}
+    res = {"oracion": "x", "ls_lista": [ls]}
+    r = c.corregir_enrutado(res, 0, elemento_id=1, destino="no_existe",
+                            reanalizar_fn=lambda o: res)
+    assert r["accion"] == "cancelado" and "error" in r
+
+
+def test_g0_flujo_clase_interactivo_sigue_igual_via_menu():
+    """Regresión: el menú interactivo, tras el refactor G0.4, produce
+    exactamente la misma acción que antes (llama a la lógica compartida)."""
+    tmp = _tmp_data()
+    ent = _Entrada(["1", "2"])
+    r = c.bucle_correccion(_res(), lambda o: _res(), sub_idx=0, entrada=ent,
+                           salida=lambda *_: None, data_dir=tmp)
+    assert r["accion"] == "staging_clase" and r["clase"] == "activity"
+    shutil.rmtree(tmp)
+
+
+# ═══════════════════ G3 §1 — lema robusto (los 3 casos del prompt) ════════
+# LS "de origen" que reproduce el bug del checkpoint G2: la EL léxica solo
+# expone do'/have' (ambos en _PRED_NO_LEMA), sin el verbo real primado en
+# ningún lado -> `_lema_de` cae a `ls_type` ("accomplishment", un nombre de
+# CLASE, no un verbo).
+def _res_sin_verbo_primado():
+    return {"oracion": "Juan le dio un regalo a María", "ls_lista": [{
+        "ls_type": "accomplishment", "ls_lexical": "do'(Juan,[have'(María,regalo)])",
+        "ls_formal": "", "morph_note": "", "core": [], "periferia": [], "agx": []}]}
+
+
+def _reanalisis_confirma_transferencia(_o):
+    return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
+                                          "ls_lexical": "", "core": [], "periferia": [], "agx": []}]}
+
+
+def test_g3_lema_de_ignora_wrappers_periferia_fijos():
+    """§1.2 — con los wrappers FIJOS de periferia (because-of/despite/every/
+    probably/…) ahora en `_PRED_NO_LEMA`, `_lema_de` sigue encontrando el
+    verbo real envuelto en vez de devolver el predicado del wrapper."""
+    ls = {"ls_lexical": "because-of'(lluvia, [do'(Juan,[correr'(Juan)])])"}
+    assert c._lema_de(ls) == "correr"
+    ls2 = {"ls_lexical": "probably'(despite'(obstaculo, [do'(Ana,[nadar'(Ana)])]))"}
+    assert c._lema_de(ls2) == "nadar"
+
+
+def test_g3_corregir_el_verb_lemma_explicito_persiste_lema_real():
+    """§1.1 — reproduce el bug del checkpoint: la LS de origen no expone
+    verbo primado (fallback a ls_type="accomplishment"). Con `verb_lemma`
+    explícito ("dar"), ESE lema gana sobre `_lema_de` y se persiste bien."""
+    tmp = _tmp_data()
+    r = c.corregir_el(_res_sin_verbo_primado(), 0,
+                      "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                      _reanalisis_confirma_transferencia, data_dir=tmp, verb_lemma="dar")
+    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
+    import pandas as pd
+    df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
+    fila = df[df["lema"] == "dar"].iloc[-1]
+    assert c.FUENTE in str(fila["notas"])
+    shutil.rmtree(tmp)
+
+
+def test_g3_corregir_el_sin_lema_identificable_va_a_staging_nunca_fila_espuria():
+    """§1.3 — MISMO escenario SIN `verb_lemma`: `_lema_de` cae a "accomplishment"
+    (nombre de clase) -> la guardia anti-basura lo detecta, NUNCA lo persiste
+    en verbos_ditransitivos.xlsx; va a staging con motivo explícito."""
+    tmp = _tmp_data()
+    import pandas as pd
+    n_antes = len(pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx")))
+    r = c.corregir_el(_res_sin_verbo_primado(), 0,
+                      "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                      _reanalisis_confirma_transferencia, data_dir=tmp)
+    assert r["accion"] == "staging_lema_no_identificable"
+    df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
+    assert len(df) == n_antes   # jamás una fila espuria
+    assert "accomplishment" not in df["lema"].astype(str).str.lower().values
+    assert os.path.exists(os.path.join(tmp, "correcciones_el.csv"))
+    shutil.rmtree(tmp)
+
+
+def test_g3_clase_sugerida_por_plantilla_mapa_completo():
+    assert c.clase_sugerida_por_plantilla("state") == "state"
+    assert c.clase_sugerida_por_plantilla("activity") == "activity"
+    assert c.clase_sugerida_por_plantilla("accomplishment") == "accomplishment"
+    assert c.clase_sugerida_por_plantilla("achievement") == "achievement"
+    assert c.clase_sugerida_por_plantilla("semelfactive") == "semelfactive"
+    assert c.clase_sugerida_por_plantilla("causativa") == "accomplishment"
+    assert c.clase_sugerida_por_plantilla("ditrans_transferencia") == "accomplishment"
+    assert c.clase_sugerida_por_plantilla("ditrans_benefactiva") == "accomplishment"
+    assert c.clase_sugerida_por_plantilla("ditrans_comunicacion") == "accomplishment"
+    assert c.clase_sugerida_por_plantilla(None) is None
+    assert c.clase_sugerida_por_plantilla("no_existe") is None
+
+
+# ═══════════════════ G3 §2 — "corregir todo" (EL + clase, un solo paso) ════
+def test_g3_corregir_todo_clase_staging_y_el_persistida_un_solo_reanalisis():
+    tmp = _tmp_data()
+    llamadas = []
+
+    def reanalizar(o):
+        llamadas.append(o)
+        return _reanalisis_confirma_transferencia(o)
+
+    r = c.corregir_todo(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                        "accomplishment", reanalizar, data_dir=tmp)
+    assert len(llamadas) == 1   # UN solo re-análisis compartido, nunca dos
+    assert r["accion"] == "staging_clase+persistido"
+    assert r["clase_resultado"]["accion"] == "staging_clase"
+    assert r["el_resultado"]["accion"] == "persistido"
+    assert os.path.exists(os.path.join(tmp, "correcciones_clase.csv"))
+    shutil.rmtree(tmp)
+
+
+def test_g3_corregir_todo_el_no_confirmada_igual_stagea_la_clase():
+    tmp = _tmp_data()
+    llamadas = []
+
+    def reanalizar(o):
+        llamadas.append(o)
+        return {"oracion": "x", "ls_lista": [{"ditransitiva": None, "ls_lexical": "",
+                                              "core": [], "periferia": [], "agx": []}]}
+
+    r = c.corregir_todo(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
+                        "accomplishment", reanalizar, data_dir=tmp)
+    assert len(llamadas) == 1
+    assert r["accion"] == "staging_clase+staging_no_confirmado"
+    shutil.rmtree(tmp)
+
+
+def test_g3_corregir_todo_el_rechazada_cero_reanalisis_pero_clase_igual_stagea():
+    tmp = _tmp_data()
+    llamadas = []
+    r = c.corregir_todo(_res(), 0, "dar'(", "state", lambda o: llamadas.append(o), data_dir=tmp)
+    assert len(llamadas) == 0   # EL inválida nunca dispara re-análisis
+    assert r["accion"] == "staging_clase+rechazado"
+    assert os.path.exists(os.path.join(tmp, "correcciones_clase.csv"))
+    shutil.rmtree(tmp)
+
+
+def test_g3_corregir_todo_respeta_verb_lemma_explicito():
+    tmp = _tmp_data()
+    r = c.corregir_todo(_res_sin_verbo_primado(), 0,
+                        "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]", "accomplishment",
+                        _reanalisis_confirma_transferencia, data_dir=tmp, verb_lemma="dar")
+    assert r["el_resultado"]["accion"] == "persistido"
+    import pandas as pd
+    df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
+    assert (df["lema"] == "dar").any()
+    shutil.rmtree(tmp)
+
+
+def test_correccion_esc_cancela_sin_efectos():
+    tmp = _tmp_data()
+    antes = sorted(os.listdir(tmp))
+    ent = _Entrada(["esc"])   # cancela en el menú
+    r = c.bucle_correccion(_res(), lambda o: _res(), sub_idx=0, entrada=ent,
+                           salida=lambda *_: None, data_dir=tmp)
+    assert r["accion"] == "cancelado"
+    assert sorted(os.listdir(tmp)) == antes   # ningún archivo nuevo
+    shutil.rmtree(tmp)
+
+
+# ═══════ Fix 2026-07-12 — -help en prompts post-análisis (nunca se traga) ══
+# Bug reproducido por Julian: el prompt "¿Guardar en .txt? (s/n) — o (c)…"
+# ignoraba -help y el input caía al prompt siguiente ("Oración (o 'salir')").
+# `correccion._pedir` (usado por TODO el menú de corrección y sus sub-menús)
+# y `gruxx_ai1._flujo_guardar_o_corregir` (extraído del bucle inline de
+# main() para poder testearse aquí) ahora responden -help y VUELVEN A
+# MOSTRAR el mismo prompt, sin abortar ni tragarse el flujo.
+def test_pedir_ayuda_con_termino_responde_y_repregunta():
+    """§5 item 4: -help agx dentro de un sub-menú responde y re-muestra el
+    MISMO prompt (no cuenta como respuesta, no cancela)."""
+    salida = []
+    ent = _Entrada(["-help agx", "3"])
+    val = c._pedir("  Elige [1/2/3]:", ent, salida.append)
+    assert val == "3"   # la respuesta real (tras el -help) sí se procesa
+    texto = "\n".join(salida)
+    assert "AGX" in texto   # el glosario respondió el término
+    assert salida.count("  Elige [1/2/3]:") == 2   # el prompt se repitió
+
+
+def test_pedir_ayuda_sin_termino_vuelca_glosario_completo():
+    salida = []
+    ent = _Entrada(["-help", "1"])
+    val = c._pedir("  Elige [1/2/3]:", ent, salida.append)
+    assert val == "1"
+    assert any("Clases aspectuales" in s for s in salida)   # categoría real
+
+
+def test_pedir_ayuda_termino_no_encontrado_luego_esc_cancela():
+    salida = []
+    ent = _Entrada(["-help zzz", "esc"])
+    val = c._pedir("  Elige [1/2/3]:", ent, salida.append)
+    assert val is c._CANCEL   # Esc sigue cancelando limpio TRAS el -help
+    assert any("no encontrado" in s for s in salida)
+
+
+def test_bucle_correccion_ayuda_en_menu_no_aborta_esc_cancela_despues():
+    """§5 item 4 completo: dentro del menú de corrección, -help responde SIN
+    cerrar el menú; Esc a continuación cancela limpio (sin efectos)."""
+    tmp = _tmp_data()
+    antes = sorted(os.listdir(tmp))
+    salida = []
+    ent = _Entrada(["-help agx", "esc"])
+    r = c.bucle_correccion(_res(), lambda o: _res(), sub_idx=0, entrada=ent,
+                           salida=salida.append, data_dir=tmp)
+    assert r["accion"] == "cancelado"
+    assert sorted(os.listdir(tmp)) == antes   # -help no contaminó nada
+    texto = "\n".join(salida)
+    assert "AGX" in texto
+    assert "¿Qué está mal en el análisis?" in texto
+    shutil.rmtree(tmp)
+
+
+def _res_gruxx(oracion="Juan corrió"):
+    return {"oracion": oracion,
+            "ls_lista": [{"ls_type": "activity", "ls_lexical": "do'(Juan,[correr'(Juan)])",
+                          "ls_formal": "do'(x1,[correr'(x1)])", "morph_note": "stat=0.0",
+                          "core": [], "periferia": [], "agx": []}],
+            "stdout": "--- Oración 1 ---\n┌ SENTENCE\nConvertidas: 1 | Fallidas: 0\n",
+            "completeness": [{"ok": True, "checks": [], "resumen": "Completeness: ✓"}]}
+
+
+def _entrada_contando(respuestas):
+    """entrada() falso que además cuenta cuántas veces se lo llamó (para
+    verificar que el prompt de guardar/corregir se re-mostró tras -help)."""
+    cola = list(respuestas)
+    llamadas = []
+
+    def _e(prompt=""):
+        llamadas.append(prompt)
+        if not cola:
+            raise EOFError
+        return cola.pop(0)
+    _e.llamadas = llamadas
+    return _e
+
+
+def test_flujo_guardar_ayuda_termino_luego_guarda():
+    """1. -help agx → glosario responde → re-prompt → s → guarda normal."""
+    import gruxx_ai1 as g
+    tmp, cwd = tempfile.mkdtemp(), os.getcwd()
+    os.chdir(tmp)
+    try:
+        salida = []
+        ent = _entrada_contando(["-help agx", "s"])
+        resultado = g._flujo_guardar_o_corregir(
+            "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+            entrada=ent, salida=salida.append)
+        assert resultado == "guardado"
+        assert len(ent.llamadas) == 2   # el prompt se pidió DOS veces
+        assert any("AGX" in s for s in salida)
+        assert os.path.exists(g._nombre_archivo("Juan corrió"))
+    finally:
+        os.chdir(cwd)
+        shutil.rmtree(tmp)
+
+
+def test_flujo_guardar_ayuda_completa_luego_no_guarda():
+    """2. -help (completo) → re-prompt → n → no guarda, flujo sigue."""
+    import gruxx_ai1 as g
+    salida = []
+    ent = _entrada_contando(["-help", "n"])
+    resultado = g._flujo_guardar_o_corregir(
+        "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+        entrada=ent, salida=salida.append)
+    assert resultado == "no_guardado"
+    assert len(ent.llamadas) == 2
+    assert any("Clases aspectuales" in s for s in salida)   # glosario completo
+
+
+def test_flujo_guardar_ayuda_no_encontrado_luego_corrige():
+    """3. -help zzz → 'no encontrado' → re-prompt → c → el menú de
+    corrección abre normal (mismo flujo, sin abortar)."""
+    import gruxx_ai1 as g
+    salida = []
+    ent = _entrada_contando(["-help zzz", "c"])
+    resultado = g._flujo_guardar_o_corregir(
+        "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+        entrada=ent, salida=salida.append)
+    texto = "\n".join(salida)
+    assert "no encontrado" in texto
+    assert "¿Qué está mal en el análisis?" in texto   # el menú SÍ abrió
+    # la entrada se agota dentro del menú (EOF) -> cancela -> vuelve a
+    # ofrecer guardar -> EOF también -> no_guardado (nunca revienta)
+    assert resultado == "no_guardado"
+
+
+def test_flujo_guardar_regresion_s_n_salir_directos():
+    """5. Regresión: s/n/salir directos (sin -help de por medio) funcionan
+    igual que antes del fix."""
+    import gruxx_ai1 as g
+
+    tmp, cwd = tempfile.mkdtemp(), os.getcwd()
+    os.chdir(tmp)
+    try:
+        assert g._flujo_guardar_o_corregir(
+            "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+            entrada=_Entrada(["s"]), salida=lambda *_: None) == "guardado"
+    finally:
+        os.chdir(cwd)
+        shutil.rmtree(tmp)
+
+    assert g._flujo_guardar_o_corregir(
+        "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+        entrada=_Entrada(["n"]), salida=lambda *_: None) == "no_guardado"
+    assert g._flujo_guardar_o_corregir(
+        "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+        entrada=_Entrada([""]), salida=lambda *_: None) == "no_guardado"
+    assert g._flujo_guardar_o_corregir(
+        "Juan corrió", _res_gruxx(), lambda o: _res_gruxx(),
+        entrada=_Entrada(["salir"]), salida=lambda *_: None) == "salir"
+
+
+# ═══════════════════════ @slow — bucle real end-to-end ════════════════════
+def test_slow_correccion_ditransitiva_end_to_end():
+    """Pipeline real (Stanza + mapper): corregir 'Juan le dio flores a María'
+    a la plantilla de transferencia y confirmar por re-análisis. Usa un dir
+    temporal para no tocar los léxicos reales; restaura _DITRANS_LEXICON."""
+    import stanza
+    import rrg_ls_mapper as m
+    tmp = _tmp_data()
+    nlp = stanza.Pipeline("es", processors="tokenize,mwt,pos,lemma,depparse",
+                          verbose=False)
+
+    def procesar(oracion):
+        sent = nlp(oracion).sentences[0]
+        return {"oracion": oracion, "ls_lista": [m.map_sentence_to_ls(sent)]}
+
+    backup = dict(m._DITRANS_LEXICON) if m._DITRANS_LEXICON is not None else None
+    try:
+        oracion = "Juan le dio flores a María"
+        res = procesar(oracion)
+        ent = _Entrada(["2", "[do'(Juan,Ø)] CAUSE [BECOME have'(María,flores)]"])
+        r = c.bucle_correccion(res, procesar, sub_idx=0, entrada=ent,
+                               salida=lambda *_a: None, data_dir=tmp)
+        assert r["accion"] in ("persistido", "staging_no_confirmado")
+    finally:
+        if backup is not None:
+            m._DITRANS_LEXICON.clear()
+            m._DITRANS_LEXICON.update(backup)
+        shutil.rmtree(tmp)
+
+
+_PUROS = [test_linea_rasgos_traduce_vector, test_linea_rasgos_none_sin_vector,
+          test_traducir_apendices_gate_y_ditrans, test_integridad_ok_y_alerta,
+          test_render_bloque_orden_grr, test_glosario_busqueda_tolerante,
+          test_glosario_no_encontrado, test_es_comando_help_formas,
+          test_el_valida_transferencia, test_el_rechazo_nivel1_parentesis,
+          test_el_rechazo_nivel2_argumento_ajeno, test_el_rechazo_nivel3_plantilla_desconocida,
+          test_correccion_clase_va_a_staging_sin_tocar_contextual,
+          test_correccion_el_ditransitiva_persiste_con_confirmacion,
+          test_correccion_el_no_confirmada_cae_a_staging_y_revierte,
+          test_correccion_enrutado_a_lista_config,
+          test_correccion_esc_cancela_sin_efectos,
+          test_pedir_ayuda_con_termino_responde_y_repregunta,
+          test_pedir_ayuda_sin_termino_vuelca_glosario_completo,
+          test_pedir_ayuda_termino_no_encontrado_luego_esc_cancela,
+          test_bucle_correccion_ayuda_en_menu_no_aborta_esc_cancela_despues,
+          test_flujo_guardar_ayuda_termino_luego_guarda,
+          test_flujo_guardar_ayuda_completa_luego_no_guarda,
+          test_flujo_guardar_ayuda_no_encontrado_luego_corrige,
+          test_flujo_guardar_regresion_s_n_salir_directos,
+          test_g0_corregir_clase_staging_sin_menu,
+          test_g0_corregir_el_persiste_con_confirmacion,
+          test_g0_corregir_el_rechazada_nivel1,
+          test_g0_corregir_el_no_confirmada_cae_a_staging,
+          test_g0_corregir_enrutado_por_id_sin_menu,
+          test_g0_corregir_enrutado_elemento_inexistente,
+          test_g0_corregir_enrutado_destino_desconocido,
+          test_g0_flujo_clase_interactivo_sigue_igual_via_menu,
+          test_g3_lema_de_ignora_wrappers_periferia_fijos,
+          test_g3_corregir_el_verb_lemma_explicito_persiste_lema_real,
+          test_g3_corregir_el_sin_lema_identificable_va_a_staging_nunca_fila_espuria,
+          test_g3_clase_sugerida_por_plantilla_mapa_completo,
+          test_g3_corregir_todo_clase_staging_y_el_persistida_un_solo_reanalisis,
+          test_g3_corregir_todo_el_no_confirmada_igual_stagea_la_clase,
+          test_g3_corregir_todo_el_rechazada_cero_reanalisis_pero_clase_igual_stagea,
+          test_g3_corregir_todo_respeta_verb_lemma_explicito]
+
+if not RUN_SLOW:
+    try:
+        import pytest
+        test_slow_correccion_ditransitiva_end_to_end = pytest.mark.skipif(
+            True, reason="lento: exportar RUN_SLOW=1")(
+            test_slow_correccion_ditransitiva_end_to_end)
+    except ImportError:
+        pass
+
+
+def main():
+    tests = _PUROS + ([test_slow_correccion_ditransitiva_end_to_end] if RUN_SLOW else [])
+    fallos = 0
+    for t in tests:
+        try:
+            t()
+            print(f"  [OK]   {t.__name__}")
+        except AssertionError as e:
+            fallos += 1
+            print(f"  [FAIL] {t.__name__}: {e}")
+        except Exception as e:
+            fallos += 1
+            print(f"  [ERR]  {t.__name__}: {type(e).__name__}: {e}")
+    if fallos:
+        sys.exit(1)
+    print(f"\n{len(tests)} tests pasaron.")
+
+
+if __name__ == "__main__":
+    main()

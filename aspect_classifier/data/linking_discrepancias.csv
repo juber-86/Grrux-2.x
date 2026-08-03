@@ -1,0 +1,21 @@
+lema,oracion,texto,macrorol_auh,posicion,macropapel_previo
+comer,el pastel fue comido por Juan,pastel,Actor,1_do,Undergoer
+comer,el pastel fue comido por Juan,Juan,Undergoer,2_pred_xy,Actor
+vender,Se venden casas,casas,Actor,1_do,Undergoer(paciente→PSA)
+vender,Se vende casas,casas,Actor,1_do,Undergoer(paciente→PSA)
+vender,Se venden casas .,casas,Actor,1_do,Undergoer(paciente→PSA)
+vender,Se venden casas baratas .,casas,Actor,1_do,Undergoer(paciente→PSA)
+comer,El pastel fue comido por Juan .,pastel,Actor,1_do,Undergoer
+comer,El pastel fue comido por Juan .,Juan,Undergoer,2_pred_xy,Actor
+toser,tosió durante una hora,3sg,Undergoer,arg_estado,Actor(implícito)
+comer,El pastel fue comido por Juan,pastel,Actor,1_do,Undergoer
+comer,El pastel fue comido por Juan,Juan,Undergoer,2_pred_xy,Actor
+tener,probablemente Maria no tiene que preparar la comida,3sg,Undergoer,arg_estado,Actor(implícito)
+correr,El perro corrió hasta la casa,casa,Undergoer,2_pred_xy,Meta
+vender,se venden casas,casas,Actor,1_do,Undergoer(paciente→PSA)
+hablar,se habla español,español,Undergoer,2_pred_xy,Tema
+vender,se venden tacos,tacos,Actor,1_do,Undergoer(paciente→PSA)
+romper,se rompió la ventana,x,Actor,1_do,(no encontrado)
+explotar,El globo explotó .,globo,Undergoer,arg_estado,Actor
+explotar,el carro explotó,carro,Undergoer,arg_estado,Actor
+tronar,el cielo tronó,cielo,Undergoer,arg_estado,Actor

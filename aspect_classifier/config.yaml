@@ -1,0 +1,332 @@
+# Configuración del módulo aspect_classifier (grrux)
+
+data:
+  xlsx: data/conjunto_verbos_semilla_clase_aspectual.xlsx
+  clean_csv: data/dataset_clean.csv
+  ambiguous_csv: data/ambiguous_cases.csv
+  multiword_csv: data/multiword_cases.csv
+  # Oraciones contextuales CURADAS A MANO (append-only: gen_contextual_sentences
+  # se niega a regenerarlas) y candidatos Semelfactive del Paso 3A.
+  contextual_csv: data/contextual_sentences.csv
+  semelfactive_csv: data/semelfactive_candidates.csv
+  embeddings_dir: data/embeddings
+
+# Extracción de embeddings (extractor.py / extractor_contextual.py)
+extractor:
+  # PlanTL-GOB-ES/roberta-base-bne fue deprecado y sus pesos retirados del
+  # HF Hub (2026); BERTIN es la alternativa disponible con la misma
+  # arquitectura (RoBERTa-base español, 12 capas, 768 dim).
+  model: bertin-project/bertin-roberta-base-spanish
+  layer: 8            # capa oculta 0-indexed de la que se extrae el embedding
+
+# Fase 2 — clasificación contextual (dos cabezas: léxica en models/,
+# contextual complex-pooled en models/contextual/)
+fase2:
+  # Peso del embedding contextual al combinarse con el léxico (0 = solo
+  # léxico, 1 = solo contexto).
+  #
+  # RECALIBRACIÓN 2026-07-11 (lote augment_habitual, 68 oraciones nuevas en
+  # PRESENTE, dataset 468->536, held-out NUEVO tras reentrenar la cabeza
+  # contextual: 112 oraciones, 42 lemas -- ver checkpoint del reentrenamiento):
+  #   Config vigente (w=0.5, dyn=0.40, pun=0.45, tel=0.35) evaluada en el
+  #   held-out NUEVO: macro-F1 0.827 (Semelf=0.89 State=1.00 AA=0.68).
+  #   GANADORA del barrido: w=0.55, dyn=0.45, pun=0.40, tel=0.40 ->
+  #   macro-F1 0.838 (Semelf=0.89 State=1.00 AA=0.70). Guardarrail cumplido
+  #   (0.838 >= 0.827, evaluado en el mismo held-out nuevo -- las cifras NO
+  #   son comparables 1:1 con el 0.796 de Pre-Paso 4, ese held-out era otro).
+  peso_contextual: 0.55
+  # Poolear sobre el complejo verbal (verbo + clíticos + núcleo del OD)
+  # en vez de solo el token del verbo. Requiere la cabeza contextual
+  # (models/contextual/, entrenada con la misma receta de pooling);
+  # con false se recupera el mecanismo pre-Paso 2 (verbo solo + cabeza
+  # léxica; para regresión exacta usar también peso_contextual: 0.5).
+  usar_complejo_verbal: true
+  clitic_deprels: [expl, expl:pv, expl:pass, expl:impers]
+  # Verificado: "cinco kilómetros" parsea como obj en Stanza/AnCora;
+  # no añadir obl (arrastraría adjuntos: "con la cabeza", "de todo").
+  od_like_deprels: [obj]
+  incluir_od_nucleo: true
+  incluir_od_det: false
+
+# Etapa 1 — enrutado núcleo/core/periferia (nucleo_periferia.py).
+# Heurísticas CONSERVADORAS: obl solo asciende a core como agente de
+# pasiva o meta/origen de un verbo de movimiento de esta lista.
+nucleo_periferia:
+  verbos_movimiento: [ir, venir, llegar, salir, entrar, correr, caminar,
+                      subir, bajar, volver, regresar, viajar, volar, nadar,
+                      conducir, marchar, dar]  # correccion_usuario
+  case_meta: [a, hacia, hasta]
+  case_origen: [desde]
+  impersonales: [llover, nevar, granizar, amanecer, anochecer, haber]
+
+# Fase LINKING, Etapa L1b — wrappers de periferia en la LS (wrappers_ls.py).
+# Reescrito en la Etapa PERIFERIA (2026-07-13, prompt_opus48_periferia.md):
+# TODA la periferia se envuelve (mata "otro"); tablas editables aquí sin
+# tocar código. Metalenguaje en inglés (convención RRG de Van Valin).
+wrappers_ls:
+  enabled: true   # flag maestro; false = regresión byte-idéntica
+  # Locativos ESPACIALES (be- reservado solo para locación espacial).
+  locativos:
+    en: be-in
+    sobre: be-on
+    encima: be-on
+    bajo: be-under
+    debajo: be-under
+    entre: be-between
+    cerca: be-near
+    delante: be-in-front-of
+    ante: be-in-front-of
+    detrás: be-behind
+    tras: be-behind
+    junto: be-beside
+  locativo_fallback: be-at   # cualquier otro case locativo sin entrada propia
+  # Temporales simples (preposición → predicado bivalente). 'durante'/'por'/
+  # 'a'/'en' NO van aquí: tienen regla semántica propia en wrappers_ls.py
+  # (durante: cantidad de tiempo→for', evento/intervalo→during'; por→for';
+  # a/en punto temporal→at').
+  temporales_simples:
+    antes: before
+    después: after
+    hasta: until
+    desde: since
+  # Adverbios temporales monovalentes (sin preposición, deprel=advmod).
+  adverbios_monovalentes:
+    ayer: yesterday
+    hoy: today
+    anoche: last.night
+    ahora: now
+    mañana: tomorrow   # solo alcanzable vía deprel=advmod (NOUN "la mañana" es duración, otra rama)
+  sin_wrapper: [ya, todavía]     # aspectuales, operadores futuros — quedan listados, sin envolver
+  # NÚCLEO -- adverbios aspectuales de fase/grado (envuelven el primitivo
+  # más profundo de la LS).
+  aspectuales:
+    completamente: completely
+    totalmente: completely
+    íntegramente: completely
+    parcialmente: partially
+    continuamente: continuously
+    ininterrumpidamente: continuously
+    incesantemente: continuously
+    constantemente: constantly
+    gradualmente: gradually
+    paulatinamente: gradually
+    progresivamente: progressively
+  # CLÁUSULA -- epistémicos/evidenciales (envuelven la proposición completa).
+  epistemicos:
+    probablemente: probably
+    posiblemente: possibly
+    seguramente: surely
+    quizá: maybe
+    quizás: maybe
+    tal vez: maybe
+    evidentemente: evidently
+    obviamente: obviously
+    aparentemente: apparently
+  # CENTRO -- frecuencia: adverbio monovalente (always'/never'/...) y NP
+  # distributivo bivalente ("todos los días"/"cada semana" → every'(x,[LS])).
+  frecuencia_adverbios:
+    siempre: always
+    nunca: never
+    frecuentemente: frequently
+    habitualmente: habitually
+    a menudo: often
+    a veces: sometimes
+    algunas veces: sometimes
+  frecuencia_distributiva: every
+  # CLÁUSULA -- razón/concesión/condición (preposición predicativa
+  # bivalente sobre la frase COMPUESTA completa, p.ej. "a pesar de").
+  # 'por' causal simple queda aquí también como fallback (ver
+  # nucleo_periferia._tipo_periferia: solo dispara si no hay lectura
+  # temporal ni es agente de pasiva).
+  razon:
+    debido a: because-of
+    a causa de: because-of
+    por causa de: because-of
+    gracias a: thanks-to
+    por: because-of
+  razon_fallback: because-of
+  concesion:
+    a pesar de: despite
+    pese a: despite
+  concesion_fallback: despite
+  condicion:
+    en caso de: in-case-of
+  condicion_fallback: in-case-of
+  # GENÉRICO (mata "otro") -- preposiciones frecuentes sin capa propia;
+  # fallback = la preposición misma como predicado (nunca queda sin envolver).
+  preposiciones_predicativas:
+    con: with
+    sin: without
+    para: for-benefit
+    contra: against
+    según: according-to
+    mediante: by-means-of
+
+# Etapa OPERATORS — operadores de la GRR en la EL (operadores.py). NO tocan el
+# árbol de constituyentes: son la proyección en espejo, que se representa
+# envolviendo la EL con ⟨ ⟩ en el orden de scope de 2.25. Abreviaturas y
+# valores EN INGLÉS Y VERSALITAS (notación del libro).
+operadores:
+  enabled: true            # flag maestro; false = salida byte-idéntica a pre-OPERATORS
+  # Perífrasis modales deónticas verificadas contra Stanza: el AUXILIAR cuelga
+  # del infinitivo (que es la raíz). "tener que" NO parsea así — lleva patrón
+  # propio en el módulo (perifrasis_tener_que).
+  modales:
+    deber: OBLG
+    poder: ABIL
+  perifrasis_tener_que: true
+  # Negadores que disparan ⟨NEG⟩. SOLO el negador puro: 'nunca'/'jamás'/
+  # 'tampoco' también llevan Polarity=Neg en Stanza, pero fusionan negación
+  # con cuantificación de evento o aditividad, y reducirlas a ⟨NEG⟩ perdería
+  # esa parte (EVQ no está implementado). Conservan su wrapper léxico
+  # (never'…) hasta que exista EVQ. Ver operadores._detectar_neg.
+  # OJO: las comillas son OBLIGATORIAS -- en YAML 1.1 un `no` desnudo se
+  # parsea como el booleano False, no como la palabra "no".
+  negadores: ["no"]
+  # Auxiliares que HOY no son operador pero podrían serlo (aspectuales/modales
+  # de frontera): no cambian nada, solo se loguean para que Julian decida.
+  perifrasis_vigiladas: [soler, querer, ir, saber, necesitar, intentar, tratar, acabar, volver]
+  # Adverbios epistémicos → STA. Los irreales dan IRR; los asertivos hacen
+  # explícito el REAL (que por defecto se omite).
+  adv_epistemicos_irreal: [quizá, quizás, tal vez, acaso, posiblemente,
+                           probablemente, seguramente, a lo mejor]
+  adv_epistemicos_real: [ciertamente, indudablemente, sin duda, obviamente,
+                         evidentemente]
+
+# Fase LINKING, Etapa L2.5 — Estructuras Lógicas ditransitivas (recipiente)
+# (ditransitivas.py). Léxico curado en data/verbos_ditransitivos.xlsx
+# (Julian lo edita); trigger estructural sobre lo que Etapa 1 ya produce,
+# sin modelo/LLM. Ver docstring de ditransitivas.py para las 3 plantillas.
+ditransitivas:
+  enabled: true              # flag maestro; false = regresión byte-idéntica
+  lexicon_xlsx: data/verbos_ditransitivos.xlsx
+  default_plantilla: transferencia   # verbo fuera del léxico + trigger → esta plantilla + log
+  benefactiva_para: true     # decisión 4: "compró un regalo para María" (sin clítico) dispara PURP
+  case_para: para             # preposición del beneficiario sin clítico
+
+# Pruebas de Van Valin ESTRUCTURALES (pruebas_estructurales.py): detectan el
+# entorno de prueba en la oración real (rule-based), no juicios MLM sobre
+# frames sintéticos. Familia completa de reglas_RRG.txt; P6 y P7 no van aquí
+# (ver docstring del módulo).
+pruebas_estructurales:
+  enabled: true          # flag maestro; false = regresión byte-idéntica
+  adv_dinamicos: [vigorosamente, activamente, enérgicamente, dinámicamente]  # P2
+  adv_ritmo: [lentamente, rápidamente, gradualmente]                        # P3
+  prep_durativas: [durante, por]                                           # P4
+  prep_terminativa: en                                                     # P5
+  coerciones:            # flags individuales, cambian de clase (todas true por defecto)
+    semelfactive_iterativa: true    # R1: semelfactive + P1/P4 → activity (lectura iterativa)
+    lectura_atelica: true           # R2: accomplishment/AA + P4 sin P5 → activity (atélico)
+  avisos: true            # R3 (P5 confirma télico) / R4 (conflictos): solo notas, sin cambiar clase
+
+# Corroborador Van Valin (pruebas_clase_aspectual.py): pruebas de clase
+# aspectual como contrastes de pares mínimos con la cabeza MLM de BERTIN.
+pruebas:
+  adv_dinamico: vigorosamente     # p2: solo diagnóstico (fuera del vector)
+  adv_neutro: aparentemente
+  adv_durativo: lentamente        # p3: solo diagnóstico (fuera del vector)
+  adv_puntual: de repente
+  prep_terminativa: en
+  prep_durativa: durante
+  temperatura_pll: 0.5
+  temperatura_mask: 4.0
+  # Offset de centrado del contraste p45 (en/durante): el ranking del Δ es
+  # correcto pero "en" gana siempre por frecuencia (todos los Δ > 0). El bias
+  # resta ese desplazamiento antes de la sigmoide: s = σ((Δ−bias)/τ_mask).
+  # Se fija en la CALIBRACIÓN (python -m aspect_classifier.calibrate --pruebas);
+  # rango útil de Δ visto: [+1.8, +6.2]. 0.0 = sin recentrado.
+  bias_mask: 0.0
+  # Peso de p6 (participio resultativo) dentro de tel; auxiliar de bajo peso
+  # (falla en "estornudado" → NO discrimina Achievement/Semelfactive).
+  #   tel = (1 − peso_p6_en_tel)·s45_centrado + peso_p6_en_tel·s6
+  peso_p6_en_tel: 0.2
+  # Peso del corroborador por rasgo en el blend con el probe:
+  #   P_final[f] = (1-λ_f)·P_probe[f] + λ_f·P_pruebas[f].
+  # dyn NO tiene señal (P_pruebas['dyn'] is None) → su λ es un no-op. 0.0 en
+  # todos = corroborador APAGADO: fast path (el MLM ni se carga) y salida
+  # byte-idéntica al probe-solo.
+  # GANADORES: se fijan corriendo `calibrate --pruebas` (held-out fold 1,
+  # StratifiedGroupKFold 5 / seed 42, w=peso_contextual fijo). El barrido
+  # respeta el GUARDARRAÍL DURO (macro-F1 ≥ probe-solo) y anula la λ de todo
+  # rasgo que no mejore.
+  #
+  # CALIBRACIÓN 2026-07-08 (held-out: 98 oraciones, 41 lemas):
+  #   ANTES (probe-solo, λ=0): macro-F1 0.796 | tel 0.95 pun 0.98
+  #                            | Semelf 0.82 State 1.00 AA 0.67
+  #   MEJOR del barrido:       λ_tel=0.4 (resto 0), bias_mask=0.0
+  #                            → macro-F1 0.798 (+0.002, dentro del ruido);
+  #                              AA 0.67→0.69 pero tel_F1 diag. 0.95→0.93.
+  #   pun/stat/dyn: opt-out a 0 (no mejoran; el probe ya da pun 0.98).
+  # DECISIÓN (Julian): se deja APAGADO (λ=0). La ganancia (+0.002 macro) no
+  # compensa activar el MLM en cada predict (perder el fast path). El probe
+  # solo ya es la config ganadora en la práctica. Para ACTIVAR el único
+  # rasgo con señal marginal: poner `tel: 0.4` (y re-verificar las 15 dianas).
+  #
+  # SEGUNDA OPORTUNIDAD 2026-07-11 (lote augment_habitual, held-out con
+  # presentes, ver checkpoint del reentrenamiento): held-out 112 oraciones/
+  # 42 lemas (cambió con el dataset 468->536 y el reentrenamiento de la
+  # cabeza contextual -- no comparable 1:1 con 07-08).
+  #   ANTES (probe-solo, λ=0, config recalibrada w=0.55/dyn=0.45/pun=0.40/
+  #          tel=0.40): macro-F1=0.838 | tel_F1=0.94 pun_F1=0.93
+  #                     | Semelf=0.89 State=1.00 AA=0.70
+  #   MEJOR del barrido: λ_stat=0.1, λ_tel=0.3 (pun/dyn opt-out a 0),
+  #                      bias_mask=2.5 → macro-F1=0.843 (+0.005) | AA 0.70→0.72
+  #   HIPÓTESIS DEL PROMPT NO SE CONFIRMA: la ganancia NO viene de λ_pun (el
+  #   barrido lo anula a 0 igual que en 07-08) -- p1/progresivo no termina
+  #   "aplastando" el pun espurio de verbos como comer en el blend agregado
+  #   del held-out. Viene de stat/tel, rasgos sin relación directa con el
+  #   bug de comer.
+  # DECISIÓN: se deja APAGADO (λ=0), mismo criterio que 07-08 -- +0.005
+  # sigue dentro del ruido para n=112 y no compensa perder el fast path.
+  # El bug de comer ya se corrigió con datos+recalibración (pasos 1-3): el
+  # corroborador no aporta nada específico a ESE problema en esta segunda
+  # oportunidad. Revisar de nuevo si crece mucho más el held-out con
+  # presentes, o si se decide medir λ_pun aislado (sin barrido conjunto).
+  lambdas:
+    stat: 0.0
+    dyn: 0.0
+    tel: 0.0
+    pun: 0.0
+
+# Fase LINKING, Etapa LA1 — el linking algorithm explícito (linking.py).
+# Macropapeles por la jerarquía Actor-Padecedor (AUH, fig. 5.1), PSA +
+# concordancia, traza de producción de 5 pasos, round-trip contra el árbol.
+# Etapa ADITIVA: no cambia clases/EL/golds, solo añade análisis encima.
+linking:
+  enabled: true   # flag maestro; false = ninguna clave nueva, byte-idéntico
+
+# Umbrales del árbol de decisión.
+#
+# RECALIBRACIÓN 2026-07-11 (lote augment_habitual): dyn 0.40->0.45,
+# pun 0.45->0.40, tel 0.35->0.40 -- ganadores exactos del barrido descrito
+# arriba (fase2.peso_contextual), guardarrail cumplido sobre el held-out
+# nuevo. pun BAJA esta vez (a diferencia de Pre-Paso 4, donde bajarlo
+# empeoraba): el lote nuevo corrigió la fuga Semelfactive->Activity con
+# DATOS (68 presentes), asi que el umbral ya no necesita compensarla tanto.
+#
+# DOS HALLAZGOS VERIFICADOS con la batería (ver checkpoint del
+# reentrenamiento, no corregidos ad-hoc -- prohibido tocar gold):
+#   1. REGRESIÓN confirmada: "Juan corrió cinco kilómetros" (diana
+#      histórica, esperado active_accomplishment) cae a activity. tel del
+#      blend baja a ~0.34 tras el reentrenamiento -- por debajo de
+#      CUALQUIER valor del barrido de tel (mínimo 0.35), así que ningún
+#      umbral disponible lo arregla. Reportado a Julian.
+#   2. Trade-off pun=0.40 vs 0.45: con 0.40, "Juan come" (la más corta/
+#      ambigua de las 5 dianas del bug) vuelve a salir Semelfactive en
+#      CRUDO (pun=0.42, justo sobre el umbral) -- el gate obj_desnudo la
+#      sigue corrigiendo a Activity en la salida final, así que no rompe
+#      nada, pero ya no es "sin gate". Con pun=0.45 sale Activity en crudo
+#      pero el macro-F1 agregado del held-out es peor. Se deja el ganador
+#      del barrido (0.40): 4/5 dianas del bug quedan correctas EN CRUDO
+#      (antes ninguna lo estaba) y la 5ª sigue blindada por el gate.
+decision_tree:
+  stat: 0.5
+  dyn: 0.45
+  # tel=0.40 (subido desde 0.35, ganador del barrido 2026-07-11). Vigilar
+  # igual que antes: las frases de medida ("cinco kilómetros") topan bajo
+  # en blend tras el reentrenamiento -- ver ADVERTENCIA arriba.
+  tel: 0.40
+  pun: 0.40
+  # Semiancho de la zona "dyn ≈ 0.5" que dispara State_Activity en el
+  # nodo 1 (solo aplica cuando stat supera su umbral).
+  dyn_ambiguous_band: 0.15

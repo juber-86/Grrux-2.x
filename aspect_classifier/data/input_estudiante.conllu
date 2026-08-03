@@ -1,0 +1,13 @@
+# sent_id = 1
+# text = juan se comió la pizza completa
+# rrg_ls_type = semelfactive
+# rrg_ls = SEML comer'(x1, x2)
+# rrg_ls_lex = SEML comer'(juan, pizza)
+# rrg_args = x1:juan,nsubj,Agent; x2:pizza,obj,Patient
+1	juan	juan	PROPN	_	_	3	nsubj	_	_
+2	se	él	PRON	_	Case=Acc|Person=3|PrepCase=Npr|PronType=Prs|Reflex=Yes	3	expl:pv	_	_
+3	comió	comer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	la	el	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	5	det	_	_
+5	pizza	pizza	NOUN	_	Gender=Fem|Number=Sing	3	obj	_	_
+6	completa	completo	ADJ	_	Gender=Fem|Number=Sing	5	amod	_	SpaceAfter=No
+

@@ -1,0 +1,20 @@
+# State con ser (Cópula de atributo inherente)  be' (Juan, [alto'])
+Juan es alto
+# State con estar (Cópula de estado transitorio/resultado) abierto' (puerta)
+La puerta está abierta
+# Activity simple (Transitividad con objeto escueto/atélico) do' (Maria, [eat' (Maria, manzanas)])
+Maria come manzanas
+# Activity de movimiento (Intransitivo sin límite espacial) do' (perro, [run' (perro)])
+El perro corre por el parque
+# Active Accomplishment de consumo (Reflexivo + objeto delimitado) do' (Maria, [eat' (Maria, manzana)]) & INGR consumed' (manzana)
+Maria se comió la manzana
+# Active Accomplishment de movimiento (Adjunto direccional de meta) do' (perro, [run' (perro)]) & INGR be-at' (casa, perro)
+El perro corrió hasta la casa
+# Achievement (Cambio de estado puntual, sujeto paciente) INGR be-at' (loc, tren)
+El hielo se derritió
+# Accomplishment (Cambio de estado durativo/incoativo morfológico) BECOME melted' (hielo)
+El tren llegó
+# Semelfactive (Evento puntual sin estado resultante) SEML do' (niño, [cough' (niño)])
+El niño tosió 
+# Causative Accomplishment (Transitivo causativo de cambio de estado) do' (Pedro, Ø)] CAUSE [BECOME broken' (ventana)]
+Pedro rompió la ventana

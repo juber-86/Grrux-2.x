@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Lanzador desde el host Bazzite para la instalación creada con instalar_bazzite.sh.
+set -Eeuo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONTENEDOR="${GRRUX_DISTROBOX_NAME:-grrux}"
+ACCION="${1:-gui}"
+
+uso() {
+  cat <<'EOF'
+Uso: ./grrux-bazzite [gui|terminal|modelos]
+  gui       abre la interfaz web local (predeterminado)
+  terminal  abre la interfaz de terminal
+  modelos   descarga antes los modelos de Stanza y BERTIN
+EOF
+}
+
+command -v distrobox >/dev/null 2>&1 || {
+  echo "[GRRux] No encuentro Distrobox." >&2
+  exit 1
+}
+
+case "$ACCION" in
+  gui)
+    exec distrobox enter --name "$CONTENEDOR" -- bash -lc 'cd "$1" && exec ./gruxx-gui' bash "$REPO"
+    ;;
+  terminal)
+    exec distrobox enter --name "$CONTENEDOR" -- bash -lc 'cd "$1" && exec ./venv/bin/python gruxx_ai1.py' bash "$REPO"
+    ;;
+  modelos)
+    exec distrobox enter --name "$CONTENEDOR" -- bash -lc 'cd "$1" && exec bash ./instalar_comun.sh --modelos' bash "$REPO"
+    ;;
+  -h|--help|help)
+    uso
+    ;;
+  *)
+    echo "Acción no reconocida: $ACCION" >&2
+    uso >&2
+    exit 2
+    ;;
+esac

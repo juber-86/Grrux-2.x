@@ -1,0 +1,30 @@
+lema,stat,dyn,tel,pun,clase,transitivo,pronominal,oracion,es_contraste,notas
+patear,0,0.5,0,1,Semelfactive,1,0,Juan pateó el balón.,False,"una patada; dyn=0.5 propuesto (agentivo), confirmar ±dynamic"
+aplaudir,0,1,0,0,Activity,0,0,Juan aplaudió.,False,DECISIÓN JULIAN: Activity por defecto (acción continua repetitiva); una sola palmada sería Semelfactive
+guiñar,0,0.5,0,1,Semelfactive,1,0,Juan guiñó un ojo.,False,dyn=0.5 propuesto (agentivo)
+palmear,0,0.5,0,1,Semelfactive,1,0,Juan palmeó la mesa.,False,una palmada sobre superficie
+tamborilear,0,0.5,0,1,Semelfactive,0,0,Juan tamborileó en la mesa.,False,CONFIRMADO JULIAN: Semelfactive
+repicar,0,0,0,1,Semelfactive,0,0,La campana repicó.,False,CONFIRMADO JULIAN: Semelfactive; sujeto inanimado
+hipar,0,0,0,1,Semelfactive,0,0,Juan hipó.,False,"un hipo; involuntario, dyn=0 (cf. estornudar en semilla)"
+suspirar,0,0,0,1,Semelfactive,0,0,Juan suspiró.,False,un suspiro; era OOV y es oración diana del pipeline
+escupir,0,0.5,0,1,Semelfactive,0,0,Juan escupió.,False,"intrínsecamente Semelfactivo, pero se transforma sistemáticamente en Realizaciones Activas (Logros Activos) tan pronto como el objeto desprendido se vuelve referencial o se delimita el punto de llegada del proyectil"
+soplar,0,1,0,0,Activity,0,0,Juan sopló.,False,DECISIÓN JULIAN: Activity
+pellizcar,0,0.5,0,1,Semelfactive,1,0,Juan pellizcó a su hermano.,False,un pellizco
+vislumbrar,0,0,0,1,Semelfactive,1,0,Juan vislumbró la costa.,False,"CONFIRMADO JULIAN: Semelfactive (percepción puntual, glimpse)"
+crujir,0,0,0,1,Semelfactive,0,0,La rama crujió.,False,un crujido; sujeto inanimado
+chirriar,0,1,0,0,Activity,0,0,La puerta chirrió.,False,DECISIÓN JULIAN: Activity
+cabecear,0,0.5,0,1,Semelfactive,0,0,Juan cabeceó.,False,una cabezada (asentimiento/sueño); en fútbol sería otra acepción
+resoplar,0,0,0,1,Semelfactive,0,0,Juan resopló.,False,un resoplido
+eructar,0,0,0,1,Semelfactive,0,0,Juan eructó.,False,"involuntario, dyn=0"
+derretirse,0,0.5,1,0,Accomplishment,0,1,El hielo se derritió.,True,"CONTRASTE: cambio de estado gradual que hoy se sobredispara como Semelfactive (error conocido del pipeline); dyn=0.5 sigue convención semilla de graduales (cf. madurar, curar)"
+congelarse,0,0.5,1,0,Accomplishment,0,1,El agua se congeló.,True,CONTRASTE: cambio de estado gradual
+evaporarse,0,0.5,1,0,Accomplishment,0,1,El agua se evaporó.,True,CONTRASTE: cambio de estado gradual
+oxidarse,0,0.5,1,0,Accomplishment,0,1,El metal se oxidó.,True,CONTRASTE: cambio de estado gradual lento
+disolverse,0,0.5,1,0,Accomplishment,0,1,El azúcar se disolvió.,True,CONTRASTE: cambio de estado gradual
+marchitarse,0,0.5,1,0,Accomplishment,0,1,La flor se marchitó.,True,CONTRASTE: cambio de estado gradual
+agrietarse,0,0,1,1,Achievement,0,1,El muro se agrietó.,True,CONTRASTE; CONFIRMADO JULIAN: Achievement
+quebrarse,0,0,1,1,Achievement,0,1,La rama se quebró.,True,CONTRASTE: cambio de estado puntual con resultado (≠ Semelfactive sin cambio)
+desplomarse,0,0,1,1,Achievement,0,1,El puente se desplomó.,True,CONTRASTE: colapso puntual
+volcarse,0,0,1,1,Achievement,0,1,El camión se volcó.,True,CONTRASTE: cambio de estado puntual
+reventar,0,0,1,1,Achievement,0,0,El globo reventó.,True,CONTRASTE: explosión con resultado (cf. estallar ya en semilla como Achievement)
+romper,0,0,1,1,Achievement,1,1,El vaso se rompió.,True,CONFIRMADO JULIAN: Achievement; reemplaza la entrada Semelfactive de la semilla vía resolución por confianza

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# gruxx-gui — Fase GUI, Etapa G1.3.
+#
+# Arranca gruxx_server.py (si no hay uno corriendo ya) y abre la GUI en el
+# navegador. NUNCA levanta una segunda instancia del servidor: Stanza +
+# BERTIN quedan residentes (~2 GB) y la máquina es de 12 GB (ver advertencia
+# OOM del checkpoint) — por eso primero se sondea /estado.
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="${GRRUX_VENV:-${DIR}/venv}"
+HOST="127.0.0.1"
+PORT="8763"
+URL="http://${HOST}:${PORT}/"
+LOG="${DIR}/gruxx-gui.log"
+
+servidor_arriba() {
+  curl -s -o /dev/null -m 2 "http://${HOST}:${PORT}/estado"
+}
+
+if [ ! -x "${VENV}/bin/uvicorn" ]; then
+  echo "[gruxx-gui] no encuentro el entorno en ${VENV}." >&2
+  echo "[gruxx-gui] ejecuta el instalador de tu sistema antes de abrir la GUI." >&2
+  exit 1
+fi
+
+if servidor_arriba; then
+  echo "[gruxx-gui] servidor ya corriendo en ${URL} — reusando."
+else
+  echo "[gruxx-gui] arrancando servidor (Stanza + BERTIN, puede tardar) → ${LOG}"
+  (cd "$DIR" && nohup "${VENV}/bin/uvicorn" gruxx_server:app \
+    --host "$HOST" --port "$PORT" --workers 1 >"$LOG" 2>&1 &)
+
+  listo=""
+  for _ in $(seq 1 60); do
+    if servidor_arriba; then listo=1; break; fi
+    sleep 1
+  done
+  if [ -z "$listo" ]; then
+    echo "[gruxx-gui] el servidor no respondió a tiempo — revisa ${LOG}" >&2
+    exit 1
+  fi
+  echo "[gruxx-gui] servidor listo en ${URL}"
+fi
+
+if command -v chromium >/dev/null 2>&1; then
+  (chromium --app="$URL" >/dev/null 2>&1 &)
+elif command -v chromium-browser >/dev/null 2>&1; then
+  (chromium-browser --app="$URL" >/dev/null 2>&1 &)
+elif command -v google-chrome >/dev/null 2>&1; then
+  (google-chrome --app="$URL" >/dev/null 2>&1 &)
+else
+  (xdg-open "$URL" >/dev/null 2>&1 &)
+fi

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>gruxx — analizador GRR</title>
+<link rel="icon" type="image/png" href="grrux_logo.png">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<header id="cabecera">
+  <h1><img id="logo" src="grrux_logo.png" alt="gruxx"> gruxx <span class="subtitulo">— analizador GRR (Role and Reference Grammar)</span></h1>
+  <div id="fila-analizar">
+    <input type="text" id="input-oracion" placeholder="Escribe una oración en español…" autocomplete="off">
+    <button id="btn-analizar" disabled>cargando modelos…</button>
+  </div>
+  <p id="mensaje-estado" class="mensaje"></p>
+</header>
+
+<nav id="nav-vistas">
+  <button class="nav-vista activa" data-vista="analizar" type="button">Análisis</button>
+  <button class="nav-vista" data-vista="lote" type="button">Lote</button>
+  <button class="nav-vista" data-vista="curacion" type="button">Curación</button>
+</nav>
+
+<div id="cuerpo" class="vista">
+
+  <main id="principal">
+    <nav id="tabs-suboraciones" class="oculto"></nav>
+
+    <section id="seccion-arbol">
+      <h2>Árbol sintáctico RRG</h2>
+      <label id="toggle-operadores-label" title="Proyección de operadores en espejo (fig. 5.2): la espina V→NUC→CORE→CLAUSE→SENTENCE con los operadores detectados enganchados a su estrato.">
+        <input type="checkbox" id="toggle-operadores"> mostrar proyección de operadores
+      </label>
+      <div id="arbol-scroll">
+        <svg id="arbol-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p id="arbol-vacio" class="aviso">(sin árbol — la oración no se convirtió)</p>
+    </section>
+
+    <section id="seccion-el">
+      <h2>Estructura Lógica</h2>
+      <div class="el-linea"><span class="etiqueta">EL léxica:</span> <span id="el-lexica"></span></div>
+      <div class="el-linea"><span class="etiqueta">EL formal:</span> <span id="el-formal"></span></div>
+    </section>
+
+    <section id="seccion-detalle">
+      <div id="fila-tipo">
+        <span id="badge-tipo" class="badge"></span>
+        <span id="badge-metodo" class="badge badge-secundario"></span>
+      </div>
+
+      <h3>Argumentos</h3>
+      <table id="tabla-argumentos">
+        <thead><tr><th>var</th><th>palabra</th><th>función UD</th><th>papel</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <h3>Rasgos aspectuales</h3>
+      <div id="rasgos"></div>
+
+      <h3>Integridad</h3>
+      <div id="integridad"></div>
+
+      <div id="causatividad-bloque" class="oculto">
+        <h3>Causatividad</h3>
+        <div id="causatividad"></div>
+      </div>
+
+      <div id="linking-bloque" class="oculto">
+        <h3>Linking</h3>
+        <div id="linking-linea"></div>
+        <ol id="linking-traza"></ol>
+      </div>
+
+      <div id="notas-bloque" class="oculto">
+        <h3>Notas</h3>
+        <ul id="notas"></ul>
+      </div>
+
+      <label id="toggle-verbose-label">
+        <input type="checkbox" id="toggle-verbose"> mostrar detalle técnico
+      </label>
+      <div id="crudo" class="oculto">
+        <pre id="crudo-morph"></pre>
+        <pre id="crudo-completeness"></pre>
+      </div>
+
+      <button id="btn-corregir" title="Corregir este análisis">Corregir</button>
+
+      <div id="fila-exportar">
+        <span class="etiqueta-exportar">Exportar:</span>
+        <button id="btn-exportar-svg" type="button">SVG</button>
+        <button id="btn-exportar-png" type="button">PNG</button>
+        <button id="btn-exportar-txt" type="button">.txt</button>
+        <button id="btn-exportar-conllu" type="button">.conllu</button>
+      </div>
+    </section>
+  </main>
+
+  <aside id="panel-lateral">
+    <section id="panel-glosario">
+      <h2>Glosario <button id="btn-toggle-glosario" class="btn-mini">▾</button></h2>
+      <div id="glosario-contenido">
+        <input type="text" id="buscar-glosario" placeholder="Buscar término…">
+        <div id="lista-glosario"></div>
+      </div>
+    </section>
+
+    <section id="panel-historial">
+      <h2>Historial <button id="btn-limpiar-historial" class="btn-mini" title="Borrar historial persistente">limpiar</button></h2>
+      <ul id="lista-historial"></ul>
+    </section>
+  </aside>
+
+</div>
+
+<section id="vista-lote" class="vista oculto">
+  <h2>Análisis en lote</h2>
+  <p class="aviso">Una oración por línea (las que empiezan con <code>#</code> se ignoran). También
+    puedes cargar un archivo <code>.txt</code> con el mismo formato que usa la terminal.</p>
+  <textarea id="lote-textarea" rows="6" placeholder="Juan corrió por el parque.&#10;# esto es un comentario, se ignora&#10;María le dio flores a Pedro."></textarea>
+  <div class="lote-controles">
+    <input type="file" id="lote-archivo" accept=".txt">
+    <button id="btn-lote-analizar" type="button">Analizar lote</button>
+    <label><input type="checkbox" id="lote-filtro-alerta"> mostrar solo ⚠</label>
+  </div>
+  <p id="lote-progreso" class="mensaje"></p>
+  <table id="tabla-lote">
+    <thead><tr><th>Oración</th><th>Clase</th><th>Integridad</th><th>Avisos</th><th>Exportar</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<section id="vista-curacion" class="vista oculto">
+  <h2>Curación (solo lectura)</h2>
+  <p class="aviso-curacion">
+    Este panel MUESTRA y CUENTA las correcciones en staging y el log maestro.
+    No promueve nada: la promoción a léxicos vivos / <code>contextual_sentences.csv</code>
+    sigue siendo edición MANUAL de Julian.
+  </p>
+  <button id="btn-refrescar-curacion" type="button">Refrescar</button>
+  <div id="curacion-resumen"></div>
+  <div id="curacion-tablas"></div>
+</section>
+
+<div id="modal-corregir" class="modal-overlay oculto">
+  <div class="modal-panel">
+    <div class="modal-cabecera">
+      <h2>Corregir análisis</h2>
+      <button id="btn-cerrar-corregir" class="btn-mini" title="Cancelar — sin efectos">✕</button>
+    </div>
+
+    <nav id="tabs-corregir">
+      <button class="tab-corregir activa" data-tab="clase" type="button">Clase</button>
+      <button class="tab-corregir" data-tab="el" type="button">Estructura Lógica</button>
+      <button class="tab-corregir" data-tab="enrutado" type="button">Enrutado</button>
+      <button class="tab-corregir" data-tab="operador" type="button">Operadores</button>
+    </nav>
+
+    <section id="tab-clase" class="panel-tab">
+      <label for="select-clase">Clase aspectual correcta:</label>
+      <select id="select-clase"></select>
+      <button id="btn-aplicar-clase" type="button">Aplicar</button>
+      <div id="resultado-clase" class="banner oculto"></div>
+    </section>
+
+    <section id="tab-el" class="panel-tab oculto">
+      <label for="editor-el">Estructura Lógica correcta:</label>
+      <div id="paleta-el"></div>
+      <textarea id="editor-el" spellcheck="false" rows="3"></textarea>
+      <div id="validacion-el" class="validacion-el"></div>
+      <label for="select-clase-el">Clase aspectual <span id="clase-el-sugerencia" class="aviso-inline"></span></label>
+      <select id="select-clase-el"></select>
+      <button id="btn-aplicar-el" type="button" disabled>Aplicar</button>
+    </section>
+
+    <section id="tab-enrutado" class="panel-tab oculto">
+      <p>¿Qué elemento está mal enrutado?</p>
+      <ul id="lista-enrutado-elementos"></ul>
+      <div id="enrutado-destino-bloque" class="oculto">
+        <label for="select-destino">¿Qué debería ser?</label>
+        <select id="select-destino"></select>
+        <button id="btn-aplicar-enrutado" type="button">Aplicar</button>
+      </div>
+    </section>
+
+    <section id="tab-operador" class="panel-tab oculto">
+      <p>¿Qué operador está mal?</p>
+      <ul id="lista-operadores"></ul>
+      <div id="operador-accion-bloque" class="oculto">
+        <label for="select-operador-accion">¿Qué hacemos?</label>
+        <select id="select-operador-accion">
+          <option value="cambiar">Cambiar su valor</option>
+          <option value="quitar">Quitarlo (no debería estar)</option>
+        </select>
+        <label for="select-operador-valor">Valor correcto</label>
+        <select id="select-operador-valor"></select>
+        <button id="btn-aplicar-operador" type="button">Aplicar</button>
+      </div>
+      <p class="aviso">gruxx decide solo el destino: si falta una palabra en una
+        lista (un adverbio epistémico, una perífrasis modal) la añade a la
+        configuración y lo verifica re-analizando; si el fallo viene del análisis
+        morfológico, lo registra para revisión.</p>
+    </section>
+
+    <div id="diff-corregir" class="oculto">
+      <div id="diff-banner" class="banner"></div>
+      <div class="diff-lado-a-lado">
+        <div class="diff-columna">
+          <h3>Antes</h3>
+          <div class="diff-arbol-scroll"><svg id="arbol-antes" xmlns="http://www.w3.org/2000/svg"></svg></div>
+          <div id="el-antes" class="el-diff"></div>
+        </div>
+        <div class="diff-columna">
+          <h3>Después</h3>
+          <div class="diff-arbol-scroll"><svg id="arbol-despues" xmlns="http://www.w3.org/2000/svg"></svg></div>
+          <div id="el-despues" class="el-diff"></div>
+        </div>
+      </div>
+      <button id="btn-usar-nuevo" class="oculto" type="button">Usar el nuevo análisis</button>
+    </div>
+  </div>
+</div>
+
+<script src="contrato_confianza.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

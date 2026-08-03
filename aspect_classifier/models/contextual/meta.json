@@ -1,0 +1,11 @@
+{
+ "n_train": 531,
+ "features": [
+  "stat",
+  "dyn",
+  "tel",
+  "pun"
+ ],
+ "embedding_dim": 768,
+ "receta": "complex_pool"
+}

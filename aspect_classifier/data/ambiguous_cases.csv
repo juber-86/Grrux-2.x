@@ -1,0 +1,7 @@
+lema,stat,dyn,tel,pun,clase,transitivo,pronominal,confianza,notas,hoja,clase_original
+pesar,1,0.5,0,0,AMBIGUOUS,1,0,1.0,"Estático (""pesa 10 kg"") o dinámico (""pesa la fruta"").",Grupo A — States y Activities,State / Activity
+medir,1,0.5,0,0,AMBIGUOUS,1,0,1.0,"Estático (""mide 2 m"") o dinámico (""mide la tela"").",Grupo A — States y Activities,State / Activity
+pensar,1,0.5,0,0,AMBIGUOUS,1,0,1.0,"Dinámico (""estar pensando en..."") o estático (""opinar que..."").",Grupo A — States y Activities,Activity / State
+esperar,1,0.5,0,0,AMBIGUOUS,1,0,1.0,"Estático (""tener esperanza"") o activo durativo (""aguardar"").",Grupo A — States y Activities,State / Activity
+imaginar,1,0.5,0,0,AMBIGUOUS,1,0,1.0,"Actividad mental durativa (""estaba imaginando"") o Estado.",Grupo A — States y Activities,Activity / State
+flotar,1,0.5,0,0,AMBIGUOUS,0,0,1.0,Posición estática suspendida o actividad de movimiento suave en un fluido.,Grupo A — States y Activities,State / Activity
