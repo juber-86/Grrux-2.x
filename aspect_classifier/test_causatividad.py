@@ -83,7 +83,7 @@ def test_lexico_transitivo():
     ls = componer_cause("Achievement", "reventado'/popped'", "reventar",
                         "gato", "globo", False)
     assert ls["lexical"] == "[do'(gato, Ø)] CAUSE [INGR reventado'(globo)]"
-    assert ls["formal"] == "[do'(x1, Ø)] CAUSE [INGR reventado'(x2)]"
+    assert ls["formal"] == "[do'(x, Ø)] CAUSE [INGR reventado'(y)]"
 
 
 def test_lexico_anticausativo_se():
@@ -132,12 +132,12 @@ def test_fallback_no_dispara_en_transitivo():
 
 def test_componer_cause_seis_clases():
     casos = {
-        "State":          "[do'(x1, Ø)] CAUSE [asustado'(x2)]",
-        "Activity":       "[do'(x1, Ø)] CAUSE [do'(x2, [rodar'(x2)])]",
-        "Achievement":    "[do'(x1, Ø)] CAUSE [INGR roto'(x2)]",
-        "Semelfactive":   "[do'(x1, Ø)] CAUSE [SEML destello'(x2)]",
-        "Accomplishment": "[do'(x1, Ø)] CAUSE [BECOME seco'(x2)]",
-        "Active_Accomplishment": "[do'(x1, Ø)] CAUSE [do'(x2, [pasear'(x2)])]",
+        "State":          "[do'(x, Ø)] CAUSE [asustado'(y)]",
+        "Activity":       "[do'(x, Ø)] CAUSE [do'(y, [rodar'(y)])]",
+        "Achievement":    "[do'(x, Ø)] CAUSE [INGR roto'(y)]",
+        "Semelfactive":   "[do'(x, Ø)] CAUSE [SEML destello'(y)]",
+        "Accomplishment": "[do'(x, Ø)] CAUSE [BECOME seco'(y)]",
+        "Active_Accomplishment": "[do'(x, Ø)] CAUSE [do'(y, [pasear'(y)])]",
     }
     preds = {"State": "asustado'", "Activity": "rodar'", "Achievement": "roto'",
              "Semelfactive": "destello'", "Accomplishment": "seco'",

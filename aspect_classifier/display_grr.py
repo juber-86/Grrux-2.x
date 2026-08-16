@@ -4,7 +4,7 @@ El usuario objetivo es un lingüista competente en la GRR (Role and Reference
 Grammar) que NO tiene por qué aprender los tecnicismos internos de gruxx. La
 INFORMACIÓN se conserva íntegra; solo cambia el DELIVERY: el vector aspectual
 crudo (`stat=0.02 dyn=0.75 ...`) y la línea de Completeness con etiquetas
-internas (`falta_en_arbol`, `x2↔PP`) se re-expresan en términos legibles. El
+internas (`falta_en_arbol`, `y↔PP`) se re-expresan en términos legibles. El
 detalle crudo completo sigue disponible con `--verbose` (ver gruxx_ai1.py).
 
 Los términos y sus definiciones viven en el glosario (§4,
@@ -203,8 +203,8 @@ def _traducir_check(c: dict) -> str:
 
 
 def linea_integridad(comp: dict | None) -> str | None:
-    """`Integridad: ✓ x1 en la terminación verbal · x2 ↔ sintagma nominal ·
-    concordancia (AGX) ✓` / `Integridad: ⚠ x2 ("participar") no aparece...`.
+    """`Integridad: ✓ x en la terminación verbal · y ↔ sintagma nominal ·
+    concordancia (AGX) ✓` / `Integridad: ⚠ y ("participar") no aparece...`.
     Devuelve None si no hay árbol (nada que verificar)."""
     if not comp:
         return None

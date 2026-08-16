@@ -13,7 +13,8 @@ import tempfile
 from pathlib import Path
 
 from .ditransitivas import (cargar_lexicon, construir_ditransitiva,
-                            detectar_trigger, elegir_plantilla, log_candidato)
+                            construir_el, detectar_trigger, elegir_plantilla,
+                            log_candidato)
 from .nucleo_periferia import analizar_roles
 
 RUN_SLOW = os.environ.get("RUN_SLOW") == "1" or "--slow" in sys.argv
@@ -89,11 +90,14 @@ def test_lexicon_carga_54_verbos():
     # no un tamaño fijo.
     assert len(LEXICON) >= 54
     for lema, entry in LEXICON.items():
-        assert set(entry.keys()) == {"plantilla", "ambiguo", "notas"}, lema
+        assert set(entry.keys()) == {"plantilla", "subtipo_benefactivo",
+                                     "predicado_resultado", "proposito",
+                                     "ambiguo", "notas", "fuente"}, lema
         assert entry["plantilla"] in ("transferencia", "benefactiva", "comunicacion"), lema
         assert isinstance(entry["ambiguo"], bool), lema
 
-    assert LEXICON["dar"] == {"plantilla": "transferencia", "ambiguo": False, "notas": ""}
+    assert LEXICON["dar"]["plantilla"] == "transferencia"
+    assert LEXICON["dar"]["subtipo_benefactivo"] is None
     assert LEXICON["comprar"]["plantilla"] == "benefactiva"
     assert LEXICON["decir"]["plantilla"] == "comunicacion"
     assert LEXICON["escribir"]["ambiguo"] is True
@@ -105,19 +109,37 @@ def test_lexicon_carga_54_verbos():
     assert not duplicados, f"lemas duplicados en {LEXICON_XLSX.name}: {duplicados}"
 
 
+def test_lexicon_rechaza_subtipo_invalido_con_fila_y_lema():
+    import pandas as pd
+    from .ditransitivas import LEXICON_XLSX
+
+    with tempfile.TemporaryDirectory() as tmp:
+        ruta = Path(tmp) / "lexicon_invalido.xlsx"
+        df = pd.read_excel(LEXICON_XLSX)
+        indice = df.index[df["lema"].astype(str).str.lower() == "comprar"][0]
+        df.loc[indice, "subtipo_benefactivo"] = "magia"
+        df.to_excel(ruta, index=False)
+        try:
+            cargar_lexicon(ruta)
+            assert False, "un subtipo fuera del enum debe rechazarse"
+        except ValueError as exc:
+            mensaje = str(exc)
+            assert "comprar" in mensaje and f"fila {indice + 2}" in mensaje
+
+
 # ---------------------------------------------------------------------------
 # Transferencia
 # ---------------------------------------------------------------------------
-def test_transferencia_el_exacta_y_un_solo_x3():
+def test_transferencia_el_exacta_y_un_solo_y():
     r = construir_ditransitiva(_roles(DIO_REGALO_MARIA, 3), "dar", LEXICON, {})
     assert r["plantilla"] == "transferencia"
     assert r["clase"] == "accomplishment"
-    assert r["formal"] == "[do'(x1, Ø)] CAUSE [BECOME have'(x3, x2)]"
+    assert r["formal"] == "[do'(x, Ø)] CAUSE [BECOME have'(y, z)]"
     assert r["lexical"] == "[do'(Juan, Ø)] CAUSE [BECOME have'(María, regalo)]"
     assert r["roles_tematicos"] == {1: "Efectuador", 5: "Tema", 7: "Poseedor"}
-    # UN solo x3: el clítico "le" (id=2) nunca aparece como variable propia
+    # Un solo y: el clítico "le" (id=2) nunca aparece como variable propia
     assert 2 not in r["id_a_var"]
-    assert list(r["id_a_var"].values()).count("x3") == 1
+    assert list(r["id_a_var"].values()).count("y") == 1
 
 
 # ---------------------------------------------------------------------------
@@ -127,9 +149,9 @@ def test_benefactiva_con_dativo_purp():
     r = construir_ditransitiva(_roles(COMPRO_REGALO_MARIA, 3), "comprar", LEXICON, {})
     assert r["plantilla"] == "benefactiva"
     assert r["trigger"] == "dativo"
-    assert r["formal"] == "[[do'(x1, Ø)] CAUSE [BECOME have'(x1, x2)]] PURP [have'(x3, x2)]"
+    assert r["formal"] == "[[do'(x, Ø)] CAUSE [BECOME have'(x, z)]] PURP [BECOME have'(y, z)]"
     assert r["lexical"] == ("[[do'(Juan, Ø)] CAUSE [BECOME have'(Juan, regalo)]]"
-                            " PURP [have'(María, regalo)]")
+                            " PURP [BECOME have'(María, regalo)]")
 
 
 def test_benefactiva_sin_clitico_asciende_beneficiario():
@@ -139,7 +161,7 @@ def test_benefactiva_sin_clitico_asciende_beneficiario():
     assert r["trigger"] == "benefactivo_para"
     assert r["plantilla"] == "benefactiva"
     assert r["lexical"] == ("[[do'(3sg, Ø)] CAUSE [BECOME have'(3sg, regalo)]]"
-                            " PURP [have'(María, regalo)]")
+                            " PURP [BECOME have'(María, regalo)]")
     assert r["y_periferia_id"] == 5   # id de "María" en periferia — el mapper la remueve de ahí
 
 
@@ -162,14 +184,14 @@ def test_comunicacion_clitico_solo():
     r = construir_ditransitiva(_roles(DIJE_VERDAD, 2), "decir", LEXICON, {})
     assert r["plantilla"] == "comunicacion"
     assert r["clase"] == "activity"
-    assert r["formal"] == "do'(x1, [decir.to.(3sg)'(x1, x2)])"
+    assert r["formal"] == "do'(x, [decir.to.(y)'(x, z)])"
     assert r["lexical"] == "do'(1sg, [decir.to.(3sg)'(1sg, verdad)])"
 
 
 def test_comunicacion_z_es_ccomp():
     r = construir_ditransitiva(_roles(DIJE_QUE_VINIERA, 2), "decir", LEXICON, {})
     assert r["lexical"] == "do'(1sg, [decir.to.(3sg)'(1sg, viniera)])"
-    assert "x2:viniera,ccomp,Tema(Contenido)" in r["arg_meta_parts"]
+    assert "z:viniera,ccomp,Tema(Contenido)" in r["arg_meta_parts"]
 
 
 # ---------------------------------------------------------------------------
@@ -222,8 +244,45 @@ def test_detectar_trigger_sin_disparo():
 
 
 def test_elegir_plantilla_benefactivo_para_siempre_benefactiva():
-    p = elegir_plantilla("cualquierverbo", "benefactivo_para", LEXICON, {})
-    assert p == {"plantilla": "benefactiva", "source": "lexico", "ambiguo": False}
+    p = elegir_plantilla("preparar", "benefactivo_para", LEXICON, {})
+    assert p["plantilla"] == "benefactiva" and p["source"] == "lexico"
+    assert p["subtipo_benefactivo"] == "preparacion"
+
+
+def test_subtipos_benefactivos_el_y_estructura_isomorfos():
+    casos = {
+        "preparar": ("preparacion", "BECOME prepared'(z)", "become_have"),
+        "cocinar": ("preparacion", "BECOME prepared'(z)", "become_have"),
+        "crear": ("creacion", "BECOME exist'(z)", "become_have"),
+        "comprar": ("obtencion", "BECOME have'(x, z)", "become_have"),
+        "reparar": ("cambio_estado", "BECOME repaired'(z)", "have"),
+        "buscar": ("actividad", "buscar'(x, z)", "become_have"),
+    }
+    for lema, (subtipo, fragmento, proposito) in casos.items():
+        entry = LEXICON[lema]
+        el = construir_el("benefactiva", lema, "Juan", "María", "objeto", entry)
+        assert fragmento in el["formal"], lema
+        assert entry["subtipo_benefactivo"] == subtipo
+        assert entry["proposito"] == proposito
+        assert "have'(x, z)" not in el["formal"] or lema == "comprar"
+        predicados = [f["predicado"] for f in el["estructura"]]
+        if entry["predicado_resultado"]:
+            assert entry["predicado_resultado"] in predicados
+        assert "have'" in predicados
+
+
+def test_preparar_linking_deduplica_z_sin_perder_posiciones():
+    from . import linking
+    el = construir_el("benefactiva", "preparar", "Juan", "María", "pizzas",
+                      LEXICON["preparar"])
+    linking.enriquecer_ids(el["estructura"], {"Juan": 1, "pizzas": 3, "María": 5})
+    mp = linking.asignar_macropapeles(el["estructura"])
+    assert mp["actor"]["texto"] == "Juan"
+    assert mp["undergoer"]["texto"] == "pizzas"
+    assert [n["texto"] for n in mp["nmr"]] == ["María"]
+    assert mp["m_transitividad"] == 2
+    posiciones_z = {p["posicion"] for p in mp["undergoer"]["posiciones_semanticas"]}
+    assert posiciones_z == {"arg_estado", "2_pred_xy"}
 
 
 # ---------------------------------------------------------------------------
@@ -250,13 +309,26 @@ def test_slow_integracion_mapper():
 
     ls = m.map_sentence_to_ls(nlp("Juan le dio un regalo a María").sentences[0])
     assert ls["ls_type"] == "accomplishment"
-    assert ls["ls_formal"] == "[do'(x1, Ø)] CAUSE [BECOME have'(x3, x2)]"
+    assert ls["ls_formal"] == "[do'(x, Ø)] CAUSE [BECOME have'(y, z)]"
     assert ls["ditransitiva"] == {"plantilla": "transferencia", "trigger": "dativo",
-                                  "source": "lexico", "ambiguo": False}
+                                  "source": "lexico", "ambiguo": False,
+                                  "subtipo_benefactivo": None,
+                                  "predicado_resultado": None, "proposito": None}
     assert not ls["causativo"], "no debe pasar también por la cascada de causatividad"
 
     ls = m.map_sentence_to_ls(nlp("Juan le compró un regalo a María").sentences[0])
     assert "PURP" in ls["ls_formal"]
+
+    ls = m.map_sentence_to_ls(
+        nlp("Juan prepara pizzas a María todas las mañanas").sentences[0])
+    assert "BECOME prepared'(z)" in ls["ls_formal"]
+    assert "PURP [BECOME have'(y, z)]" in ls["ls_formal"]
+    assert "BECOME have'(x, z)" not in ls["ls_formal"]
+    assert ls["ditransitiva"]["subtipo_benefactivo"] == "preparacion"
+    assert ls["ditransitiva"]["predicado_resultado"] == "prepared'"
+    assert ls["ditransitiva"]["proposito"] == "become_have"
+    assert ls["linking"]["macropapeles"]["m_transitividad"] == 2
+    assert ls["linking"]["macropapeles"]["undergoer"]["texto"] == "pizzas"
 
     ls = m.map_sentence_to_ls(nlp("compró un regalo para María").sentences[0])
     assert "PURP" in ls["ls_formal"]
@@ -267,20 +339,20 @@ def test_slow_integracion_mapper():
     assert "PURP" not in ls["ls_formal"]
 
     ls = m.map_sentence_to_ls(nlp("Le dije la verdad").sentences[0])
-    assert ls["ls_formal"] == "do'(x1, [decir.to.(3sg)'(x1, x2)])"
+    assert ls["ls_formal"] == "do'(x, [decir.to.(y)'(x, z)])"
 
     # wrappers componen POR FUERA de la plantilla ditransitiva
     ls = m.map_sentence_to_ls(nlp("Ayer le dio flores a María en el parque").sentences[0])
     assert ls["ls_formal"] == ("yesterday'(be-in'(parque, "
-                               "[[do'(x1, Ø)] CAUSE [BECOME have'(x3, x2)]]))")
+                               "[[do'(x, Ø)] CAUSE [BECOME have'(y, z)]]))")
 
-    # MISC: RRGVar=x3 + RRGThemRel=Poseedor para María (L3: renombrado desde
+    # MISC: RRGVar=y + RRGThemRel=Poseedor para María (L3: renombrado desde
     # "Recipiente", ver ditransitivas._ROLES_POR_PLANTILLA)
     from aspect_classifier.misc_rrg import anotaciones_misc
     ls = m.map_sentence_to_ls(nlp("Juan le dio un regalo a María").sentences[0])
     anot = anotaciones_misc(ls)
     maria_id = next(k for k, v in ls["roles_tematicos"].items() if v == "Poseedor")
-    assert anot[maria_id]["RRGVar"] == "x3"
+    assert anot[maria_id]["RRGVar"] == "y"
     assert anot[maria_id]["RRGThemRel"] == "Poseedor"
 
     # L3: ud2rrg YA convierte "le" (obl:arg ahora en el dispatch, AGX bajo
@@ -343,7 +415,7 @@ if not RUN_SLOW:
 def main():
     rapidos = [
         test_lexicon_carga_54_verbos,
-        test_transferencia_el_exacta_y_un_solo_x3,
+        test_transferencia_el_exacta_y_un_solo_y,
         test_benefactiva_con_dativo_purp,
         test_benefactiva_sin_clitico_asciende_beneficiario,
         test_benefactiva_para_desactivable_por_config,
@@ -355,6 +427,8 @@ def main():
         test_log_candidato_dedupe,
         test_detectar_trigger_tipo_dativo, test_detectar_trigger_sin_disparo,
         test_elegir_plantilla_benefactivo_para_siempre_benefactiva,
+        test_subtipos_benefactivos_el_y_estructura_isomorfos,
+        test_preparar_linking_deduplica_z_sin_perder_posiciones,
         test_flag_maestro_apagado_replica_mapper_no_op,
     ]
     tests = rapidos + ([test_slow_integracion_mapper, test_slow_26_dianas_casi_todas_sin_regresion]

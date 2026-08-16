@@ -15,6 +15,9 @@ Ejecutar:
 """
 
 import sys
+from pathlib import Path
+
+import pytest
 
 from discodop.tree import ParentedTree
 
@@ -131,8 +134,8 @@ _TOKENS = [{"id": 1, "texto": "Juan", "lema": "Juan"},
 _LS_BASICO = {
     "ls_type": "accomplishment", "ls_formal": "BECOME comido'(pizza)",
     "ls_lexical": "BECOME comer'(pizza)",
-    "variables": {"x1": "Juan", "x2": "pizza"},
-    "id_a_var": {1: "x1", 3: "x2"},
+    "variables": {"x": "Juan", "y": "pizza"},
+    "id_a_var": {1: "x", 3: "y"},
     "core": [{"id": 1, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"},
             {"id": 3, "text": "pizza", "deprel": "obj", "macropapel": "Undergoer"}],
     "periferia": [], "agx": [], "wrappers": [],
@@ -158,7 +161,7 @@ def _claves_contrato():
     return {"tokens", "arbol", "el", "argumentos", "rasgos", "notas",
             "causatividad", "integridad", "periferia", "agx",
             "actor_implicito", "impersonal", "crudo", "operadores", "linking",
-            "inventario_enrutado"}
+            "inventario_enrutado", "ditransitiva"}
 
 
 def test_contrato_tiene_todas_las_claves_con_tipos_correctos():
@@ -176,6 +179,7 @@ def test_contrato_tiene_todas_las_claves_con_tipos_correctos():
                          "formal_ops": _LS_BASICO["ls_formal"],
                          "lexical_ops": _LS_BASICO["ls_lexical"]}
     assert sub["operadores"] == []
+    assert sub["ditransitiva"] is None
     assert isinstance(sub["argumentos"], list) and len(sub["argumentos"]) == 2
     assert isinstance(sub["rasgos"], dict) and sub["rasgos"]["telico"] == 0.8
     assert isinstance(sub["notas"], list)
@@ -200,21 +204,35 @@ def test_argumentos_no_parsean_args_map_usan_campos_estructurados():
     assert "args_map" not in ls
     argumentos = gm._argumentos_de(ls)
     por_var = {a["var"]: a for a in argumentos}
-    assert por_var["x1"] == {"var": "x1", "token_id": 1, "texto": "Juan",
+    assert por_var["x"] == {"var": "x", "token_id": 1, "texto": "Juan",
                              "deprel": "nsubj", "papel": "Actor"}
-    assert por_var["x2"] == {"var": "x2", "token_id": 3, "texto": "pizza",
+    assert por_var["y"] == {"var": "y", "token_id": 3, "texto": "pizza",
                              "deprel": "obj", "papel": "Undergoer"}
 
 
 def test_argumento_pro_drop_sin_token_id():
     ls = dict(_LS_BASICO)
-    ls["variables"] = {"x1": "3sg"}
+    ls["variables"] = {"x": "3sg"}
     ls["id_a_var"] = {}
     ls["core"] = []
     ls["actor_implicito"] = {"persona": "3", "numero": "sg", "etiqueta": "3sg"}
     argumentos = gm._argumentos_de(ls)
-    assert argumentos == [{"var": "x1", "token_id": None, "texto": "3sg",
+    assert argumentos == [{"var": "x", "token_id": None, "texto": "3sg",
                            "deprel": None, "papel": "Actor(implícito)"}]
+
+
+def test_motor_rechaza_variables_heredadas():
+    ls = dict(_LS_BASICO)
+    ls["variables"] = {"x1": "Juan"}
+    ls["id_a_var"] = {1: "x1"}
+    with pytest.raises(ValueError, match="notación anterior"):
+        gm._argumentos_de(ls)
+
+
+def test_gui_resalta_solo_variables_completas_xyz():
+    app = (Path(__file__).parent / "gui" / "app.js").read_text(encoding="utf-8")
+    assert "([xyz])" in app
+    assert "/x(\\d+)/g" not in app
 
 
 def test_periferia_con_wrap_aplicado_y_sin_aplicar():
@@ -369,7 +387,7 @@ def test_render_txt_grr_con_arbol_respeta_el_orden_grr():
     arbol = _arbol(("CLAUSE", [("CORE", [("NP", [("N", 0)]), ("NUC", [("V", 1)])])]))
     tokens = [{"id": 1, "texto": "Juan", "lema": "Juan"},
              {"id": 2, "texto": "corrió", "lema": "correr"}]
-    ls = {"ls_type": "activity", "ls_formal": "do'(x1,[correr'(x1)])",
+    ls = {"ls_type": "activity", "ls_formal": "do'(x,[correr'(x)])",
          "ls_lexical": "do'(Juan,[correr'(Juan)])"}
     crudo = {"oracion": "Juan corrió", "ls_lista": [ls], "arboles": [arbol],
             "tokens_por_sub": [tokens]}

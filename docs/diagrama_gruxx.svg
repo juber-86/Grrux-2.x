@@ -93,14 +93,14 @@
 <tspan x="116.0" dy="0.0">Ejemplo guía — síguelo en cada etapa: “Juan le dio flores a María”</tspan>
 </text>
 <text x="114.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
-<tspan x="114.0" dy="0.0">②  x1=Juan (Actor) · ‘le’→AGX dativo · x3=María (NMR/Poseedor) · ‘dar’→transferencia</tspan>
+<tspan x="114.0" dy="0.0">②  x=Juan (Actor) · ‘le’→AGX dativo · y=María (NMR/Poseedor) · ‘dar’→transferencia</tspan>
 <tspan x="114.0" dy="14.5">EL: [[do'(Juan,Ø)] CAUSE [BECOME have'(María,flores)]]</tspan>
 </text>
 <text x="811.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
 <tspan x="811.0" dy="0.0">③  AGX bajo NUC (‘le’) · PP “a María” en el centro</tspan>
 </text>
 <text x="1197.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
-<tspan x="1197.0" dy="0.0">④  Integridad: ✓ x1↔NP · x2↔NP · x3↔PP ·</tspan>
+<tspan x="1197.0" dy="0.0">④  Integridad: ✓ x↔NP · z↔NP · y↔PP ·</tspan>
 <tspan x="1197.0" dy="14.5">concordancia (AGX) ✓</tspan>
 </text>
 <text x="1505.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
@@ -155,7 +155,7 @@
 <tspan x="158.0" dy="0.0">Núcleo vs. periferia</tspan>
 </text>
 <text x="130.0" y="625.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
-<tspan x="130.0" dy="0.0">Argumento (x1,x2,x3…) vs. adjunto (temporal/locativo/modo/otro) · pro-drop desde la</tspan>
+<tspan x="130.0" dy="0.0">Argumento (x/y/z) vs. adjunto (temporal/locativo/modo/otro) · pro-drop desde la</tspan>
 <tspan x="130.0" dy="15.6">morfología · clíticos → AGX (dativo, se-pasivo/impersonal/aspectual, reflexivo).</tspan>
 </text>
 <rect x="114.0" y="675.2" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>

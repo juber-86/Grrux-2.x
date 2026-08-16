@@ -12,7 +12,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .misc_rrg import anotaciones_misc, escribir_misc_en_conllu, fusionar_misc
+import pytest
+
+from .misc_rrg import (anotaciones_misc, escribir_misc_en_conllu, fusionar_misc,
+                       leer_ls_desde_misc)
+from .rrg_variables import LegacyRRGNotationError
 
 RUN_SLOW = os.environ.get("RUN_SLOW") == "1" or "--slow" in sys.argv
 
@@ -42,9 +46,25 @@ def test_fusionar_vacio_da_guion_bajo():
 
 
 def test_fusionar_es_idempotente():
-    una_vez = fusionar_misc("_", {"RRGRole": "CoreArg", "RRGVar": "x2"})
-    dos_veces = fusionar_misc(una_vez, {"RRGRole": "CoreArg", "RRGVar": "x2"})
+    una_vez = fusionar_misc("_", {"RRGRole": "CoreArg", "RRGVar": "y"})
+    dos_veces = fusionar_misc(una_vez, {"RRGRole": "CoreArg", "RRGVar": "y"})
     assert una_vez == dos_veces
+
+
+def test_misc_rechaza_rrgvar_y_rrgargvar_heredadas():
+    for campo, valor in (("RRGVar", "x2"), ("RRGArgVar", "x3")):
+        with pytest.raises(LegacyRRGNotationError, match="notación anterior"):
+            fusionar_misc("_", {campo: valor})
+
+
+def test_lectura_conllu_rechaza_misc_y_comentario_formal_heredados():
+    token = "1\tJuan\tJuan\tPROPN\t_\t_\t0\troot\t_\tRRGVar=x2"
+    with pytest.raises(LegacyRRGNotationError, match="notación anterior"):
+        leer_ls_desde_misc(token)
+    mixto = ("# rrg_ls = do'(x1, [correr'(x1)])\n"
+             "1\tJuan\tJuan\tPROPN\t_\t_\t0\troot\t_\tRRGVar=x")
+    with pytest.raises(LegacyRRGNotationError, match="notación anterior"):
+        leer_ls_desde_misc(mixto)
 
 
 # ---------------------------------------------------------------------------
@@ -53,10 +73,10 @@ def test_fusionar_es_idempotente():
 def test_core_arg_con_var():
     ls = _ls_base(core=[{"id": 4, "text": "regalo", "deprel": "obj",
                         "macropapel": "Undergoer"}],
-                  id_a_var={4: "x2"})
+                  id_a_var={4: "y"})
     anot = anotaciones_misc(ls)
     assert anot == {4: {"RRGRole": "CoreArg", "RRGMacrorole": "Undergoer",
-                        "RRGVar": "x2"},
+                        "RRGVar": "y"},
                     1: {"RRGAnalyzed": "si"}}   # L5 §1: marca en la raíz
 
 
@@ -97,9 +117,9 @@ def test_wrapper_no_aplicado_no_se_filtra_como_wrap():
 def test_agx_doblado():
     ls = _ls_base(agx=[{"clitico": "Le", "rasgos": "3sg-dat", "fuente": "dativo",
                        "doblado": True, "arg_id": 6, "clitico_id": 1}],
-                  id_a_var={6: "x3"})
+                  id_a_var={6: "y"})
     anot = anotaciones_misc(ls)
-    assert anot == {1: {"RRGRole": "AGX", "RRGDoblado": "si", "RRGArgVar": "x3",
+    assert anot == {1: {"RRGRole": "AGX", "RRGDoblado": "si", "RRGArgVar": "y",
                         "RRGAgxFuente": "dativo", "RRGAnalyzed": "si"}}
 
 
@@ -281,6 +301,8 @@ def main():
     rapidos = [
         test_fusionar_preserva_existente, test_fusionar_desde_guion_bajo,
         test_fusionar_vacio_da_guion_bajo, test_fusionar_es_idempotente,
+        test_misc_rechaza_rrgvar_y_rrgargvar_heredadas,
+        test_lectura_conllu_rechaza_misc_y_comentario_formal_heredados,
         test_core_arg_con_var, test_periferia_sin_wrapper,
         test_periferia_con_wrapper, test_wrapper_no_aplicado_no_se_filtra_como_wrap,
         test_agx_doblado, test_agx_sin_doblar_sin_argvar,

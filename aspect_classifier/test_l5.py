@@ -42,23 +42,23 @@ def test_traducir_apendices_gate_y_ditrans():
 
 def test_integridad_ok_y_alerta():
     comp_ok = {"ok": True, "checks": [
-        {"tipo": "argumento", "elemento": "x1", "estado": "ok", "detalle": "x1(morf)"},
+        {"tipo": "argumento", "elemento": "x", "estado": "ok", "detalle": "x(morf)"},
         {"tipo": "agx", "elemento": "AGX", "estado": "ok", "detalle": "AGX✓"}]}
     li = d.linea_integridad(comp_ok)
     assert li.startswith("Integridad: ✓")
-    assert "x1 en la terminación verbal" in li and "concordancia (AGX) ✓" in li
+    assert "x en la terminación verbal" in li and "concordancia (AGX) ✓" in li
 
     comp_warn = {"ok": False, "checks": [
-        {"tipo": "argumento", "elemento": "x2", "estado": "falta_en_arbol",
-         "detalle": 'x2 ("participar") sin constituyente en el árbol'}]}
+        {"tipo": "argumento", "elemento": "y", "estado": "falta_en_arbol",
+         "detalle": 'y ("participar") sin constituyente en el árbol'}]}
     lw = d.linea_integridad(comp_warn)
     assert lw.count("⚠") == 1   # un solo símbolo, no duplicado
-    assert 'x2 ("participar") NO aparece como constituyente en el árbol' in lw
+    assert 'y ("participar") NO aparece como constituyente en el árbol' in lw
 
 
 def test_render_bloque_orden_grr():
     """Árbol PRIMERO, EL léxica INMEDIATAMENTE DEBAJO, luego el resto."""
-    ls = {"ls_type": "activity", "ls_formal": "do'(x1,[correr'(x1)])",
+    ls = {"ls_type": "activity", "ls_formal": "do'(x,[correr'(x)])",
           "ls_lexical": "do'(Juan,[correr'(Juan)])"}
     out = d.render_bloque(ls, "[arbol]", None, verbose=False)
     i_arbol = out.index("ÁRBOL SINTÁCTICO RRG")
@@ -95,6 +95,32 @@ def test_el_valida_transferencia():
     assert v["ok"] and v["plantilla"] == "ditrans_transferencia"
 
 
+def test_el_benefactiva_reconoce_subtipo_resultativo_y_wrappers():
+    el = ("⟨IF DEC ⟨TNS PRES ⟨every'(mañanas, [[[do'(Juan, Ø)] CAUSE "
+          "[BECOME prepared'(pizzas)]] PURP [BECOME have'(María, pizzas)]])⟩⟩⟩")
+    v = c.validar_el(el, "Juan prepara pizzas a María todas las mañanas".split(), "preparar")
+    assert v["ok"] and v["plantilla"] == "ditrans_benefactiva"
+    assert v["especificacion"]["subtipo_benefactivo"] == "preparacion"
+    assert v["especificacion"]["predicado_resultado"] == "prepared'"
+    assert v["especificacion"]["proposito"] == "become_have"
+
+
+def test_el_benefactiva_rechaza_aridad_o_coindexacion_incompatible():
+    malas = [
+        "[[do'(Juan,Ø)] CAUSE [BECOME prepared'(pizzas,María)]] PURP [BECOME have'(María,pizzas)]",
+        "[[do'(Juan,Ø)] CAUSE [BECOME prepared'(pizzas)]] PURP [BECOME have'(María,regalo)]",
+    ]
+    for el in malas:
+        v = c.validar_el(el, _TOKS + ["pizzas"], "preparar")
+        assert not v["ok"] and v["nivel"] == 3
+
+
+def test_el_benefactiva_actividad_exige_predicado_del_lema():
+    el = "do'(Juan,[buscar'(Juan,regalo)]) PURP [BECOME have'(María,regalo)]"
+    v = c.validar_el(el, _TOKS, "amasar")
+    assert not v["ok"] and v["nivel"] == 3 and "amasar" in v["error"]
+
+
 def test_el_rechazo_nivel1_parentesis():
     v = c.validar_el("do'(Juan,[correr'(Juan)]", _TOKS, "dar")
     assert not v["ok"] and v["nivel"] == 1
@@ -103,6 +129,13 @@ def test_el_rechazo_nivel1_parentesis():
 def test_el_rechazo_nivel2_argumento_ajeno():
     v = c.validar_el("do'(Pedro,[dar'(Pedro,regalo)])", _TOKS, "dar")
     assert not v["ok"] and v["nivel"] == 2 and "Pedro" in v["error"]
+
+
+def test_el_rechaza_notacion_anterior_xn():
+    for variable in ("x1", "x2", "x3", "x9"):
+        v = c.validar_el(f"do'({variable},[dar'({variable},regalo)])", _TOKS, "dar")
+        assert not v["ok"] and v["nivel"] == 2
+        assert "notación anterior" in v["error"] and "regenerarse" in v["error"]
 
 
 def test_el_rechazo_nivel3_plantilla_desconocida():
@@ -137,6 +170,19 @@ def _res(ls_lexical="do'(Juan,[dar'(Juan)])", ls_type="activity", oracion="Juan 
         "morph_note": "stat=0.1", "core": [], "periferia": [], "agx": []}]}
 
 
+def _ls_transferencia_confirmada():
+    return {"ditransitiva": {"plantilla": "transferencia",
+                              "subtipo_benefactivo": None,
+                              "predicado_resultado": None, "proposito": None},
+            "ls_lexical": "[do'(Juan, Ø)] CAUSE [BECOME have'(María, regalo)]",
+            "ls_formal": "[do'(x, Ø)] CAUSE [BECOME have'(y, z)]",
+            "variables": {"x": "Juan", "y": "María", "z": "regalo"},
+            "id_a_var": {1: "x", 5: "z", 7: "y"},
+            "ls_estructura": [{"predicado": "do'", "args": []},
+                              {"predicado": "have'", "args": []}],
+            "core": [], "periferia": [], "agx": []}
+
+
 def test_correccion_clase_va_a_staging_sin_tocar_contextual():
     tmp = _tmp_data()
     salida = []
@@ -157,18 +203,15 @@ def test_correccion_el_ditransitiva_persiste_con_confirmacion():
     tmp = _tmp_data()
     # el re-análisis confirma: devuelve un res cuya ditransitiva coincide
     def reanalizar(_o):
-        return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
-                                              "ls_lexical": "", "core": [], "periferia": [],
-                                              "agx": []}]}
+        return {"oracion": "x", "ls_lista": [_ls_transferencia_confirmada()]}
     ent = _Entrada(["2", "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]"])
     r = c.bucle_correccion(_res(), reanalizar, sub_idx=0, entrada=ent,
                            salida=lambda *_: None, data_dir=tmp)
-    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
-    # el lema quedó en el xlsx con la marca
+    assert r["accion"] == "no-op" and r["plantilla"] == "ditrans_transferencia"
+    # La corrección idéntica no duplica ni reescribe la fila existente.
     import pandas as pd
     df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
-    fila = df[df["lema"] == "dar"].iloc[-1]
-    assert c.FUENTE in str(fila["notas"])
+    assert len(df[df["lema"] == "dar"]) == 1
     shutil.rmtree(tmp)
 
 
@@ -234,12 +277,10 @@ def test_g0_corregir_el_persiste_con_confirmacion():
     tmp = _tmp_data()
 
     def reanalizar(_o):
-        return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
-                                              "ls_lexical": "", "core": [], "periferia": [],
-                                              "agx": []}]}
+        return {"oracion": "x", "ls_lista": [_ls_transferencia_confirmada()]}
     r = c.corregir_el(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
                       reanalizar, data_dir=tmp)
-    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
+    assert r["accion"] == "no-op" and r["plantilla"] == "ditrans_transferencia"
     shutil.rmtree(tmp)
 
 
@@ -323,8 +364,7 @@ def _res_sin_verbo_primado():
 
 
 def _reanalisis_confirma_transferencia(_o):
-    return {"oracion": "x", "ls_lista": [{"ditransitiva": {"plantilla": "transferencia"},
-                                          "ls_lexical": "", "core": [], "periferia": [], "agx": []}]}
+    return {"oracion": "x", "ls_lista": [_ls_transferencia_confirmada()]}
 
 
 def test_g3_lema_de_ignora_wrappers_periferia_fijos():
@@ -345,11 +385,10 @@ def test_g3_corregir_el_verb_lemma_explicito_persiste_lema_real():
     r = c.corregir_el(_res_sin_verbo_primado(), 0,
                       "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
                       _reanalisis_confirma_transferencia, data_dir=tmp, verb_lemma="dar")
-    assert r["accion"] == "persistido" and r["plantilla"] == "ditrans_transferencia"
+    assert r["accion"] == "no-op" and r["plantilla"] == "ditrans_transferencia"
     import pandas as pd
     df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
-    fila = df[df["lema"] == "dar"].iloc[-1]
-    assert c.FUENTE in str(fila["notas"])
+    assert len(df[df["lema"] == "dar"]) == 1
     shutil.rmtree(tmp)
 
 
@@ -397,9 +436,9 @@ def test_g3_corregir_todo_clase_staging_y_el_persistida_un_solo_reanalisis():
     r = c.corregir_todo(_res(), 0, "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
                         "accomplishment", reanalizar, data_dir=tmp)
     assert len(llamadas) == 1   # UN solo re-análisis compartido, nunca dos
-    assert r["accion"] == "staging_clase+persistido"
+    assert r["accion"] == "staging_clase+no-op"
     assert r["clase_resultado"]["accion"] == "staging_clase"
-    assert r["el_resultado"]["accion"] == "persistido"
+    assert r["el_resultado"]["accion"] == "no-op"
     assert os.path.exists(os.path.join(tmp, "correcciones_clase.csv"))
     shutil.rmtree(tmp)
 
@@ -435,11 +474,66 @@ def test_g3_corregir_todo_respeta_verb_lemma_explicito():
     r = c.corregir_todo(_res_sin_verbo_primado(), 0,
                         "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]", "accomplishment",
                         _reanalisis_confirma_transferencia, data_dir=tmp, verb_lemma="dar")
-    assert r["el_resultado"]["accion"] == "persistido"
+    assert r["el_resultado"]["accion"] == "no-op"
     import pandas as pd
     df = pd.read_excel(os.path.join(tmp, "verbos_ditransitivos.xlsx"))
     assert (df["lema"] == "dar").any()
     shutil.rmtree(tmp)
+
+
+def test_upsert_ditransitivo_insert_update_noop_conflicto_y_revert():
+    import pandas as pd
+    tmp = _tmp_data()
+    ruta = os.path.join(tmp, "verbos_ditransitivos.xlsx")
+    spec = {"familia": "benefactiva", "subtipo_benefactivo": "preparacion",
+            "predicado_resultado": "prepared'", "proposito": "become_have"}
+    try:
+        n0 = len(pd.read_excel(ruta))
+        ins = c.persistir_ditransitiva("amasar", spec, tmp)
+        assert ins["accion"] == "insert" and len(pd.read_excel(ruta)) == n0 + 1
+        assert ins["anterior"] is None and ins["nueva"]["subtipo_benefactivo"] == "preparacion"
+        nop = c.persistir_ditransitiva("amasar", spec, tmp)
+        assert nop["accion"] == "no-op" and len(pd.read_excel(ruta)) == n0 + 1
+        assert nop["anterior"] == nop["nueva"]
+
+        # Verbo conocido no ambiguo: actualización in-place, nunca duplicado.
+        reparacion = {"familia": "benefactiva", "subtipo_benefactivo": "cambio_estado",
+                      "predicado_resultado": "repaired'", "proposito": "have"}
+        upd = c.persistir_ditransitiva("amasar", reparacion, tmp)
+        assert upd["accion"] == "update"
+        assert upd["anterior"]["subtipo_benefactivo"] == "preparacion"
+        assert upd["nueva"]["subtipo_benefactivo"] == "cambio_estado"
+        df = pd.read_excel(ruta)
+        assert len(df[df["lema"] == "amasar"]) == 1
+        assert df[df["lema"] == "amasar"].iloc[0]["predicado_resultado"] == "repaired'"
+
+        conflicto = c.persistir_ditransitiva("traducir", spec, tmp)
+        assert conflicto["accion"] == "staging_conflicto"
+
+        antes_revert = open(ruta, "rb").read()
+        cambio = c.persistir_ditransitiva("amasar", spec, tmp)
+        assert cambio["accion"] == "update"
+        c.revert(cambio)
+        assert open(ruta, "rb").read() == antes_revert
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_confirmacion_benefactiva_exige_semantica_exacta_no_solo_familia():
+    spec = {"familia": "benefactiva", "subtipo_benefactivo": "preparacion",
+            "predicado_resultado": "prepared'", "proposito": "become_have"}
+    propuesta = ("[[do'(Juan, Ø)] CAUSE [BECOME prepared'(pizzas)]] "
+                 "PURP [BECOME have'(María, pizzas)]")
+    ls = {"ditransitiva": {"plantilla": "benefactiva", **spec},
+          "ls_lexical": propuesta,
+          "ls_formal": "[[do'(x, Ø)] CAUSE [BECOME prepared'(z)]] PURP [BECOME have'(y, z)]",
+          "variables": {"x": "Juan", "y": "María", "z": "pizzas"},
+          "id_a_var": {1: "x", 3: "z", 5: "y"},
+          "ls_estructura": [{"predicado": "prepared'", "args": []}]}
+    assert c._confirmar_ditransitiva(ls, propuesta, spec)
+    ls_mal = {**ls, "ditransitiva": {**ls["ditransitiva"],
+                                      "predicado_resultado": "repaired'"}}
+    assert not c._confirmar_ditransitiva(ls_mal, propuesta, spec)
 
 
 def test_correccion_esc_cancela_sin_efectos():
@@ -508,7 +602,7 @@ def test_bucle_correccion_ayuda_en_menu_no_aborta_esc_cancela_despues():
 def _res_gruxx(oracion="Juan corrió"):
     return {"oracion": oracion,
             "ls_lista": [{"ls_type": "activity", "ls_lexical": "do'(Juan,[correr'(Juan)])",
-                          "ls_formal": "do'(x1,[correr'(x1)])", "morph_note": "stat=0.0",
+                          "ls_formal": "do'(x,[correr'(x)])", "morph_note": "stat=0.0",
                           "core": [], "periferia": [], "agx": []}],
             "stdout": "--- Oración 1 ---\n┌ SENTENCE\nConvertidas: 1 | Fallidas: 0\n",
             "completeness": [{"ok": True, "checks": [], "resumen": "Completeness: ✓"}]}
@@ -627,7 +721,38 @@ def test_slow_correccion_ditransitiva_end_to_end():
         ent = _Entrada(["2", "[do'(Juan,Ø)] CAUSE [BECOME have'(María,flores)]"])
         r = c.bucle_correccion(res, procesar, sub_idx=0, entrada=ent,
                                salida=lambda *_a: None, data_dir=tmp)
-        assert r["accion"] in ("persistido", "staging_no_confirmado")
+        assert r["accion"] in ("insert", "update", "no-op", "staging_no_confirmado")
+    finally:
+        if backup is not None:
+            m._DITRANS_LEXICON.clear()
+            m._DITRANS_LEXICON.update(backup)
+        shutil.rmtree(tmp)
+
+
+def test_slow_correccion_benefactiva_nueva_reanalisis_exacto():
+    """Alta real de lema desconocido: el siguiente análisis usa el subtipo."""
+    import stanza
+    import rrg_ls_mapper as m
+    tmp = _tmp_data()
+    nlp = stanza.Pipeline("es", processors="tokenize,mwt,pos,lemma,depparse",
+                          verbose=False)
+
+    def procesar(oracion):
+        return {"oracion": oracion,
+                "ls_lista": [m.map_sentence_to_ls(nlp(oracion).sentences[0])]}
+
+    backup = dict(m._DITRANS_LEXICON) if m._DITRANS_LEXICON is not None else None
+    try:
+        oracion = "Juan le amasó pan a María"
+        res = procesar(oracion)
+        propuesta = ("do'(Juan, [amasar'(Juan, pan)]) "
+                     "PURP [BECOME have'(María, pan)]")
+        r = c.corregir_el(res, 0, propuesta, procesar, data_dir=tmp,
+                          verb_lemma="amasar")
+        assert r["accion"] == "insert"
+        nuevo = procesar(oracion)["ls_lista"][0]
+        assert nuevo["ditransitiva"]["subtipo_benefactivo"] == "actividad"
+        assert nuevo["ls_lexical"] == propuesta
     finally:
         if backup is not None:
             m._DITRANS_LEXICON.clear()
@@ -639,7 +764,10 @@ _PUROS = [test_linea_rasgos_traduce_vector, test_linea_rasgos_none_sin_vector,
           test_traducir_apendices_gate_y_ditrans, test_integridad_ok_y_alerta,
           test_render_bloque_orden_grr, test_glosario_busqueda_tolerante,
           test_glosario_no_encontrado, test_es_comando_help_formas,
-          test_el_valida_transferencia, test_el_rechazo_nivel1_parentesis,
+          test_el_valida_transferencia, test_el_benefactiva_reconoce_subtipo_resultativo_y_wrappers,
+          test_el_benefactiva_rechaza_aridad_o_coindexacion_incompatible,
+          test_el_benefactiva_actividad_exige_predicado_del_lema,
+          test_el_rechazo_nivel1_parentesis,
           test_el_rechazo_nivel2_argumento_ajeno, test_el_rechazo_nivel3_plantilla_desconocida,
           test_correccion_clase_va_a_staging_sin_tocar_contextual,
           test_correccion_el_ditransitiva_persiste_con_confirmacion,
@@ -669,7 +797,9 @@ _PUROS = [test_linea_rasgos_traduce_vector, test_linea_rasgos_none_sin_vector,
           test_g3_corregir_todo_clase_staging_y_el_persistida_un_solo_reanalisis,
           test_g3_corregir_todo_el_no_confirmada_igual_stagea_la_clase,
           test_g3_corregir_todo_el_rechazada_cero_reanalisis_pero_clase_igual_stagea,
-          test_g3_corregir_todo_respeta_verb_lemma_explicito]
+          test_g3_corregir_todo_respeta_verb_lemma_explicito,
+          test_upsert_ditransitivo_insert_update_noop_conflicto_y_revert,
+          test_confirmacion_benefactiva_exige_semantica_exacta_no_solo_familia]
 
 if not RUN_SLOW:
     try:
@@ -677,12 +807,17 @@ if not RUN_SLOW:
         test_slow_correccion_ditransitiva_end_to_end = pytest.mark.skipif(
             True, reason="lento: exportar RUN_SLOW=1")(
             test_slow_correccion_ditransitiva_end_to_end)
+        test_slow_correccion_benefactiva_nueva_reanalisis_exacto = pytest.mark.skipif(
+            True, reason="lento: exportar RUN_SLOW=1")(
+            test_slow_correccion_benefactiva_nueva_reanalisis_exacto)
     except ImportError:
         pass
 
 
 def main():
-    tests = _PUROS + ([test_slow_correccion_ditransitiva_end_to_end] if RUN_SLOW else [])
+    tests = _PUROS + ([test_slow_correccion_ditransitiva_end_to_end,
+                       test_slow_correccion_benefactiva_nueva_reanalisis_exacto]
+                      if RUN_SLOW else [])
     fallos = 0
     for t in tests:
         try:

@@ -1,7 +1,7 @@
 # GRRUX (incorrectly named "gruxx") — Estado del arte (handoff técnico para modelo IA)
 
 > Documento de traspaso denso. Audiencia: instancia Claude que retoma el desarrollo.
-> Fecha de corte: 2026-07-12. Repo: `~/proyectos/ud2rrg`. Python: `./venv/bin/python`.
+> Fecha de corte: 2026-08-12. Repo: `~/proyectos/ud2rrg`. Python: `./venv/bin/python`.
 > No es documentación de usuario; es un snapshot de arquitectura + estado + deuda.
 
 ---
@@ -161,7 +161,8 @@ MLM **λ=0 (deshabilitado — verificado 2× mismo veredicto)**. Cada capa nueva
 - `contextual_sentences.csv` (536 filas) — **CURADO A MANO. APPEND-ONLY. NUNCA regenerar,
   NUNCA auto-modificar.** Semilla de entrenamiento contextual.
 - `conjunto_verbos_semilla_clase_aspectual.xlsx`, `dataset_clean.csv` — semilla léxica.
-- `verbos_ditransitivos.xlsx` (~122 verbos, Julian curando) — léxico ditransitivo.
+- `verbos_ditransitivos.xlsx` (122 verbos) — léxico ditransitivo estructurado;
+  las 30 benefactivas llevan subtipo, predicado resultativo, propósito y trazabilidad.
 - `causative_lexicon.csv` + `causative_candidates_heuristico.csv` (log append-only) — causativas.
 - `glosario_gruxx.csv` (~62+ términos, categorías incl. "Operadores" y "Linking") — editable Julian.
 - `continuum_de_relaciones_tematicas.xlsx`, `jerarquia_semantica_a_gramatical.xlsx` — AUH/temáticas.
@@ -177,7 +178,8 @@ MLM **λ=0 (deshabilitado — verificado 2× mismo veredicto)**. Cada capa nueva
 - Conversión: **98% AnCora / 94.1% PUD** (PUD = examen a ciegas, una vez, NO re-correr).
 - Integridad (Completeness): **94.9%**. `agx_arbol_gt_ls = 0`.
 - PUD periferia 65.9%, completeness 61.8% (peor por compuestas/xcomp no cubiertas).
-- Suites (post-LA1): **351 fríos passed** / **381 slow passed, 3 failed conocidos**.
+- Suite rápida completa post-benefactivas: **382 passed, 37 skipped**. Gates lentos
+  focales: ditransitivas **20/20**, corrector **49/49**, notación **4/4**.
 
 ---
 
@@ -222,9 +224,12 @@ Cada fase produjo `CHECKPOINT_*.md`.
   defaults, modo pregunta-contexto). Ver memoria `linking-sintaxis-semantica-grrux`.
 
 ### 8.3 Teórico (requiere decisión/descripción de Julian)
-- **Reforma notación x/y**: los args son `x,y` POR PREDICADO, no `x1/x2/x3` (el "x3"
-  ditransitivo es el x del `have'` incrustado). Reforma transversal (build_ls, args_map,
-  RRGVar, checker, display). Guardada: las fases nuevas NO profundizan la numeración.
+- **Reforma notación x/y/z: CERRADA (2026-08-12).** Variables por posición
+  semántica, contratos transversales y rechazo de entradas anteriores
+  implementados y validados. Ver `CHECKPOINT_NOTACION.md` (NOTACIÓN-1) y
+  `CHECKPOINT_NOTACION_2.md` (gate independiente reproducido).
+  Los ejemplos `x1/x2/x3` en checkpoints e informes históricos reflejan
+  versiones anteriores de GRRux y no se reescriben.
 - **Migración de EL a inglés** (broken'/sold'/…): tarea futura; hoy todo en español; curar
   formas inglesas contra las listas de verbos después.
 - Periferia tipo "otro" en la EL + notación de wrapper genérico ("los fines de semana"=frecuencia).
@@ -241,8 +246,8 @@ Cada fase produjo `CHECKPOINT_*.md`.
 - **C**: depictivos a periferia ("duerme enroscado").
 - **D**: guardas anti-sobredisparo de causatividad.
 - **F**: "corregir todo" (EL+clase juntas) en el bucle.
-- Discrepancia #1 de LA1: en pasivas perifrásticas x1/x2 se ligan por ORDEN DE SUPERFICIE, no
-  por macrorol ("el pastel fue comido" → args_map correcto por deprel, AUH mal por orden).
+- Discrepancia #1 de LA1 (pasivas por orden superficial): **CERRADA por
+  NOTACIÓN-1**; Actor/Undergoer se asignan por macropapel. Ver checkpoint citado.
 - 3 fallos slow conocidos (clasificador, no de EL): "el perro se sacudió" (activity vs
   semelfactive; sospecha: `pun≥0.5` hardcodeado en gate 4D vs umbral recalibrado 0.40),
   "Juan llegó" (dianas AA), `blend_sube_pun` (corroborador, Δ0.0036, cosmético).
@@ -267,3 +272,42 @@ Cada fase produjo `CHECKPOINT_*.md`.
 8. Advertencia **OOM**: no correr suites `--slow` con instancias de gruxx/GUI abiertas.
 9. Separación de sesiones: una sesión de DISEÑO redacta `prompt_*.md`; una sesión de
    IMPLEMENTACIÓN los ejecuta. El `.md` es el contrato.
+
+## Actualización posterior a LA2.1
+
+LA2.1 queda implementado. Se corrigió el enrutado de correcciones para que las opciones de nodos correspondan únicamente a la oración analizada y no reutilicen opciones de análisis anteriores. También se incorporaron las correcciones y pruebas relacionadas con confianza, causatividad y la clasificación de logros; estas áreas deben mantenerse bajo regresión.
+
+### Próxima fase: LA3 (PAUSADA)
+
+El siguiente bloque es la implementación del linking bidireccional de RRG:
+
+- **syn→sem**: partir de la estructura sintáctica, identificar argumentos centrales, macrorroles, voz, `se`, caso/adposición y posiciones relevantes, recuperar la LS y enlazar todos los argumentos conforme a la completitud.
+- **sem→syn**: partir de la LS, determinar actor y undergoer mediante la AUH, seleccionar el argumento sintáctico privilegiado, asignar codificación morfosintáctica y construir la estructura estratificada de la cláusula.
+- **Integración**: ambos algoritmos deben compartir las mismas representaciones de LS y estructura estratificada, producir trazabilidad explicable y señalar conflictos o enlaces incompletos sin ocultarlos.
+
+La validación de LA3 deberá incluir pruebas de ida y vuelta y regresión para actividades, realizaciones, logros, estados y causativas, con especial atención a ejemplos como «El globo explotó», «Se venden casas» y «Juan rompió la ventana».
+
+LA3 y las oraciones compuestas siguen expresamente en pausa. El hito cerrado
+posterior es la reforma de benefactivas; ver `CHECKPOINT_BENEFACTIVAS.md`.
+
+### Reforma de benefactivas (CERRADA, 2026-08-12)
+
+La familia `benefactiva` se subdivide desde datos curados en obtención,
+preparación, creación, cambio de estado y actividad. EL textual,
+`ls_estructura`, Linking, Completeness, MISC, motor y JSON comparten la misma
+especificación. El corrector realiza upsert atómico insert/update/no-op,
+protege lecturas ambiguas, revierte por bytes y sólo confirma equivalencia
+semántica exacta. Gate focal: 163 passed; suite completa: 382 passed.
+
+### Infraestructura de pruebas GUI
+
+La GUI local de GRRux se sirve en `http://127.0.0.1:8763/`. Las pruebas del modelo ejecutor deben ejecutarse en una instancia aislada y cerrarse al terminar para evitar consumir memoria junto con otras instancias abiertas. El procedimiento de acceso y captura debe quedar documentado en la configuración de lanzamiento del entorno de pruebas.
+
+### Pendientes y decisiones aplazadas
+
+- Reforzar la normalización y presentación de valores de confianza para evitar regresiones de interfaz como `c.confianza.toFixed is not a function`.
+- Mantener la corrección de opciones de nodos limitada a la oración actual.
+- ADESSE queda como posible respaldo léxico futuro para casos de baja confianza o desacuerdo interno; no se implementa en LA3.
+- Se mantienen por ahora los predicados de la EL en español; la migración al inglés es futura.
+- Wh + preposición continúa suspendido.
+- La migración de nombres `gruxx` → `GRRux`, incluido `gruxx_ai1.py` → `grrux_ai1.py`, queda para una fase controlada posterior.

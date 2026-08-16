@@ -28,7 +28,7 @@ def _arbol(spec):
 
 
 # ---------------------------------------------------------------------------
-# "Juan comió pizza ayer" -- x1:Juan(id1) x2:pizza(id3), periferia ayer(id4)
+# "Juan comió pizza ayer" -- x:Juan(id1) y:pizza(id3), periferia ayer(id4)
 # temporal envuelta por yesterday'. Árbol CORRECTO en todo.
 #
 # Etapa PERIFERIA (2026-07-13): el marco temporal ancla a CENTRO/CORE, no a
@@ -45,8 +45,8 @@ ARBOL_OK = _arbol(("CLAUSE", [
 ]))
 
 LS_OK = {
-    "variables": {"x1": "Juan", "x2": "pizza"},
-    "id_a_var": {1: "x1", 3: "x2"},
+    "variables": {"x": "Juan", "y": "pizza"},
+    "id_a_var": {1: "x", 3: "y"},
     "core": [{"id": 1, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"},
             {"id": 3, "text": "pizza", "deprel": "obj", "macropapel": "Undergoer"}],
     "periferia": [{"id": 4, "text": "ayer", "deprel": "advmod", "tipo": "temporal",
@@ -63,7 +63,7 @@ def test_todo_ok():
     estados = {c["estado"] for c in r["checks"]}
     assert estados == {"ok"}
     assert r["resumen"].startswith("Completeness: ✓")
-    assert "x1↔NP" in r["resumen"] and "x2↔NP" in r["resumen"]
+    assert "x↔NP" in r["resumen"] and "y↔NP" in r["resumen"]
     assert "yesterday'↔PERI@CORE" in r["resumen"]
 
 
@@ -78,14 +78,14 @@ def test_sin_arbol():
 # Mismatches: falta_en_arbol / falta_en_ls
 # ---------------------------------------------------------------------------
 def test_argumento_falta_en_arbol():
-    # árbol sin el NP de "pizza" (x2) -- solo Juan y el verbo.
+    # árbol sin el NP de "pizza" (y) -- solo Juan y el verbo.
     arbol = _arbol(("CLAUSE", [("CORE", [("NP", [("N", 0)]), ("NUC", [("V", 1)])])]))
     ls = {**LS_OK, "periferia": [], "wrappers": []}
     r = verificar(ls, arbol)
     assert r["ok"] is False
-    x2 = next(c for c in r["checks"] if c["elemento"] == "x2")
-    assert x2["estado"] == "falta_en_arbol"
-    assert "sin constituyente en el árbol" in x2["detalle"]
+    y = next(c for c in r["checks"] if c["elemento"] == "y")
+    assert y["estado"] == "falta_en_arbol"
+    assert "sin constituyente en el árbol" in y["detalle"]
 
 
 def test_periferia_wrapped_sin_rama_peri_falta_en_arbol():
@@ -145,19 +145,19 @@ def test_agx_falta_en_ls():
 # Satisfacciones morfológicas -- NUNCA son error (Completeness Constraint)
 # ---------------------------------------------------------------------------
 def test_pro_drop_no_es_error():
-    # "corrió" -- x1 es actor implícito (pro-drop), sin id de token.
+    # "corrió" -- x es Actor implícito (pro-drop), sin id de token.
     arbol = _arbol(("CLAUSE", [("CORE", [("NUC", [("V", 0)])])]))
     ls = {
-        "variables": {"x1": "3sg"}, "id_a_var": {}, "core": [],
+        "variables": {"x": "3sg"}, "id_a_var": {}, "core": [],
         "periferia": [], "wrappers": [],
         "actor_implicito": {"persona": "3", "numero": "sg", "etiqueta": "3sg"},
         "agx": None, "impersonal": False,
     }
     r = verificar(ls, arbol)
     assert r["ok"] is True
-    x1 = next(c for c in r["checks"] if c["elemento"] == "x1")
-    assert x1["estado"] == "ok"
-    assert "morf" in x1["detalle"]
+    x = next(c for c in r["checks"] if c["elemento"] == "x")
+    assert x["estado"] == "ok"
+    assert "morf" in x["detalle"]
 
 
 def test_clitico_solo_no_es_error():
@@ -167,8 +167,8 @@ def test_clitico_solo_no_es_error():
         ("NP", [("N", 3)]),   # "verdad"
     ])]))
     ls = {
-        "variables": {"x1": "3sg", "x2": "verdad"},
-        "id_a_var": {1: "x1", 4: "x2"},
+        "variables": {"x": "3sg", "y": "verdad"},
+        "id_a_var": {1: "x", 4: "y"},
         "core": [{"id": 4, "text": "verdad", "deprel": "obj", "macropapel": "Undergoer"}],
         "periferia": [], "wrappers": [],
         "actor_implicito": None,
@@ -178,9 +178,9 @@ def test_clitico_solo_no_es_error():
     }
     r = verificar(ls, arbol)
     assert r["ok"] is True
-    x1 = next(c for c in r["checks"] if c["elemento"] == "x1")
-    assert x1["estado"] == "ok"
-    assert "clítico-AGX" in x1["detalle"]
+    x = next(c for c in r["checks"] if c["elemento"] == "x")
+    assert x["estado"] == "ok"
+    assert "clítico-AGX" in x["detalle"]
     agx_check = next(c for c in r["checks"] if c["tipo"] == "agx")
     assert agx_check["estado"] == "ok"
 
@@ -205,7 +205,7 @@ def test_periferia_sin_wrapper_presente_es_ok():
         ("PP-PERI", [("P", 2), ("NP", [("N", 3)])]),
     ])]))
     ls = {
-        "variables": {"x1": "Juan"}, "id_a_var": {1: "x1"},
+        "variables": {"x": "Juan"}, "id_a_var": {1: "x"},
         "core": [{"id": 1, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"}],
         "periferia": [{"id": 4, "text": "parque", "deprel": "obl", "tipo": "locativo",
                       "case": "en", "lemma": "parque"}],
@@ -222,7 +222,7 @@ def test_periferia_sin_wrapper_ausente_no_verificable():
     # sin ninguna rama -PERI para "parque" -- no_verificable, NUNCA error.
     arbol = _arbol(("CLAUSE", [("CORE", [("NP", [("N", 0)]), ("NUC", [("V", 1)])])]))
     ls = {
-        "variables": {"x1": "Juan"}, "id_a_var": {1: "x1"},
+        "variables": {"x": "Juan"}, "id_a_var": {1: "x"},
         "core": [{"id": 1, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"}],
         "periferia": [{"id": 4, "text": "parque", "deprel": "obl", "tipo": "locativo",
                       "case": "en", "lemma": "parque"}],
@@ -240,15 +240,15 @@ def test_periferia_sin_wrapper_ausente_no_verificable():
 # propio verbo incrustado, no un NP/PP.
 # ---------------------------------------------------------------------------
 def test_argumento_clausal_xcomp_ok():
-    # "El Congresillo quiere guardar las formas": x2 = "guardar" (xcomp,
+    # "El Congresillo quiere guardar las formas": y = "guardar" (xcomp,
     # id=4 -> pos 3), NUC anidado (juntura CORE/CLAUSE subordinada).
     arbol = _arbol(("CLAUSE", [("CORE", [
         ("CORE", [("NP", [("N", 0)]), ("NUC", [("V", 2)])]),                # "Congresillo quiere"
         ("CORE", [("NP", [("N", 4)]), ("NUC", [("V", 3)])]),                # "las formas guardar"
     ])]))
     ls = {
-        "variables": {"x1": "Congresillo", "x2": "guardar"},
-        "id_a_var": {1: "x1", 4: "x2"},
+        "variables": {"x": "Congresillo", "y": "guardar"},
+        "id_a_var": {1: "x", 4: "y"},
         "core": [{"id": 1, "text": "Congresillo", "deprel": "nsubj", "macropapel": "Actor"},
                 {"id": 4, "text": "guardar", "deprel": "xcomp", "macropapel": "Tema"}],
         "periferia": [], "wrappers": [],
@@ -256,9 +256,9 @@ def test_argumento_clausal_xcomp_ok():
     }
     r = verificar(ls, arbol)
     assert r["ok"] is True, r["resumen"]
-    x2 = next(c for c in r["checks"] if c["elemento"] == "x2")
-    assert x2["estado"] == "ok_clausal"
-    assert x2["detalle"] == "x2↔CLÁUSULA"
+    y = next(c for c in r["checks"] if c["elemento"] == "y")
+    assert y["estado"] == "ok_clausal"
+    assert y["detalle"] == "y↔CLÁUSULA"
 
 
 def test_argumento_no_clausal_no_usa_fallback_clausal():
@@ -266,7 +266,7 @@ def test_argumento_no_clausal_no_usa_fallback_clausal():
     # el fallback clausal NO debe enmascararlo.
     arbol = _arbol(("CLAUSE", [("CORE", [("NP", [("N", 0)]), ("NUC", [("V", 1)])])]))
     ls = {
-        "variables": {"x1": "Juan", "x2": "pizza"}, "id_a_var": {1: "x1", 3: "x2"},
+        "variables": {"x": "Juan", "y": "pizza"}, "id_a_var": {1: "x", 3: "y"},
         "core": [{"id": 1, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"},
                 {"id": 3, "text": "pizza", "deprel": "obj", "macropapel": "Undergoer"}],
         "periferia": [], "wrappers": [],
@@ -274,8 +274,8 @@ def test_argumento_no_clausal_no_usa_fallback_clausal():
     }
     r = verificar(ls, arbol)
     assert r["ok"] is False
-    x2 = next(c for c in r["checks"] if c["elemento"] == "x2")
-    assert x2["estado"] == "falta_en_arbol"
+    y = next(c for c in r["checks"] if c["elemento"] == "y")
+    assert y["estado"] == "falta_en_arbol"
 
 
 # ---------------------------------------------------------------------------
@@ -289,7 +289,7 @@ def test_periferia_temporal_ldp_es_ok():
         ("CLAUSE", [("CORE", [("NP", [("N", 2)]), ("NUC", [("V", 3)])])]),
     ]))
     ls = {
-        "variables": {"x1": "Juan"}, "id_a_var": {3: "x1"},
+        "variables": {"x": "Juan"}, "id_a_var": {3: "x"},
         "core": [{"id": 3, "text": "Juan", "deprel": "nsubj", "macropapel": "Actor"}],
         "periferia": [{"id": 1, "text": "ayer", "deprel": "advmod", "tipo": "temporal",
                       "case": None, "lemma": "ayer", "destacado_inicial": True}],

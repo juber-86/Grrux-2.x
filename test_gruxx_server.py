@@ -26,13 +26,26 @@ RUN_SLOW = os.environ.get("RUN_SLOW") == "1" or "--slow" in sys.argv
 _CLAVES_SUB = {"tokens", "arbol", "el", "argumentos", "rasgos", "notas",
               "causatividad", "integridad", "periferia", "agx",
               "actor_implicito", "impersonal", "crudo", "operadores", "linking",
-              "inventario_enrutado"}
+              "inventario_enrutado", "ditransitiva"}
 
 
 def _ls_default():
     return {"ls_type": "activity", "ls_lexical": "do'(Juan,[dar'(Juan)])",
-            "ls_formal": "do'(x1,[dar'(x1)])", "morph_note": "",
+            "ls_formal": "do'(x,[dar'(x)])", "morph_note": "",
             "core": [], "periferia": [], "agx": []}
+
+
+def _ls_transferencia_confirmada():
+    return {**_ls_default(),
+            "ditransitiva": {"plantilla": "transferencia",
+                              "subtipo_benefactivo": None,
+                              "predicado_resultado": None, "proposito": None},
+            "ls_lexical": "[do'(Juan, Ø)] CAUSE [BECOME have'(María, regalo)]",
+            "ls_formal": "[do'(x, Ø)] CAUSE [BECOME have'(y, z)]",
+            "variables": {"x": "Juan", "y": "María", "z": "regalo"},
+            "id_a_var": {1: "x", 5: "z", 7: "y"},
+            "ls_estructura": [{"predicado": "do'", "args": []},
+                              {"predicado": "have'", "args": []}]}
 
 
 class _MotorStub:
@@ -69,6 +82,7 @@ class _MotorStub:
                   "formal": ls.get("ls_formal", ""), "lexical": ls.get("ls_lexical", ""),
                   "formal_ops": ls.get("ls_formal", ""), "lexical_ops": ls.get("ls_lexical", "")},
             "operadores": [],
+            "ditransitiva": ls.get("ditransitiva"),
             "linking": ls.get("_contrato_linking"),
             "argumentos": [], "rasgos": None, "notas": [],
             "integridad": {"ok": None, "checks": [], "linea": None},
@@ -237,6 +251,17 @@ def test_corregir_validar_el_los_3_niveles_y_una_valida():
                     json={**base, "el": "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]"})
         j4 = r4.json()
         assert j4["ok"] is True and j4["plantilla"] == "ditrans_transferencia"
+
+        r5 = c.post("/corregir/validar-el", json={**base, "el":
+                    "[[do'(Juan,Ø)] CAUSE [BECOME prepared'(regalo)]] "
+                    "PURP [BECOME have'(María,regalo)]"})
+        j5 = r5.json()
+        assert j5["ok"] is True and j5["plantilla"] == "ditrans_benefactiva"
+        assert j5["especificacion"] == {
+            "familia": "benefactiva", "plantilla": "ditrans_benefactiva",
+            "subtipo_benefactivo": "preparacion",
+            "predicado_resultado": "prepared'", "aridad_resultado": 1,
+            "proposito": "become_have"}
         # puro: nunca persiste ni re-analiza -- el motor solo vio el /analizar inicial
         assert motor.llamadas.count("Juan le dio un regalo a María") == 1
 
@@ -272,14 +297,13 @@ def test_corregir_el_confirmada_devuelve_persistido_y_analisis_nuevo():
             # el re-análisis (disparado por corregir_el) "confirma": el
             # stub, en la SIGUIENTE llamada a analizar(), devuelve una LS
             # con la ditransitiva ya reconocida.
-            motor.ls_lista_reanalisis = [{**_ls_default(),
-                                         "ditransitiva": {"plantilla": "transferencia"}}]
+            motor.ls_lista_reanalisis = [_ls_transferencia_confirmada()]
             r = c.post("/corregir/el", json={
                 "analisis_id": aid, "sub_idx": 0,
                 "el": "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]"})
             assert r.status_code == 200
             body = r.json()
-            assert body["accion"] == "persistido"
+            assert body["accion"] == "no-op"
             assert body["detalle"]["plantilla"] == "ditrans_transferencia"
             assert body["analisis_nuevo"] is not None
             assert body["analisis_nuevo"]["analisis_id"] != aid
@@ -437,17 +461,16 @@ def test_corregir_todo_persiste_el_y_stagea_clase_un_solo_reanalisis():
     try:
         with cliente as c:
             aid = _analizar(c)
-            motor.ls_lista_reanalisis = [{**_ls_default(),
-                                         "ditransitiva": {"plantilla": "transferencia"}}]
+            motor.ls_lista_reanalisis = [_ls_transferencia_confirmada()]
             r = c.post("/corregir/todo", json={
                 "analisis_id": aid, "sub_idx": 0,
                 "el": "[do'(Juan,Ø)] CAUSE [BECOME have'(María,regalo)]",
                 "clase": "accomplishment"})
             assert r.status_code == 200
             body = r.json()
-            assert body["accion"] == "staging_clase+persistido"
+            assert body["accion"] == "staging_clase+no-op"
             assert body["detalle"]["clase_resultado"]["accion"] == "staging_clase"
-            assert body["detalle"]["el_resultado"]["accion"] == "persistido"
+            assert body["detalle"]["el_resultado"]["accion"] == "no-op"
             assert body["analisis_nuevo"] is not None
             # el ÚNICO re-análisis que dispara /corregir/todo es el de la EL
             # (persistir_ditransitiva -> _confirmar_persistencia): 1 llamada
@@ -655,7 +678,7 @@ def test_slow_corregir_el_real_con_reanalisis():
                        json={"analisis_id": aid, "sub_idx": 0, "el": el_correcta})
             assert r1.status_code == 200
             body = r1.json()
-            assert body["accion"] in ("persistido", "staging_no_confirmado")
+            assert body["accion"] in ("insert", "update", "no-op", "staging_no_confirmado")
             assert body["analisis_nuevo"] is not None
             assert body["analisis_nuevo"]["analisis_id"] != aid
             assert set(body["analisis_nuevo"]["sub_oraciones"][0].keys()) == _CLAVES_SUB

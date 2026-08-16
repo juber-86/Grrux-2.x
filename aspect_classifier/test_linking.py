@@ -230,10 +230,10 @@ def test_traza_tiene_cinco_pasos_numerados():
 
 
 def test_paso_5_se_completa_con_comp():
-    comp = {"ok": True, "checks": [{"tipo": "argumento", "elemento": "x1",
-                                    "estado": "ok", "detalle": "x1↔NP"}],
-           "resumen": "Completeness: ✓ x1↔NP"}
-    assert paso_5_asignacion(comp) == "Paso 5 — Asignación: x1↔NP"
+    comp = {"ok": True, "checks": [{"tipo": "argumento", "elemento": "x",
+                                    "estado": "ok", "detalle": "x↔NP"}],
+           "resumen": "Completeness: ✓ x↔NP"}
+    assert paso_5_asignacion(comp) == "Paso 5 — Asignación: x↔NP"
     assert paso_5_asignacion(None) != paso_5_asignacion(comp)
 
 
@@ -246,8 +246,8 @@ def test_reconciliar_coincide():
         frame("have'", arg("María", "1_pred_xy", nmr=True), arg("flores", "2_pred_xy")),
     ]
     m = asignar_macropapeles(estructura)
-    args_map = ("x1:Juan,nsubj,Actor(Efectuador); x2:flores,obj,Undergoer(Tema); "
-               "x3:María,obl:arg,NMR(Poseedor)")
+    args_map = ("x:Juan,nsubj,Actor(Efectuador); z:flores,obj,Undergoer(Tema); "
+               "y:María,obl:arg,NMR(Poseedor)")
     r = reconciliar(m, args_map)
     assert r["hay_discrepancia"] is False
     assert all(f["coincide"] for f in r["filas"])
@@ -255,12 +255,12 @@ def test_reconciliar_coincide():
 
 def test_reconciliar_discrepancia_hallazgo_real_pastel_juan():
     """Documenta el hallazgo real de esta etapa (CHECKPOINT_LA1.md §2): el
-    pipeline vivo liga x1/x2 por ORDEN DE SUPERFICIE, no por macrorrol, así
-    que en una pasiva el AUH (posicional) y args_map (deprel) discrepan --
+    Regresión histórica: la pasiva debe ligar por macrorrol y no por orden
+    superficial; AUH y args_map deben coincidir.
     exactamente lo que §3 está diseñado para detectar."""
     estructura = [frame("do'", arg("pastel", "1_do")), frame("comer'", arg("Juan", "2_pred_xy"))]
     m = asignar_macropapeles(estructura)
-    args_map = "x1:pastel,nsubj:pass,Undergoer; x2:Juan,obl:agent,Actor"
+    args_map = "y:pastel,nsubj:pass,Undergoer; x:Juan,obl:agent,Actor"
     r = reconciliar(m, args_map)
     assert r["hay_discrepancia"] is True
     assert {f["texto"]: f["coincide"] for f in r["filas"]} == {"pastel": False, "Juan": False}

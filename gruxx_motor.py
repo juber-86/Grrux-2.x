@@ -100,8 +100,12 @@ def _tokens_de(sentence) -> list[dict]:
 
 
 def _argumentos_de(ls: dict) -> list[dict]:
+    from aspect_classifier.rrg_variables import (canonical_variables,
+                                                 validate_mapping_values)
     variables = ls.get("variables") or {}
     id_a_var = ls.get("id_a_var") or {}
+    variables = canonical_variables(variables)
+    validate_mapping_values(id_a_var, field="id_a_var")
     var_a_id = {v: k for k, v in id_a_var.items()}
     core_por_id = {c["id"]: c for c in (ls.get("core") or [])}
     roles_tematicos = ls.get("roles_tematicos") or {}
@@ -249,6 +253,7 @@ def construir_sub_oracion(tokens: list[dict], arbol, ls: dict, comp: dict | None
                "formal_ops": display_grr.el_formal(ls),
                "lexical_ops": display_grr.el_lexica(ls)},
         "operadores": _operadores_de(ls),
+        "ditransitiva": ls.get("ditransitiva"),
         "linking": _linking_de(ls, comp),
         "argumentos": _argumentos_de(ls),
         "rasgos": _rasgos_de(ls),

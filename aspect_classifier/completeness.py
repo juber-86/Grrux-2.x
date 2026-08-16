@@ -40,7 +40,7 @@ _ESTRATO_A_LABEL = {"nucleo": "NUC", "centro": "CORE", "clausula": "CLAUSE"}
 _ESTRATO_DEFECTO = "CORE"
 
 # Fase L4.5 §1: deprels de origen cuyo filler es una CLÁUSULA subordinada
-# (juntura CORE/CLAUSE), no un NP/PP -- el x_n mismo ES el token verbal
+# (juntura CORE/CLAUSE), no un NP/PP: la variable misma ES el token verbal
 # incrustado (ver CORE_DEPRELS en nucleo_periferia.py).
 _DEPRELS_CLAUSALES = {"ccomp", "xcomp", "csubj"}
 
@@ -76,7 +76,7 @@ def _buscar_constituyente_argumental(arbol, token_id: int | None) -> str | None:
 def _es_argumento_clausal(arbol, token_id: int | None) -> bool:
     """Fase L4.5 §1: ¿el token es el NÚCLEO VERBAL (NUC) de una cláusula
     incrustada (juntura CORE/CLAUSE subordinada)? Para ccomp/xcomp/csubj el
-    x_n del mapper ES el propio verbo incrustado (ver CORE_DEPRELS), así
+    la variable del mapper ES el propio verbo incrustado (ver CORE_DEPRELS), así
     que basta comprobar que su posición cuelga de un nodo NUC verbal
     (transform_V etiqueta el núcleo del predicado siempre como NUC
     exactamente) -- distinto de buscar 'la' CORE que lo contiene, que
@@ -186,7 +186,7 @@ def _chequear_argumentos(ls_data: dict, arbol) -> list[dict]:
                            "detalle": f"{var}↔{etiqueta}"})
             continue
 
-        # L4.5 §1: el x_n es un complemento CLAUSAL (ccomp/xcomp/csubj) --
+        # L4.5 §1: la variable es un complemento CLAUSAL (ccomp/xcomp/csubj) --
         # su filler es el propio verbo incrustado, no un NP/PP.
         if (entry and entry.get("deprel") in _DEPRELS_CLAUSALES
                 and _es_argumento_clausal(arbol, tid)):
@@ -302,7 +302,7 @@ def _chequear_linking(ls_data: dict, arbol) -> list[dict]:
     operando en la dirección de PRODUCCIÓN — un ángulo distinto del que ya
     cubren `_chequear_argumentos`/`_chequear_agx` (comprensión), no una
     repetición: aquí se decide desde los MACROPAPELES (Actor/Undergoer/NMR),
-    no desde las variables x_n. `estado` viene prefijado `linking_`.
+    no desde las variables x/y/z. `estado` viene prefijado `linking_`.
 
     Vacío si `ls_data` no trae análisis de linking (etapa apagada, o una
     rama que no lo calcula) -- ninguna clave nueva, ningún check nuevo."""

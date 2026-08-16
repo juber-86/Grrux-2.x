@@ -91,7 +91,7 @@ DIJE_VERDAD = [
 ]
 
 # Fase L5 §1 — clítico dativo de 1ª persona "Me dio el libro" (me=dativo
-# obl:arg, sin doblar -> agx dativo 1sg + un solo x3 morfológico)
+# obl:arg, sin doblar -> AGX dativo 1sg + un solo y morfológico)
 ME_DIO_LIBRO = [
     _tok(1, "Me", "yo", "PRON", "obl:arg", 2, "Case=Dat|Number=Sing|Person=1"),
     _tok(2, "dio", "dar", "VERB", "root", 0,
@@ -281,7 +281,7 @@ def test_impersonal_llover():
 
 
 def test_dativo_doblado_clitico_mas_pleno():
-    """'Le compró un regalo a María': x1 implícito, x2 regalo, x3 María;
+    """'Le compró un regalo a María': x implícito, z regalo, y María;
     el clítico va a agx (concordancia), NUNCA genera su propia variable."""
     r = analizar_roles(REGALO_MARIA, 2, {})
     assert r["actor_implicito"] == {"persona": "3", "numero": "sg", "etiqueta": "3sg"}
@@ -313,7 +313,7 @@ def test_sin_clitico_dativo_sin_agx():
 # Fase L5 §1 — conciliación AGX: me/te/nos/os (dativo/acusativo/reflexivo)
 def test_dativo_me_clitico_solo_morfologico():
     """'Me dio el libro': me=dativo 1sg (obl:arg, sin doblar) -> agx dativo +
-    UN SOLO x3 morfológico (fixture del prompt §1)."""
+    Un solo y morfológico (fixture del prompt §1)."""
     r = analizar_roles(ME_DIO_LIBRO, 2, {})
     assert r["agx"] == [{"clitico": "Me", "rasgos": "1sg-dat", "fuente": "dativo",
                         "doblado": False, "arg_id": None, "clitico_id": 1}]

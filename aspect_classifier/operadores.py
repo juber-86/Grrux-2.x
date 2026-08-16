@@ -23,7 +23,7 @@ EVID, EVQ y DIR no se implementan (el español no los gramaticaliza como los
 persigue Van Valin): se omiten siempre, pero conservan su hueco en el orden
 de scope para que añadirlos después no cambie el anidamiento.
 
-NOTA DE NOTACIÓN: nada aquí referencia variables numeradas (x1/x2/x3). Esa
+NOTA DE NOTACIÓN: nada aquí referencia variables ordinales. Esa
 numeración es un gruxx-ismo con una reforma pendiente (la GRR usa x/y por
 predicado); el dict de operadores y el JSON de la GUI hablan de valores,
 estratos y señales de origen, nunca de variables.

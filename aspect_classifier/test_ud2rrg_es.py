@@ -546,7 +546,7 @@ def test_slow_l4_completeness_end_to_end():
     nlp = stanza.Pipeline("es", processors="tokenize,mwt,pos,lemma,depparse",
                           verbose=False)
 
-    # (1) "Le compró un regalo a María" -> Completeness: ✓ con AGX y x3↔PP.
+    # (1) "Le compró un regalo a María" -> Completeness: ✓ con AGX e y↔PP.
     res = g.procesar_oracion(nlp, "Le compró un regalo a María")
     assert "Convertidas: 1 | Fallidas: 0" in res["stdout"]
     assert len(res["completeness"]) == 1
@@ -554,7 +554,7 @@ def test_slow_l4_completeness_end_to_end():
     assert c["ok"] is True, c["resumen"]
     assert c["resumen"].startswith("Completeness: ✓")
     assert "AGX✓" in c["resumen"]
-    assert "x3↔PP" in c["resumen"]
+    assert "y↔PP" in c["resumen"]
 
     # (2) periferia temporal Y locativa -> wrappers ↔ ramas en el estrato
     # correcto. Etapa PERIFERIA (2026-07-13): AMBAS anclan a CENTRO/CORE

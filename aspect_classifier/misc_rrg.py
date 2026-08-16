@@ -9,7 +9,7 @@ Formato UD estándar: `Clave1=Valor1|Clave2=Valor2` (o `_` si no hay nada).
 Vocabulario mínimo (namespace `RRG*`, para no chocar con MISC de terceros):
 
     RRGRole=CoreArg     | RRGMacrorole=<Actor|Undergoer|...|NMR(dativo)>
-                        | RRGVar=x<n>
+                        | RRGVar=x|y|z
         En el token del argumento nuclear (nsubj/obj/obl:agent/obl:arg...).
 
     RRGRole=Periphery   | RRGType=<aspectual|manera|locativo|temporal|
@@ -31,7 +31,7 @@ Vocabulario mínimo (namespace `RRG*`, para no chocar con MISC de terceros):
         En el token cabeza del adjunto periférico.
 
     RRGRole=AGX         | RRGDoblado=<si|no>  (solo se usa con fuente=dativo)
-                        | RRGArgVar=x<n>  (solo si doblado: variable del
+                        | RRGArgVar=x|y|z  (solo si doblado: variable del
                           sintagma pleno que materializa el mismo argumento)
                         | RRGAgxFuente=<dativo|acusativo|reflexivo|se_pasivo|
                           se_impersonal|se_aspectual>  (L4.5 §3; L5 §1 añade
@@ -67,11 +67,14 @@ Vocabulario mínimo (namespace `RRG*`, para no chocar con MISC de terceros):
         `have'(y,z)`, no "Recipiente" — ver ditransitivas.py). La
         comunicación (que no tiene `have'`) conserva "Receptor".
         Ej.: "María" en "Juan le dio un regalo a María" →
-        `RRGRole=CoreArg|RRGMacrorole=NMR(dativo)|RRGVar=x3|RRGThemRel=Poseedor`.
+        `RRGRole=CoreArg|RRGMacrorole=NMR(dativo)|RRGVar=y|RRGThemRel=Poseedor`.
 
 Funciones puras (salvo `escribir_misc_en_conllu`, que hace I/O de archivo
 explícito — sin Stanza, sin modelos).
 """
+
+from .rrg_variables import (reject_legacy_notation, validate_mapping_values,
+                            validate_variable)
 
 
 def fusionar_misc(existente: str, nuevas: dict) -> str:
@@ -84,6 +87,11 @@ def fusionar_misc(existente: str, nuevas: dict) -> str:
             if "=" in par:
                 k, v = par.split("=", 1)
                 pares[k] = v
+    for campo in ("RRGVar", "RRGArgVar"):
+        if campo in pares:
+            validate_variable(pares[campo], field=campo)
+        if campo in nuevas and nuevas[campo] is not None:
+            validate_variable(nuevas[campo], field=campo)
     pares.update(nuevas)
     if not pares:
         return "_"
@@ -108,6 +116,7 @@ def anotaciones_misc(ls: dict) -> dict[int, dict[str, str]]:
             anot.setdefault(tid, {}).update(limpio)
 
     id_a_var = ls.get("id_a_var") or {}
+    validate_mapping_values(id_a_var, field="id_a_var")
 
     for c in ls.get("core") or []:
         _add(c["id"], RRGRole="CoreArg", RRGMacrorole=c["macropapel"],
@@ -173,6 +182,10 @@ def leer_ls_desde_misc(bloque: str) -> dict:
     de rama -PERI" de `completeness._chequear_periferia`, que es
     precisamente el comportamiento correcto para ese caso (nunca error).
     """
+    for linea in bloque.split("\n"):
+        if linea.startswith("#") and "rrg_ls" in linea.lower():
+            reject_legacy_notation(linea, context="el comentario CoNLL-U de EL formal")
+
     variables: dict[str, str] = {}
     id_a_var: dict[int, str] = {}
     core: list[dict] = []
@@ -192,6 +205,9 @@ def leer_ls_desde_misc(bloque: str) -> dict:
         if not misc or misc == "_":
             continue
         pares = dict(p.split("=", 1) for p in misc.split("|") if "=" in p)
+        for campo in ("RRGVar", "RRGArgVar"):
+            if pares.get(campo):
+                validate_variable(pares[campo], field=f"CoNLL-U {campo}")
 
         role = pares.get("RRGRole")
         if role == "CoreArg":
@@ -235,7 +251,7 @@ def leer_ls_desde_misc(bloque: str) -> dict:
         if "RRGImplicitActor" in pares:
             etiqueta = pares["RRGImplicitActor"]
             actor_implicito = {"etiqueta": etiqueta}
-            variables.setdefault("x1", etiqueta)
+            variables.setdefault("x", etiqueta)
 
     return {"variables": variables, "id_a_var": id_a_var, "core": core,
            "periferia": periferia, "agx": agx_list, "actor_implicito": actor_implicito,

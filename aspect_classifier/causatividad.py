@@ -176,10 +176,10 @@ def componer_cause(aktionsart_base: str, predicado_base: str | None,
     if se_anticausativo:
         x_var = x_lex = "Ø"
     else:
-        x_var, x_lex = "x1", (causer_lex or "x")
+        x_var, x_lex = "x", (causer_lex or "x")
 
     resultative = bool(se_anticausativo and causativo_heuristico)
-    formal = f"[do'({x_var}, Ø)] CAUSE [{_beta(base, pred, 'x2', resultative)}]"
+    formal = f"[do'({x_var}, Ø)] CAUSE [{_beta(base, pred, 'y', resultative)}]"
     lexical = f"[do'({x_lex}, Ø)] CAUSE [{_beta(base, pred, y_lex, resultative)}]"
 
     posicion_y = "arg_estado" if resultative else (

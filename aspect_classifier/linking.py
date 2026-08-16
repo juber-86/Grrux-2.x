@@ -84,7 +84,8 @@ def frame(predicado: str, *args: dict) -> dict:
     return {"predicado": predicado, "args": list(args)}
 
 
-def arg(texto: str, posicion: str, nmr: bool = False) -> dict:
+def arg(texto: str, posicion: str, nmr: bool = False,
+        variable: str | None = None) -> dict:
     """Un argumento de `ls_estructura`. `nmr=True` excluye este argumento de
     la competencia de macropapel (dativo español — decisión de L1a/L2.5, no
     se re-litiga). El `id` de token NO se registra aquí (los constructores
@@ -93,6 +94,8 @@ def arg(texto: str, posicion: str, nmr: bool = False) -> dict:
     d = {"texto": texto, "posicion": posicion, "id": None}
     if nmr:
         d["nmr"] = True
+    if variable:
+        d["variable"] = variable
     return d
 
 
@@ -166,7 +169,7 @@ def asignar_macropapeles(estructura: list[dict], cfg: dict | None = None) -> dic
     cada `arg` es el dict original + 'predicado' (el de su frame) +
     'rango' (0-4) + 'justificacion' (texto legible de su posición).
     """
-    candidatos, nmr, inespecificado = [], [], []
+    candidatos_crudos, nmr_crudos, inespecificado = [], [], []
     for fr in estructura or []:
         pred = fr.get("predicado")
         for a in fr.get("args", []):
@@ -177,9 +180,39 @@ def asignar_macropapeles(estructura: list[dict], cfg: dict | None = None) -> dic
             if a.get("texto") == "Ø":
                 inespecificado.append(enriquecido)
             elif a.get("nmr"):
-                nmr.append(enriquecido)
+                nmr_crudos.append(enriquecido)
             else:
-                candidatos.append(enriquecido)
+                candidatos_crudos.append(enriquecido)
+
+    # Una misma variable puede estar coindexada en varios frames (p.ej. z en
+    # prepared'(z) y en el have' de PURP). Es un solo participante sintáctico:
+    # se conserva la lista completa de posiciones semánticas, pero compite una
+    # sola vez por macropapel/M-transitividad. La ocurrencia canónica es la más
+    # agentiva cuando participa en do'/DO; en los demás casos, la más afectada.
+    def deduplicar(items):
+        grupos = {}
+        for item in items:
+            identidad = ("id", item["id"]) if item.get("id") is not None else \
+                        ("var", item.get("variable") or item.get("texto"))
+            grupos.setdefault(identidad, []).append(item)
+        salida = []
+        for ocurrencias in grupos.values():
+            posiciones = [o.get("posicion") for o in ocurrencias]
+            if any(p in {"arg_de_DO", "1_do"} for p in posiciones):
+                elegida = min(ocurrencias, key=lambda o: o["rango"])
+            else:
+                elegida = max(ocurrencias, key=lambda o: o["rango"])
+            elegida = {**elegida,
+                       "posiciones_semanticas": [
+                           {"predicado": o.get("predicado"),
+                            "posicion": o.get("posicion"),
+                            "justificacion": o.get("justificacion")}
+                           for o in ocurrencias]}
+            salida.append(elegida)
+        return salida
+
+    candidatos = deduplicar(candidatos_crudos)
+    nmr = deduplicar(nmr_crudos)
 
     if not candidatos:
         return {"actor": None, "undergoer": None, "nmr": nmr,
@@ -434,12 +467,12 @@ def linea_compacta(macropapeles: dict, psa: dict, concordancia: dict) -> str:
 # §3 — reconciliación con los macropapeles existentes (args_map).
 # ---------------------------------------------------------------------------
 # args_map es una cadena PLANA y CONTROLADA por el propio mapper
-# ("x1:texto,deprel,macropapel; x2:texto,deprel,macropapel; …", más
+# ("x:texto,deprel,macropapel; y:texto,deprel,macropapel; …", más
 # segmentos sueltos como "Periferia: …" que este patrón excluye a
 # propósito) — NO es la EL (eso sí está prohibido parsear, ver §1 del
 # prompt): es un formato fijo de una sola línea que el propio mapper
 # genera, sin anidamiento.
-_RE_ARG_MAP_ITEM = re.compile(r"^x\d+:(.+?),([^,]+),(.+)$")
+_RE_ARG_MAP_ITEM = re.compile(r"^([xyz]):(.+?),([^,]+),(.+)$")
 
 
 def _parse_args_map(args_map: str) -> dict[str, dict]:
@@ -448,7 +481,7 @@ def _parse_args_map(args_map: str) -> dict[str, dict]:
         m = _RE_ARG_MAP_ITEM.match(parte.strip())
         if not m:
             continue
-        texto, deprel, macropapel = (g.strip() for g in m.groups())
+        _var, texto, deprel, macropapel = (g.strip() for g in m.groups())
         salida[texto] = {"deprel": deprel, "macropapel": macropapel}
     return salida
 

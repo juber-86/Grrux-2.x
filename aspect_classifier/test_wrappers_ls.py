@@ -15,7 +15,7 @@ from .wrappers_ls import componer_wrappers
 
 RUN_SLOW = os.environ.get("RUN_SLOW") == "1" or "--slow" in sys.argv
 
-BASE_FORMAL = "do'(x1, [correr'(x1)])"
+BASE_FORMAL = "do'(x, [correr'(x)])"
 BASE_LEXICAL = "do'(Juan, [correr'(Juan)])"
 
 
@@ -32,7 +32,7 @@ def _peri(id_, text, deprel, tipo, estrato="centro", case=None, lemma=None, **ex
 def test_locativo_en_be_in():
     p = [_peri(1, "parque", "obl", "locativo", case="en")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "be-in'(parque, [do'(x1, [correr'(x1)])])"
+    assert f == "be-in'(parque, [do'(x, [correr'(x)])])"
     assert ap == [{"capa": "locativo", "id": 1, "trigger": "parque",
                   "pred": "be-in'", "aplicado": True, "estrato": "centro"}]
 
@@ -56,13 +56,13 @@ def test_locativo_tabla_configurable():
 def test_durante_cantidad_de_tiempo_da_for():
     p = [_peri(1, "hora", "obl", "temporal", case="durante", lemma="hora")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "for'(hora, [do'(x1, [correr'(x1)])])"
+    assert f == "for'(hora, [do'(x, [correr'(x)])])"
 
 
 def test_durante_evento_nombrado_da_during():
     p = [_peri(1, "clase", "obl", "temporal", case="durante", lemma="clase")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "during'(clase, [do'(x1, [correr'(x1)])])"
+    assert f == "during'(clase, [do'(x, [correr'(x)])])"
 
 
 def test_por_duracion_da_for():
@@ -89,7 +89,7 @@ def test_en_punto_temporal_da_at():
 def test_duracion_desnuda_cuantificada_da_for():
     p = [_peri(1, "horas", "obl", "temporal", lemma="hora", cuantificada=True)]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "for'(horas, [do'(x1, [correr'(x1)])])"
+    assert f == "for'(horas, [do'(x, [correr'(x)])])"
 
 
 def test_duracion_desnuda_sin_cuantificada_no_envuelve():
@@ -98,7 +98,7 @@ def test_duracion_desnuda_sin_cuantificada_no_envuelve():
     (for', conservador) -- Etapa PERIFERIA: NUNCA queda sin envolver."""
     p = [_peri(1, "horas", "obl", "temporal", lemma="hora")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "for'(horas, [do'(x1, [correr'(x1)])])"
+    assert f == "for'(horas, [do'(x, [correr'(x)])])"
 
 
 # ---------------------------------------------------------------------------
@@ -107,7 +107,7 @@ def test_duracion_desnuda_sin_cuantificada_no_envuelve():
 def test_adverbio_monovalente_ayer():
     p = [_peri(1, "ayer", "advmod", "temporal", lemma="ayer")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "yesterday'([do'(x1, [correr'(x1)])])"
+    assert f == "yesterday'([do'(x, [correr'(x)])])"
 
 
 def test_adverbio_manana_solo_via_advmod():
@@ -140,7 +140,7 @@ def test_frecuencia_adverbio_se_envuelve():
     for lemma, pred in casos.items():
         p = [_peri(1, lemma, "advmod", "frecuencia", lemma=lemma)]
         f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-        assert f == f"{pred}'([do'(x1, [correr'(x1)])])", (lemma, f)
+        assert f == f"{pred}'([do'(x, [correr'(x)])])", (lemma, f)
         assert ap[0]["aplicado"] is True and ap[0]["pred"] == f"{pred}'"
 
 
@@ -149,7 +149,7 @@ def test_frecuencia_np_distributivo_every():
     por nucleo_periferia): every'(x, [LS])."""
     p = [_peri(1, "fines", "obl", "frecuencia", lemma="fin")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "every'(fines, [do'(x1, [correr'(x1)])])"
+    assert f == "every'(fines, [do'(x, [correr'(x)])])"
 
 
 # ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ def test_frecuencia_np_distributivo_every():
 def test_manera_provisional_monovalente():
     p = [_peri(1, "lentamente", "advmod", "manera", lemma="lentamente")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "lentamente'([do'(x1, [correr'(x1)])])"
+    assert f == "lentamente'([do'(x, [correr'(x)])])"
     assert ap[0]["capa"] == "manera"
 
 
@@ -169,7 +169,7 @@ def test_aspectual_completamente_nucleo():
     p = [_peri(1, "completamente", "advmod", "aspectual", estrato="nucleo",
                lemma="completamente")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "completely'([do'(x1, [correr'(x1)])])"
+    assert f == "completely'([do'(x, [correr'(x)])])"
     assert ap[0]["estrato"] == "nucleo"
 
 
@@ -180,35 +180,35 @@ def test_epistemico_probablemente_clausula():
     p = [_peri(1, "probablemente", "advmod", "epistemico", estrato="clausula",
                lemma="probablemente")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "probably'([do'(x1, [correr'(x1)])])"
+    assert f == "probably'([do'(x, [correr'(x)])])"
 
 
 def test_razon_debido_a_because_of():
     p = [_peri(1, "insultos", "obl", "razon", estrato="clausula",
                case="debido", lemma="insulto", frase="debido a")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "because-of'(insultos, [do'(x1, [correr'(x1)])])"
+    assert f == "because-of'(insultos, [do'(x, [correr'(x)])])"
 
 
 def test_razon_gracias_a_thanks_to():
     p = [_peri(1, "ayuda", "obl", "razon", estrato="clausula",
                case="gracias", lemma="ayuda", frase="gracias a")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "thanks-to'(ayuda, [do'(x1, [correr'(x1)])])"
+    assert f == "thanks-to'(ayuda, [do'(x, [correr'(x)])])"
 
 
 def test_concesion_a_pesar_de_despite():
     p = [_peri(1, "lluvia", "obl", "concesion", estrato="clausula",
                case="a", lemma="lluvia", frase="a pesar de")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "despite'(lluvia, [do'(x1, [correr'(x1)])])"
+    assert f == "despite'(lluvia, [do'(x, [correr'(x)])])"
 
 
 def test_condicion_en_caso_de():
     p = [_peri(1, "lluvia", "obl", "condicion", estrato="clausula",
                case="en", lemma="lluvia", frase="en caso de")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "in-case-of'(lluvia, [do'(x1, [correr'(x1)])])"
+    assert f == "in-case-of'(lluvia, [do'(x, [correr'(x)])])"
 
 
 # ---------------------------------------------------------------------------
@@ -217,19 +217,19 @@ def test_condicion_en_caso_de():
 def test_generico_pp_preposicion_como_predicado():
     p = [_peri(1, "martillo", "obl", "generico", case="con", lemma="martillo")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "with'(martillo, [do'(x1, [correr'(x1)])])"
+    assert f == "with'(martillo, [do'(x, [correr'(x)])])"
 
 
 def test_generico_pp_sin_entrada_usa_la_preposicion_misma():
     p = [_peri(1, "silla", "obl", "generico", case="bajo la mesa", lemma="silla")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "bajo la mesa'(silla, [do'(x1, [correr'(x1)])])"
+    assert f == "bajo la mesa'(silla, [do'(x, [correr'(x)])])"
 
 
 def test_generico_adverbio_sin_entrada_usa_el_lema():
     p = [_peri(1, "también", "advmod", "generico", lemma="también")]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == "también'([do'(x1, [correr'(x1)])])"
+    assert f == "también'([do'(x, [correr'(x)])])"
 
 
 # ---------------------------------------------------------------------------
@@ -243,7 +243,7 @@ def test_anidamiento_completo_manera_locativo_temporal_adverbio():
     ]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
     assert f == ("yesterday'(for'(horas, be-in'(parque, "
-                "[do'(x1, [correr'(x1)])])))")
+                "[do'(x, [correr'(x)])])))")
     capas = [w["capa"] for w in ap]
     assert capas == ["locativo", "temporal", "temporal"]
 
@@ -254,7 +254,7 @@ def test_anidamiento_con_manera():
         _peri(2, "parque", "obl", "locativo", case="en", lemma="parque"),
     ]
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
-    assert f == ("be-in'(parque, lentamente'([do'(x1, [correr'(x1)])]))")
+    assert f == ("be-in'(parque, lentamente'([do'(x, [correr'(x)])]))")
     assert [w["capa"] for w in ap] == ["manera", "locativo"]
 
 
@@ -276,7 +276,7 @@ def test_anidamiento_todos_los_estratos():
     f, l, ap = componer_wrappers(BASE_FORMAL, BASE_LEXICAL, p, {})
     assert f == (
         "probably'(because-of'(insultos, always'(for'(hora, "
-        "be-in'(parque, lentamente'(completely'([do'(x1, [correr'(x1)])])))))))"
+        "be-in'(parque, lentamente'(completely'([do'(x, [correr'(x)])])))))))"
     )
     assert [w["capa"] for w in ap] == ["aspectual", "manera", "locativo",
                                       "temporal", "frecuencia", "razon", "epistemico"]

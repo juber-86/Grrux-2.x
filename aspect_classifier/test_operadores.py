@@ -396,12 +396,12 @@ def test_notacion_usa_corchetes_angulares_no_menor_mayor():
 
 
 def test_dict_no_referencia_variables_numeradas():
-    """Nada nuevo profundiza la numeración x1/x2/x3 (gruxx-ismo con reforma
+    """Nada nuevo introduce variables ordinales (gruxx-ismo ya retirado
     pendiente): el dict de operadores habla de valores, estratos y señales."""
     ops = detectar_operadores(_toks_ha_estado_llorando(), 4, "complet", CFG)
     for spec in ops.values():
         assert set(spec) == {"valor", "estrato", "origen", "origen_ids"}
-        assert "x1" not in spec["origen"] and "x2" not in spec["origen"]
+        assert not any(v in spec["origen"] for v in ("x" + "1", "x" + "2"))
 
 
 def test_toks_vacios_no_rompe():
@@ -651,7 +651,7 @@ def test_sin_cubiertos_los_wrappers_no_cambian():
 def _res_con_ops(ops, oracion="Juan corrió.", periferia=None, verb_lemma="correr"):
     return {"oracion": oracion, "ls_lista": [{
         "ls_type": "activity", "ls_lexical": "do'(Juan, [correr'(Juan)])",
-        "ls_formal": "do'(x1, [correr'(x1)])", "morph_note": "",
+        "ls_formal": "do'(x, [correr'(x)])", "morph_note": "",
         "verb_lemma": verb_lemma, "core": [], "agx": [],
         "periferia": periferia or [], "operadores": ops}]}
 

@@ -15,7 +15,7 @@ const estadoApp = {
   resultadoActual: null,
   subIdxActual: 0,
   verbose: false,
-  tokenIdxAVar: {},    // token_id-1 -> "x_n", repoblado por renderArgumentos en cada render
+  tokenIdxAVar: {},    // token_id-1 -> x|y|z, repoblado por renderArgumentos
   corregirCtx: null,   // {analisis_id, sub_idx} de la (sub)oración en edición (G2 §3)
   elementoEnrutado: null,   // elemento elegido en la pestaña Enrutado (G2 §3)
   rutasEnrutado: [],
@@ -556,7 +556,7 @@ function renderArbol(sub) {
   });
 }
 
-// ─── EL léxica / formal (con hover bidireccional en x_n) ────────────────────
+// ─── EL léxica / formal (con hover bidireccional en x/y/z) ──────────────────
 function escapeHTML(s) {
   return (s || "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
@@ -609,13 +609,11 @@ function renderEL(sub) {
   contLexica.innerHTML = lexicaHTML;
   conectarHoverOperadores(contLexica, sub);
 
-  // Las variables se marcan ANTES que los operadores: al revés, el regex de
-  // `x\d+` entraría también en los atributos `title` ya insertados (una
-  // definición del glosario que mencione "x1" rompería el HTML).
+  // Solo variables argumentales completas; nunca letras dentro de palabras.
   const formalHTML = marcarOperadoresEnEL(
     escapeHTML(sub.el.formal_ops || sub.el.formal || "").replace(
-      /x(\d+)/g,
-      (m, n) => `<span class="var-el" data-var="x${n}">x${n}</span>`
+      /(?<![\p{L}\p{N}_])([xyz])(?![\p{L}\p{N}_])/gu,
+      (m, v) => `<span class="var-el" data-var="${v}">${v}</span>`
     ), ops);
   const contenedor = $("#el-formal");
   contenedor.innerHTML = formalHTML;
@@ -1116,9 +1114,17 @@ async function validarElEnVivo() {
     const j = await postJSON("/corregir/validar-el", { analisis_id, sub_idx, el });
     if (j.ok) {
       div.className = "validacion-el ok";
-      div.textContent = `✓ plantilla reconocida: ${j.plantilla}`;
+      const spec = j.especificacion || {};
+      const detalle = spec.subtipo_benefactivo
+        ? ` · ${spec.subtipo_benefactivo}${spec.predicado_resultado ? ` · ${spec.predicado_resultado}` : ""}`
+        : "";
+      div.textContent = `✓ plantilla reconocida: ${j.plantilla}${detalle}`;
       $("#btn-aplicar-el").disabled = false;
-      sugerirClasePorPlantilla(j.plantilla);
+      if (j.clase_sugerida && !_claseElManual) {
+        $("#select-clase-el").value = j.clase_sugerida;
+        $("#clase-el-sugerencia").textContent =
+          `(la plantilla sugiere: ${CLASE_ES_POR_VALOR[j.clase_sugerida]})`;
+      } else sugerirClasePorPlantilla(j.plantilla);
     } else {
       div.className = "validacion-el error";
       div.textContent = `✗ (nivel ${j.nivel}): ${j.error}`;
@@ -1307,6 +1313,11 @@ $("#btn-aplicar-operador").addEventListener("click", async () => {
 // ─── diff confirmatorio (antes/después) ─────────────────────────────────────
 const _BANNER_POR_ACCION = {
   persistido: ["verde", (d) => `✓ Corrección aplicada y verificada → «${_archivoLegible(d)}»`],
+  insert: ["verde", (d) => `✓ Conocimiento añadido y verificado → «${_archivoLegible(d)}»`],
+  update: ["verde", (d) => `✓ Conocimiento actualizado y verificado → «${_archivoLegible(d)}»`],
+  "no-op": ["verde", (d) => `✓ Conocimiento ya vigente; verificación exacta superada → «${_archivoLegible(d)}»`],
+  staging_conflicto: ["ambar", (d) =>
+    `⚠ Lectura conflictiva enviada a staging: ${d.motivo || "falta discriminador suficiente"}.`],
   persistido_enrutado: ["verde", (d) => `✓ Corrección aplicada y verificada → «${_archivoLegible(d)}»`],
   staging_no_confirmado: ["ambar", () =>
     "⚠ Registrada para revisión (staging) — el análisis aún no la refleja."],
@@ -1381,7 +1392,7 @@ function mostrarDiffCorreccion(j) {
     // en una accion compuesta ("staging_clase+persistido"), lo que importa
     // para habilitar "usar el nuevo análisis" es el componente EL.
     const accionEl = (j.accion || "").includes("+") ? j.accion.split("+")[1] : j.accion;
-    if (accionEl === "persistido" || accionEl === "persistido_enrutado") {
+    if (["persistido", "insert", "update", "no-op", "persistido_enrutado"].includes(accionEl)) {
       btnUsar.classList.remove("oculto");
       btnUsar.onclick = () => usarNuevoAnalisis(j.analisis_nuevo);
     }

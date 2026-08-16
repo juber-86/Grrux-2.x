@@ -20,12 +20,15 @@ inyección la función de re-análisis y las de entrada/salida (para el test
 """
 
 import csv
+import json
 import os
 import re
+import tempfile
 from datetime import datetime
 
 from . import glosario
 from .gui_contract import ROUTING_BY_KEY, inventario_enrutado
+from .rrg_variables import reject_legacy_notation
 
 _PKG = os.path.dirname(os.path.abspath(__file__))
 _DATA = os.path.join(_PKG, "data")
@@ -34,11 +37,14 @@ FUENTE = "correccion_usuario"
 
 # ── Vocabulario de la EL reconocido por el mini-parser (nivel 1) ───────────
 _OPERADORES = {"CAUSE", "BECOME", "INGR", "SEML", "PURP"}      # operadores sin apóstrofe
+_VALORES_OPERADORES = {"DEC", "INT", "IMP", "PAST", "PRES", "FUT", "PERF",
+                       "PROG", "IMPF", "NEG", "OBLG", "ABIL", "IRR", "REAL"}
+_NOMBRES_OPERADORES_GRAMATICALES = {"IF", "TNS", "ASP", "NEG", "MOD", "STA"}
 _PRIMITIVOS_PRIMADOS = {"do'", "have'"}                        # predicados fijos con apóstrofe
 _WRAPPERS = {"for'", "during'", "before'", "after'", "until'", "since'", "at'",
              "be-in'", "be-on'", "be-at'", "be-under'", "be-near'", "be-behind'",
              "be-between'", "be-beside'", "be-in-front-of'",
-             "yesterday'", "today'", "now'", "tomorrow'", "last.night'"}
+             "yesterday'", "today'", "now'", "tomorrow'", "last.night'", "every'"}
 
 CLASES = ["state", "activity", "accomplishment", "achievement",
           "semelfactive", "active_accomplishment"]
@@ -89,7 +95,7 @@ def nivel1_sintaxis(el: str) -> tuple[bool, str]:
                        "menos uno con apóstrofe, p.ej. run', have', broken')")
     # operadores bare mal escritos: palabras EN MAYÚSCULA que no son operadores
     for m in re.finditer(r"\b([A-Z]{3,})\b", el):
-        if m.group(1) not in _OPERADORES:
+        if m.group(1) not in _OPERADORES | _VALORES_OPERADORES | _NOMBRES_OPERADORES_GRAMATICALES:
             return False, (f"sintaxis: '{m.group(1)}' no es un operador conocido "
                           f"(operadores válidos: {', '.join(sorted(_OPERADORES))})")
     return True, ""
@@ -97,28 +103,32 @@ def nivel1_sintaxis(el: str) -> tuple[bool, str]:
 
 def nivel2_consistencia(el: str, tokens_oracion: list[str], verb_lemma: str) -> tuple[bool, str]:
     """Consistencia con la oración: los argumentos deben ser tokens/lemas de
-    la oración (o Ø, o etiquetas morfológicas '3sg'/x<n>); el predicado
+    la oración (o Ø, variables x/y/z o etiquetas morfológicas '3sg'); el predicado
     principal debe corresponder al lema del verbo.
 
     En plantillas ABSTRACTAS (ditransitiva/causativa) el predicado nuclear es
     de la plantilla (have'/CAUSE), no el lema del verbo — ahí no se exige que
     el lema aparezca primado."""
     el = (el or "").strip()
+    try:
+        reject_legacy_notation(el, context="la EL corregida")
+    except ValueError as exc:
+        return False, f"consistencia: {exc}"
     vocab = {t.lower() for t in tokens_oracion}
     abstracta = ("CAUSE" in el or "have'" in el or ".to." in el)
     # argumentos = identificadores dentro de paréntesis que NO son predicados
-    # (no llevan apóstrofe) ni operadores. Se toleran Ø, variables x1.., y
+    # (no llevan apóstrofe) ni operadores. Se toleran Ø, variables x/y/z y
     # morf '3sg'/'1pl'.
     args = re.findall(r"[\(,\s]([\wÀ-ÿ]+)(?=[\)\],\s])", el)
     for a in args:
         al = a.lower()
-        if a in _OPERADORES:
+        if a in _OPERADORES | _VALORES_OPERADORES | _NOMBRES_OPERADORES_GRAMATICALES:
             continue
         if al in vocab:
             continue
         if a in ("Ø",) or al in ("ø",):
             continue
-        if re.fullmatch(r"x\d+", al):
+        if al in ("x", "y", "z"):
             continue
         if re.fullmatch(r"\d(sg|pl)", al):
             continue
@@ -126,7 +136,7 @@ def nivel2_consistencia(el: str, tokens_oracion: list[str], verb_lemma: str) -> 
         if re.search(rf"{re.escape(a)}'", el):
             continue
         return False, (f"consistencia: '{a}' no es una palabra de la oración "
-                      f"(ni Ø, ni x<n>, ni una etiqueta morfológica tipo '3sg')")
+                      f"(ni Ø, ni x/y/z, ni una etiqueta morfológica tipo '3sg')")
     # predicado principal = lema del verbo debe aparecer primado (salvo
     # plantillas abstractas, cuyo núcleo es have'/CAUSE de la plantilla).
     if verb_lemma and not abstracta \
@@ -136,16 +146,106 @@ def nivel2_consistencia(el: str, tokens_oracion: list[str], verb_lemma: str) -> 
     return True, ""
 
 
+def _compactar(el: str) -> str:
+    return re.sub(r"\s+", "", el or "")
+
+
+def _quitar_exteriores(el: str) -> str:
+    """Quita sólo operadores y wrappers exteriores balanceados conocidos."""
+    e = _compactar(el)
+    while e.startswith("⟨") and e.endswith("⟩"):
+        interior = e[1:-1]
+        pos = interior.find("⟨")
+        if pos < 0:
+            e = interior
+            break
+        if not interior.endswith("⟩"):
+            break
+        e = interior[pos:]
+    wrappers = {w[:-1] for w in _WRAPPERS}
+    while True:
+        m = re.match(r"^([\wÀ-ÿ.\-]+)'\(", e)
+        if not m or (m.group(1) not in wrappers and not m.group(1).startswith("be-")):
+            break
+        inicio = m.end()
+        profundidad = 0
+        coma = None
+        for i in range(inicio, len(e) - 1):
+            ch = e[i]
+            if ch in "([": profundidad += 1
+            elif ch in ")]": profundidad -= 1
+            elif ch == "," and profundidad == 0:
+                coma = i
+                break
+        if coma is None:
+            break
+        inner = e[coma + 1:-1]
+        if inner.startswith("[") and inner.endswith("]"):
+            inner = inner[1:-1]
+        e = inner
+    return e
+
+
+_A = r"[\wÀ-ÿ.]+"
+
+
+def reconocer_especificacion(el: str) -> dict | None:
+    """Reconoce estructura, alcance, aridad y coindexación ditransitiva."""
+    e = _quitar_exteriores(el)
+    acq = re.fullmatch(
+        rf"\[\[do'\((?P<x>{_A}),Ø\)\]CAUSE\[BECOMEhave'\((?P=x),(?P<z>{_A})\)\]\]"
+        rf"PURP\[(?P<bec>BECOME)?have'\((?P<y>{_A}),(?P=z)\)\]", e)
+    if acq:
+        return {"familia": "benefactiva", "plantilla": "ditrans_benefactiva",
+                "subtipo_benefactivo": "obtencion", "predicado_resultado": None,
+                "aridad_resultado": 2,
+                "proposito": "become_have" if acq.group("bec") else "have"}
+    result = re.fullmatch(
+        rf"\[\[do'\((?P<x>{_A}),Ø\)\]CAUSE\[BECOME(?P<pred>[a-z][a-z0-9_.-]*')"
+        rf"\((?P<z>{_A})\)\]\]PURP\[(?P<bec>BECOME)?have'\((?P<y>{_A}),(?P=z)\)\]",
+        e, re.IGNORECASE)
+    if result:
+        pred = result.group("pred").lower()
+        subtipo = ("preparacion" if pred == "prepared'" else
+                   "creacion" if pred == "exist'" else "cambio_estado")
+        return {"familia": "benefactiva", "plantilla": "ditrans_benefactiva",
+                "subtipo_benefactivo": subtipo, "predicado_resultado": pred,
+                "aridad_resultado": 1,
+                "proposito": "become_have" if result.group("bec") else "have"}
+    actividad = re.fullmatch(
+        rf"do'\((?P<x>{_A}),\[(?P<pred>[a-z][a-z0-9_.-]*')\((?P=x),(?P<z>{_A})\)\]\)"
+        rf"PURP\[(?P<bec>BECOME)?have'\((?P<y>{_A}),(?P=z)\)\]", e, re.IGNORECASE)
+    if actividad:
+        return {"familia": "benefactiva", "plantilla": "ditrans_benefactiva",
+                "subtipo_benefactivo": "actividad", "predicado_resultado": None,
+                "predicado_actividad": actividad.group("pred").lower(),
+                "aridad_resultado": 0,
+                "proposito": "become_have" if actividad.group("bec") else "have"}
+
+    tiene_cause = "CAUSE" in e
+    tiene_have = "have'" in e
+    tiene_purp = "PURP" in e
+    if tiene_purp and (tiene_cause or tiene_have):
+        return None  # benefactiva mal formada: no caer a una familia general
+    if re.fullmatch(rf"\[do'\(({_A}),Ø\)\]CAUSE\[BECOMEhave'\(({_A}),({_A})\)\]", e):
+        return {"familia": "transferencia", "plantilla": "ditrans_transferencia"}
+    if re.search(r"\.to\.\(", e) or ".to." in e:
+        return {"familia": "comunicacion", "plantilla": "ditrans_comunicacion"}
+    return None
+
+
 def reconocer_plantilla(el: str) -> str | None:
-    """Nivel 3 — ¿la EL corresponde a una plantilla que gruxx conoce? Devuelve
-    el nombre de la plantilla o None (rechazo)."""
-    e = el or ""
+    """Nivel 3 — plantilla reconocida; las benefactivas exigen spec exacta."""
+    spec = reconocer_especificacion(el)
+    if spec:
+        return spec["plantilla"]
+    e = _quitar_exteriores(el)
     tiene_cause = "CAUSE" in e
     tiene_have = "have'" in e
     tiene_purp = "PURP" in e
     tiene_do = "do'" in e
-    if tiene_cause and tiene_have and tiene_purp:
-        return "ditrans_benefactiva"
+    if tiene_purp:
+        return None
     if tiene_cause and tiene_have:
         return "ditrans_transferencia"
     if re.search(r"\.to\.\(", e) or ".to." in e:
@@ -201,7 +301,17 @@ def validar_el(el: str, tokens_oracion: list[str], verb_lemma: str) -> dict:
         return {"ok": False, "nivel": 3,
                 "error": ("plantilla no reconocida — las plantillas aceptadas son: "
                           + PLANTILLAS_ACEPTADAS)}
-    return {"ok": True, "plantilla": plantilla}
+    spec = reconocer_especificacion(el)
+    if (spec and spec.get("subtipo_benefactivo") == "actividad" and
+            spec.get("predicado_actividad") != f"{verb_lemma.lower()}'"):
+        return {"ok": False, "nivel": 3,
+                "error": ("el predicado de una benefactiva de actividad debe "
+                          f"corresponder al lema {verb_lemma!r}")}
+    clase_sugerida = ("activity" if spec and
+                       spec.get("subtipo_benefactivo") == "actividad"
+                       else clase_sugerida_por_plantilla(plantilla))
+    return {"ok": True, "plantilla": plantilla, "especificacion": spec,
+            "clase_sugerida": clase_sugerida}
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -285,13 +395,20 @@ def stage_operador(oracion, operador, valor_predicho, valor_correcto,
                 data_dir)
 
 
-def stage_el(oracion, lema, el, plantilla, data_dir=None):
-    campos = ["fecha", "oracion", "lema", "el", "plantilla", "fuente"]
+def stage_el(oracion, lema, el, plantilla, data_dir=None,
+             especificacion=None, motivo="", accion="staging"):
+    campos = ["fecha", "oracion", "lema", "el", "plantilla",
+              "especificacion", "motivo", "fuente"]
     fila = {"fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "oracion": oracion,
-            "lema": lema, "el": el, "plantilla": plantilla, "fuente": FUENTE}
+            "lema": lema, "el": el, "plantilla": plantilla,
+            "especificacion": json.dumps(especificacion or {}, ensure_ascii=False, sort_keys=True),
+            "motivo": motivo, "fuente": FUENTE}
     _append_dict_csv(_ruta("correcciones_el.csv", data_dir), fila, campos)
-    log_maestro({"oracion": oracion, "lema": lema, "tipo": "EL", "accion": "staging",
-                 "destino": "correcciones_el.csv", "detalle": plantilla}, data_dir)
+    log_maestro({"oracion": oracion, "lema": lema, "tipo": "EL", "accion": accion,
+                 "destino": "correcciones_el.csv",
+                 "detalle": json.dumps({"plantilla": plantilla,
+                                         "especificacion": especificacion or {},
+                                         "motivo": motivo}, ensure_ascii=False, sort_keys=True)}, data_dir)
 
 
 def stage_el_lema_no_identificable(oracion, el, plantilla, data_dir=None):
@@ -312,17 +429,80 @@ def stage_el_lema_no_identificable(oracion, el, plantilla, data_dir=None):
 
 
 # ── Escritura DIRECTA a léxicos vivos (con marca fuente + revert) ──────────
-def persistir_ditransitiva(lema, plantilla, data_dir=None) -> dict:
-    """Añade/actualiza el lema en verbos_ditransitivos.xlsx con la marca
-    `correccion_usuario` en 'notas'. Devuelve un token de revert."""
+def persistir_ditransitiva(lema, especificacion, data_dir=None) -> dict:
+    """Upsert atómico y reversible de una especificación ditransitiva."""
     import pandas as pd
     ruta = _ruta("verbos_ditransitivos.xlsx", data_dir)
     df = pd.read_excel(ruta)
-    fila = {"lema": lema, "plantilla": plantilla, "ambiguo": False,
-            "notas": f"fuente={FUENTE}"}
-    df = pd.concat([df, pd.DataFrame([fila])], ignore_index=True)
-    df.to_excel(ruta, index=False)
-    return {"archivo": ruta, "tipo": "xlsx", "lema": lema}
+    columnas = ["lema", "plantilla", "subtipo_benefactivo", "predicado_resultado",
+                "proposito", "ambiguo", "notas", "fuente"]
+    faltantes = set(columnas) - set(df.columns)
+    if faltantes:
+        raise ValueError(f"léxico sin migrar; faltan: {', '.join(sorted(faltantes))}")
+    lema = lema.strip().lower()
+    familia = especificacion.get("familia")
+    plantilla = {"transferencia": "transferencia", "benefactiva": "benefactiva",
+                 "comunicacion": "comunicacion"}.get(familia)
+    if plantilla is None:
+        raise ValueError(f"familia ditransitiva inválida: {familia!r}")
+    nueva = {
+        "lema": lema, "plantilla": plantilla,
+        "subtipo_benefactivo": especificacion.get("subtipo_benefactivo") or "",
+        "predicado_resultado": especificacion.get("predicado_resultado") or "",
+        "proposito": especificacion.get("proposito") or "",
+        "ambiguo": False, "notas": "", "fuente": FUENTE,
+    }
+    indices = df.index[df["lema"].astype(str).str.strip().str.lower() == lema].tolist()
+    if len(indices) > 1:
+        return {"archivo": ruta, "tipo": "xlsx", "lema": lema,
+                "accion": "staging_conflicto", "conflicto": "filas activas indistinguibles"}
+    contenido_anterior = open(ruta, "rb").read()
+    if indices:
+        idx = indices[0]
+        def _escalar_python(valor):
+            if pd.isna(valor):
+                return ""
+            return valor.item() if hasattr(valor, "item") else valor
+        anterior = {c: _escalar_python(df.at[idx, c]) for c in columnas}
+        comparables = ["plantilla", "subtipo_benefactivo", "predicado_resultado", "proposito"]
+        if all(str(anterior[c]).strip().lower() == str(nueva[c]).strip().lower()
+               for c in comparables):
+            return {"archivo": ruta, "tipo": "xlsx", "lema": lema,
+                    "accion": "no-op", "no_op": True, "anterior": anterior,
+                    "nueva": anterior}
+        if bool(anterior["ambiguo"]):
+            return {"archivo": ruta, "tipo": "xlsx", "lema": lema,
+                    "accion": "staging_conflicto", "conflicto":
+                    "el lema está marcado ambiguo y no hay discriminador contextual suficiente",
+                    "anterior": anterior}
+        nota_previa = str(anterior.get("notas") or "").strip()
+        cambio = (f"{datetime.now().isoformat(timespec='seconds')} {FUENTE}: "
+                  f"{anterior['subtipo_benefactivo'] or anterior['plantilla']}→"
+                  f"{nueva['subtipo_benefactivo'] or nueva['plantilla']}")
+        nueva["notas"] = "; ".join(x for x in (nota_previa, cambio) if x)
+        for c in columnas:
+            df.at[idx, c] = nueva[c]
+        accion = "update"
+    else:
+        nueva["notas"] = f"alta por {FUENTE} {datetime.now().isoformat(timespec='seconds')}"
+        df = pd.concat([df, pd.DataFrame([nueva], columns=columnas)], ignore_index=True)
+        accion = "insert"
+
+    fd, temporal = tempfile.mkstemp(suffix=".xlsx", prefix="ditrans_upsert_",
+                                    dir=os.path.dirname(ruta))
+    os.close(fd)
+    try:
+        df.to_excel(temporal, index=False)
+        # Validación con el mismo cargador que consumirá el mapper.
+        from .ditransitivas import cargar_lexicon
+        cargar_lexicon(temporal)
+        os.replace(temporal, ruta)
+    finally:
+        if os.path.exists(temporal):
+            os.remove(temporal)
+    return {"archivo": ruta, "tipo": "xlsx", "lema": lema, "accion": accion,
+            "contenido_anterior": contenido_anterior,
+            "anterior": anterior if indices else None, "nueva": nueva}
 
 
 def persistir_causativo(lema, aktionsart_base, predicado_base, data_dir=None) -> dict:
@@ -415,14 +595,17 @@ def revert(token: dict):
     tipo = token.get("tipo")
     ruta = token["archivo"]
     if tipo == "xlsx":
-        import pandas as pd
-        df = pd.read_excel(ruta)
-        # elimina la ÚLTIMA fila del lema con fuente=correccion_usuario
-        mask = (df["lema"] == token["lema"]) & \
-               (df["notas"].astype(str).str.contains(FUENTE, na=False))
-        if mask.any():
-            df = df.drop(df[mask].index[-1]).reset_index(drop=True)
-            df.to_excel(ruta, index=False)
+        contenido = token.get("contenido_anterior")
+        if contenido is not None:
+            fd, temporal = tempfile.mkstemp(suffix=".xlsx", prefix="ditrans_revert_",
+                                            dir=os.path.dirname(ruta))
+            try:
+                with os.fdopen(fd, "wb") as f:
+                    f.write(contenido)
+                os.replace(temporal, ruta)
+            finally:
+                if os.path.exists(temporal):
+                    os.remove(temporal)
     elif tipo == "csv":
         with open(ruta, encoding="utf-8") as f:
             lineas = f.readlines()
@@ -482,13 +665,30 @@ def _pedir(prompt, entrada, salida):
         return val
 
 
-def _aplicar_en_memoria_ditrans(lema, plantilla):
+def _aplicar_en_memoria_ditrans(lema, especificacion):
     """Inyecta la entrada en el léxico VIVO del mapper (en memoria) para que el
     re-análisis la vea sin recargar el .xlsx."""
     try:
         import rrg_ls_mapper as m
         if m._DITRANS_LEXICON is not None:
-            m._DITRANS_LEXICON[lema.lower()] = {"plantilla": plantilla, "ambiguo": False}
+            m._DITRANS_LEXICON[lema.lower()] = {
+                "plantilla": especificacion["familia"],
+                "subtipo_benefactivo": especificacion.get("subtipo_benefactivo"),
+                "predicado_resultado": especificacion.get("predicado_resultado"),
+                "proposito": especificacion.get("proposito"),
+                "ambiguo": False, "notas": f"fuente={FUENTE}", "fuente": FUENTE}
+    except Exception:
+        pass
+
+
+def _recargar_en_memoria_ditrans(ruta):
+    try:
+        import rrg_ls_mapper as m
+        from .ditransitivas import cargar_lexicon
+        nuevo = cargar_lexicon(ruta)
+        if m._DITRANS_LEXICON is not None:
+            m._DITRANS_LEXICON.clear()
+            m._DITRANS_LEXICON.update(nuevo)
     except Exception:
         pass
 
@@ -667,6 +867,7 @@ def _procesar_el_texto(el, oracion, lema, tokens_oracion, sub_idx, reanalizar_fn
         salida(f"  ✗ Rechazada (nivel {v['nivel']}): {v['error']}")
         return {"accion": "rechazado", "nivel": v["nivel"], "error": v["error"]}
     plantilla = v["plantilla"]
+    especificacion = v.get("especificacion")
     salida(f"  ✓ EL válida — plantilla reconocida: {plantilla}")
 
     # G3 §1.3 — guardia anti-basura: ANTES de tocar un léxico vivo, si el
@@ -684,13 +885,26 @@ def _procesar_el_texto(el, oracion, lema, tokens_oracion, sub_idx, reanalizar_fn
 
     # Derivación automática del destino (el usuario NO elige archivo).
     if plantilla.startswith("ditrans_"):
-        nombre = plantilla.replace("ditrans_", "")
-        token = persistir_ditransitiva(lema, nombre, data_dir)
-        _aplicar_en_memoria_ditrans(lema, nombre)
+        if especificacion is None:
+            # Transferencia/comunicación reconocidas por compatibilidad:
+            # completar la spec mínima que usa el léxico estructurado.
+            familia = plantilla.replace("ditrans_", "")
+            especificacion = {"familia": familia, "plantilla": plantilla,
+                               "subtipo_benefactivo": None,
+                               "predicado_resultado": None, "proposito": None}
+        token = persistir_ditransitiva(lema, especificacion, data_dir)
+        if token.get("accion") == "staging_conflicto":
+            motivo = token.get("conflicto", "lectura conflictiva")
+            stage_el(oracion, lema, el, plantilla, data_dir, especificacion, motivo,
+                     accion="staging_conflicto")
+            return {"accion": "staging_conflicto", "plantilla": plantilla,
+                    "especificacion": especificacion, "motivo": motivo}
+        _aplicar_en_memoria_ditrans(lema, especificacion)
         return _confirmar_persistencia(
             token, oracion, lema, el, plantilla, reanalizar_fn, sub_idx, entrada, salida,
-            data_dir, confirma=lambda r: (_ls_de(r, sub_idx).get("ditransitiva") or {})
-            .get("plantilla") == nombre)
+            data_dir, confirma=lambda r: _confirmar_ditransitiva(
+                _ls_de(r, sub_idx), el, especificacion),
+            especificacion=especificacion)
     if plantilla == "causativa":
         pred = f"{lema}'"
         token = persistir_causativo(lema, "", pred, data_dir)
@@ -706,7 +920,8 @@ def _procesar_el_texto(el, oracion, lema, tokens_oracion, sub_idx, reanalizar_fn
 
 
 def _confirmar_persistencia(token, oracion, lema, el, plantilla, reanalizar_fn,
-                            sub_idx, entrada, salida, data_dir, confirma):
+                            sub_idx, entrada, salida, data_dir, confirma,
+                            especificacion=None):
     """Cierre del ciclo: re-analiza y CONFIRMA. Si no confirma, revierte el
     archivo vivo y cae a staging (nunca deja en vivo algo no confirmado).
 
@@ -722,19 +937,64 @@ def _confirmar_persistencia(token, oracion, lema, el, plantilla, reanalizar_fn,
         ok = False
         salida(f"  (el re-análisis falló: {e})")
     if ok:
-        log_maestro({"oracion": oracion, "lema": lema, "tipo": "EL", "accion": "persistido",
-                     "destino": os.path.basename(token["archivo"]), "detalle": plantilla},
+        accion = token.get("accion", "persistido")
+        detalle = {"plantilla": plantilla, "especificacion": especificacion or {},
+                   "el_propuesta": el, "antes": token.get("anterior"),
+                   "despues": token.get("nueva"), "accion_upsert": accion}
+        log_maestro({"oracion": oracion, "lema": lema, "tipo": "EL", "accion": accion,
+                     "destino": os.path.basename(token["archivo"]),
+                     "detalle": json.dumps(detalle, ensure_ascii=False, sort_keys=True)},
                     data_dir)
         salida(f"  ✓ Corrección aplicada y verificada → {os.path.basename(token['archivo'])} "
                f"(fuente={FUENTE}).")
-        return {"accion": "persistido", "plantilla": plantilla,
-                "archivo": token["archivo"]}
+        return {"accion": accion, "plantilla": plantilla,
+                "especificacion": especificacion, "archivo": token["archivo"]}
     # no confirmó: revertir vivo + staging
     revert(token)
-    stage_el(oracion, lema, el, plantilla, data_dir)
+    if token.get("tipo") == "xlsx":
+        _recargar_en_memoria_ditrans(token["archivo"])
+    motivo_revert = "el reanálisis no reprodujo exactamente la semántica corregida"
+    log_maestro({"oracion": oracion, "lema": lema, "tipo": "EL", "accion": "revert",
+                 "destino": os.path.basename(token["archivo"]),
+                 "detalle": json.dumps({"plantilla": plantilla,
+                                          "especificacion": especificacion or {},
+                                          "el_propuesta": el,
+                                          "antes": token.get("anterior"),
+                                          "intento": token.get("nueva"),
+                                          "motivo": motivo_revert},
+                                         ensure_ascii=False, sort_keys=True)}, data_dir)
+    stage_el(oracion, lema, el, plantilla, data_dir, especificacion,
+             motivo_revert, accion="staging_no_confirmado")
     salida("  ⚠ La corrección se registró pero el análisis aún no la refleja — "
            "quedará para revisión (staging), no se dejó en el archivo vivo.")
     return {"accion": "staging_no_confirmado", "plantilla": plantilla}
+
+
+def _confirmar_ditransitiva(ls: dict, el_propuesta: str, especificacion: dict) -> bool:
+    """Confirmación exacta: spec, EL léxica, formal, estructura y argumentos."""
+    meta = ls.get("ditransitiva") or {}
+    familia = especificacion.get("familia")
+    if meta.get("plantilla") != familia:
+        return False
+    for campo in ("subtipo_benefactivo", "predicado_resultado", "proposito"):
+        if (meta.get(campo) or None) != (especificacion.get(campo) or None):
+            return False
+    propuestas = _compactar(el_propuesta)
+    regeneradas = {_compactar(ls.get("ls_lexical", "")),
+                   _compactar(ls.get("ls_lexical_ops", ""))}
+    if propuestas not in regeneradas:
+        return False
+    try:
+        reject_legacy_notation(ls.get("ls_formal", ""), context="EL formal regenerada")
+    except ValueError:
+        return False
+    variables = ls.get("variables") or {}
+    if not set(variables).issubset({"x", "y", "z"}):
+        return False
+    if not isinstance(ls.get("ls_estructura"), list) or not ls.get("ls_estructura"):
+        return False
+    ids = list((ls.get("id_a_var") or {}).values())
+    return all(v in {"x", "y", "z"} for v in ids) and len(ids) == len(set(ids))
 
 
 # ── "Corregir todo" (G3 §2) — EL + clase en un solo paso ───────────────────

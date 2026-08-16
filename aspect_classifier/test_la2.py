@@ -8,7 +8,7 @@ from . import display_grr, glosario, linking
 def test_se_heuristico_resultativo_espanol_y_ls_estructura():
     ls = componer_cause("Activity", None, "vender", None, "casas", True,
                         causativo_heuristico=True)
-    assert ls["formal"] == "[do'(Ø, Ø)] CAUSE [BECOME vendido'(x2)]"
+    assert ls["formal"] == "[do'(Ø, Ø)] CAUSE [BECOME vendido'(y)]"
     assert ls["lexical"] == "[do'(Ø, Ø)] CAUSE [BECOME vendido'(casas)]"
     assert ls["estructura"][1]["args"][0]["posicion"] == "arg_estado"
     assert "sold'" not in ls["lexical"]
@@ -72,7 +72,7 @@ def test_terminal_muestra_clase_causal_y_linking():
         "causativo_tipo": "lexico_transitivo",
         "causativo_source": "lexicon",
         "causativo_confianza": "alta",
-        "ls_formal": "[do'(x1, Ø)] CAUSE [INGR roto'(x2)]",
+        "ls_formal": "[do'(x, Ø)] CAUSE [INGR roto'(y)]",
         "ls_lexical": "[do'(Juan, Ø)] CAUSE [INGR roto'(ventana)]",
         "linking": {
             "macropapeles": {

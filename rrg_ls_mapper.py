@@ -5,7 +5,7 @@ Mapeador de Estructura Lógica (LS) basado en la taxonomía de 7 tipos de la
 Gramática de Rol y Referencia (Van Valin 2005).
 
 Produce dos representaciones:
-  - LS formal:  do'(x1, [comer'(x1, x2)])       — variables abstractas
+  - LS formal:  do'(x, [comer'(x, y)])           — variables abstractas
   - LS léxica:  do'(Juan, [comer'(Juan, pizza)])  — con formas superficiales
 
 Manejo especial de estados copulativos:
@@ -73,6 +73,7 @@ from aspect_classifier import operadores as _operadores
 # AUH, PSA+concordancia, traza de 5 pasos, round-trip). Módulo puro; lee la
 # EL ya construida, no la cambia.
 from aspect_classifier import linking as _linking
+from aspect_classifier.rrg_variables import canonical_variables
 
 # Fase LINKING, Etapa L2.5: Estructuras Lógicas ditransitivas (recipiente).
 # Si el léxico ditransitivo no está disponible, el mapper sigue funcionando
@@ -430,7 +431,7 @@ def build_ls(verb_lemma: str, args: dict, verb_class: str,
 
     Parámetros:
       verb_lemma : lema del verbo principal
-      args       : {'x1': 'Juan', 'x2': 'pizza', '_loc_info': {...}, ...}
+      args       : {'x': 'Juan', 'y': 'pizza', '_loc_info': {...}, ...}
       verb_class : state | activity | achievement | accomplishment |
                    semelfactive | active_accomplishment | causative
       aux_asp    : 'prog' | 'complet' | None
@@ -438,10 +439,10 @@ def build_ls(verb_lemma: str, args: dict, verb_class: str,
     Retorna:
       {'formal': str, 'lexical': str}
     """
-    x1_var = 'x1'
-    x2_var = 'x2' if 'x2' in args else None
-    x1_lex = args.get('x1', 'x')
-    x2_lex = args.get('x2', None)
+    x1_var = 'x'
+    x2_var = 'y' if 'y' in args else None
+    x1_lex = args.get('x', 'x')
+    x2_lex = args.get('y', None)
 
     pred_name = f"{verb_lemma}'"
 
@@ -477,16 +478,17 @@ def build_ls(verb_lemma: str, args: dict, verb_class: str,
             prep_pred = loc_info['prep_pred']          # e.g. 'be-in'
             loc_lex   = loc_info.get('loc_lex', 'loc')
 
-            # Argumentos invertidos: (lugar, figura)
-            f = f"{prep_pred}'(x2, {x1_var})"
-            l = f"{prep_pred}'({loc_lex}, {x1_lex})"
-            # LA1: la figura (x1, lo ubicado) es el argumento de estado por
+            figura_lex = args.get('y', 'figura')
+            # Posiciones locativas: x=locación, y=figura.
+            f = f"{prep_pred}'(x, y)"
+            l = f"{prep_pred}'({loc_lex}, {figura_lex})"
+            # La figura (y, lo ubicado) es el argumento de estado por
             # defecto (Undergoer); el lugar NO compite por macropapel (NMR
             # — decisión de esta etapa, documentada: las locaciones son
             # oblicuas para efectos de linking, igual que el dativo).
             estructura = [_linking.frame(f"{prep_pred}'",
                                          _linking.arg(loc_lex, "1_pred_xy", nmr=True),
-                                         _linking.arg(x1_lex, "arg_estado"))]
+                                         _linking.arg(figura_lex, "2_pred_xy"))]
 
         # ── ATRIBUTIVO con ESTAR: pred'(x) ──────────────────────────────
         #    "La ventana está rota" → broken'(ventana)
@@ -564,9 +566,9 @@ def build_ls(verb_lemma: str, args: dict, verb_class: str,
 
     elif verb_class == 'causative':
         f = (f"[do'({x1_var}, Ø)]"
-             f" CAUSE [BECOME {pred_formal(x1_var, x2_var)}]")
+             f" CAUSE [BECOME {pred_formal(x2_var or 'y', None)}]")
         l = (f"[do'({x1_lex}, Ø)]"
-             f" CAUSE [BECOME {pred_lexical(x1_lex, x2_lex)}]")
+             f" CAUSE [BECOME {pred_lexical(x2_lex or 'y', None)}]")
         # Rama MUERTA en el pipeline vivo (ningún verb_class del clasificador
         # produce 'causative' — la causatividad real se compone aparte, ver
         # causatividad.componer_cause); estructura consistente por si algún
@@ -705,6 +707,69 @@ def _anotar_operadores(salida: dict, toks: list[dict], root_id: int,
 # ---------------------------------------------------------------------------
 # 7. FUNCIÓN PRINCIPAL: procesar una oración Stanza  (aqui se debe hacer cambios)
 # ---------------------------------------------------------------------------
+def _mapear_argumentos_genericos(roles: dict) -> tuple[dict, dict, list[str], list[str]]:
+    """Asigna x/y por función semántica, nunca por orden superficial.
+
+    ``z`` queda reservado a las plantillas compuestas ditransitivas. Un tercer
+    participante sin posición licenciada se conserva en ``roles`` para el
+    diagnóstico, pero no se fuerza dentro de un predicado primitivo.
+    """
+    args: dict[str, str] = {}
+    id_a_var: dict[int, str] = {}
+    meta: list[str] = []
+    diagnosticos: list[str] = []
+    core = list(roles.get('core') or [])
+    actores = [c for c in core if (c.get('macropapel') or '').startswith('Actor')]
+    padecedores = [c for c in core
+                    if (c.get('macropapel') or '').startswith('Undergoer')]
+    otros = [c for c in core if c not in actores and c not in padecedores]
+
+    tiene_se_sin_actor = any(e['fuente'] in ('se_pasivo', 'se_impersonal')
+                             for e in roles.get('agx') or [])
+    if roles.get('actor_implicito') is not None:
+        etiqueta = roles['actor_implicito']['etiqueta']
+        args['x'] = etiqueta
+        meta.append(f"x:{etiqueta},pro-drop,Actor(implícito)")
+    elif tiene_se_sin_actor:
+        args['x'] = 'Ø'
+        meta.append("x:Ø,—,actor inespecificado (se)")
+
+    def asignar(var: str, c: dict) -> None:
+        if var in args:
+            diagnosticos.append(
+                f"argumento {c['text']!r} ({c['deprel']}) sin posición "
+                "licenciada en la EL seleccionada"
+            )
+            return
+        args[var] = c['text']
+        id_a_var[c['id']] = var
+        meta.append(f"{var}:{c['text']},{c['deprel']},{c['macropapel']}")
+
+    # La pasiva queda resuelta aquí: el obl:agent/Actor recibe x aunque siga
+    # superficialmente al nsubj:pass/Undergoer.
+    if actores:
+        if 'x' not in args:
+            asignar('x', actores[0])
+        else:
+            diagnosticos.extend(
+                f"argumento {c['text']!r} ({c['deprel']}) sin posición licenciada "
+                "en la EL seleccionada" for c in actores
+            )
+    if padecedores:
+        asignar('y' if 'x' in args else 'x', padecedores[0])
+
+    for c in actores[1:] + padecedores[1:] + otros:
+        disponible = next((v for v in ('x', 'y') if v not in args), None)
+        if disponible is None:
+            diagnosticos.append(
+                f"argumento {c['text']!r} ({c['deprel']}) sin posición "
+                "licenciada en la EL seleccionada"
+            )
+        else:
+            asignar(disponible, c)
+    return args, id_a_var, meta, diagnosticos
+
+
 def map_sentence_to_ls(sentence) -> dict:
     """
     Recibe un objeto sentence de Stanza y retorna el análisis LS completo.
@@ -731,7 +796,7 @@ def map_sentence_to_ls(sentence) -> dict:
     # Correcciones de lemas mal generados por Stanza (es)
     LEMA_FIXES = {'comir': 'comer', 'secuir': 'secar',
                   'derritir': 'derretir', 'tosear': 'toser',
-                  'estudir': 'estudiar'}
+                  'estudir': 'estudiar', 'llueve': 'llover'}
 
     # ── Detectar si es oración copulativa ─────────────────────────────────
     cop_info = detect_copula_info(root, words)
@@ -742,15 +807,24 @@ def map_sentence_to_ls(sentence) -> dict:
             (w for w in words if w.head == root.id and w.deprel == 'nsubj'),
             None
         )
-        x1_lex = subj.text if subj else 'x'
-
-        args = {'x1': x1_lex, '_loc_info': cop_info}
+        figura_lex = subj.text if subj else 'x'
 
         # Para locativos añadimos el lexema del lugar
         if cop_info['subtype'] == 'locative' and cop_info['loc_word']:
             cop_info['loc_lex'] = cop_info['loc_word'].text
-
-        arg_meta = f"x1:{x1_lex},nsubj,Agent"
+            loc_word = cop_info['loc_word']
+            args = {'x': loc_word.text, 'y': figura_lex, '_loc_info': cop_info}
+            variables = {'x': loc_word.text, 'y': figura_lex}
+            id_a_var = {loc_word.id: 'x'}
+            if subj is not None:
+                id_a_var[subj.id] = 'y'
+            arg_meta = (f"x:{loc_word.text},{loc_word.deprel},NMR(Locación); "
+                        f"y:{figura_lex},nsubj,Undergoer(Figura)")
+        else:
+            args = {'x': figura_lex, '_loc_info': cop_info}
+            variables = {'x': figura_lex}
+            id_a_var = {subj.id: 'x'} if subj is not None else {}
+            arg_meta = f"x:{figura_lex},nsubj,Undergoer"
 
         ls = build_ls(
             verb_lemma = cop_info.get('cop_lemma', 'ser'),
@@ -766,10 +840,27 @@ def map_sentence_to_ls(sentence) -> dict:
             'ls_lexical': ls['lexical'],
             'verb_lemma': cop_info.get('cop_lemma') or root.lemma.lower(),
             'args_map':   arg_meta,
-            'variables':  {'x1': x1_lex},
+            'variables':  canonical_variables(variables),
+            'id_a_var':   id_a_var,
             'cls_source': 'lexicon',
             'morph_note': '',
             'root_id':    root.id,
+            'core': ([{"id": cop_info['loc_word'].id,
+                       "text": cop_info['loc_word'].text,
+                       "deprel": cop_info['loc_word'].deprel,
+                       "macropapel": "NMR(Locación)"},
+                      {"id": subj.id, "text": figura_lex,
+                       "deprel": "nsubj", "macropapel": "Undergoer"}]
+                     if cop_info['subtype'] == 'locative' and subj is not None
+                     else ([{"id": subj.id, "text": figura_lex,
+                             "deprel": "nsubj", "macropapel": "Undergoer"}]
+                           if subj is not None else [])),
+            'periferia': [],
+            'agx': [],
+            'impersonal': False,
+            'actor_implicito': None,
+            'wrappers': [],
+            'diagnosticos_analisis': [],
         }
 
         # Fase LINKING, Etapa LA1 (también en copulativas: "Juan es médico"
@@ -784,7 +875,10 @@ def map_sentence_to_ls(sentence) -> dict:
         if linking_cfg.get('enabled', True):
             estructura = ls.get('estructura', [])
             if subj is not None:
-                _linking.enriquecer_ids(estructura, {x1_lex: subj.id})
+                texto_a_id = {figura_lex: subj.id}
+                if cop_info['subtype'] == 'locative' and cop_info.get('loc_word'):
+                    texto_a_id[cop_info['loc_word'].text] = cop_info['loc_word'].id
+                _linking.enriquecer_ids(estructura, texto_a_id)
             resultado_linking = _linking.analizar_linking(
                 estructura, {'core': [], 'periferia': [], 'impersonal': False}, [],
                 None, toks_cop, root.id, 'state',
@@ -812,41 +906,7 @@ def map_sentence_to_ls(sentence) -> dict:
     np_cfg = _aspect_clf.config.get('nucleo_periferia', {}) if _ASPECT_CLF_AVAILABLE else {}
     roles = analizar_roles(toks, root.id, np_cfg)
 
-    args = {}
-    arg_meta_parts = []
-    id_a_var = {}   # id de token → variable x_n asignada (insumo del canal MISC, L2)
-    idx = 0
-    # Fase LINKING, Etapa L4.5 §4 (análisis de C. González Vergara,
-    # validado por Julian): "se" pasivo/impersonal NO es un actor implícito
-    # por pro-drop -- es la inespecificación LÉXICA del argumento de mayor
-    # jerarquía (x→Ø). analizar_roles ya NO dispara actor_implicito para
-    # este caso (ver nucleo_periferia.tiene_se_sin_actor); aquí se ocupa x1
-    # con Ø explícito, igual de temprano que el pro-drop, para que el resto
-    # del pipeline (id_a_var, x2 en adelante) numere igual. Si más abajo
-    # `caus['causativo']` SÍ dispara (verbo léxica o heurísticamente
-    # anticausativo -- p.ej. "Se venden casas" ya cae en el heurístico
-    # existente de causatividad.py), esa rama reconstruye arg_meta_parts/
-    # id_a_var desde cero e ignora esto (mismo Ø por una vía distinta, sin
-    # conflicto); esta rama cubre el resto: verbos NO causativos-léxicos ni
-    # heurísticos (p.ej. "Se vive bien", impersonal, sin sujeto que el
-    # heurístico pueda enganchar).
-    tiene_se_sin_actor = any(e['fuente'] in ('se_pasivo', 'se_impersonal')
-                             for e in roles['agx'])
-    if roles['actor_implicito'] is not None:
-        idx += 1
-        etiqueta = roles['actor_implicito']['etiqueta']
-        args['x1'] = etiqueta
-        arg_meta_parts.append(f"x1:{etiqueta},pro-drop,Actor(implícito)")
-    elif tiene_se_sin_actor:
-        idx += 1
-        args['x1'] = 'Ø'
-        arg_meta_parts.append("x1:Ø,—,actor inespecificado (se)")
-    for c in roles['core']:
-        idx += 1
-        var = f"x{idx}"
-        args[var] = c['text']
-        id_a_var[c['id']] = var
-        arg_meta_parts.append(f"{var}:{c['text']},{c['deprel']},{c['macropapel']}")
+    args, id_a_var, arg_meta_parts, diagnosticos = _mapear_argumentos_genericos(roles)
     if roles['impersonal']:
         arg_meta_parts.append("—,impersonal,sin argumento semántico")
     if roles['periferia']:
@@ -1035,11 +1095,13 @@ def map_sentence_to_ls(sentence) -> dict:
 
     # ── Construir LS ──────────────────────────────────────────────────────
     if ditrans is not None:
+        diagnosticos = []
         ls = {'formal': ditrans['formal'], 'lexical': ditrans['lexical'],
              'estructura': ditrans['estructura']}
         verb_class = ditrans['clase']
         arg_meta_parts = ditrans['arg_meta_parts']
         id_a_var = ditrans['id_a_var']
+        variables = ditrans['variables']
         if ditrans['y_periferia_id'] is not None:
             # decisión 4: el beneficiario sin clítico ASCIENDE de periferia
             # a argumento — no debe listarse dos veces.
@@ -1050,6 +1112,7 @@ def map_sentence_to_ls(sentence) -> dict:
         if ditrans['source'] == 'default' or ditrans['ambiguo']:
             log_candidato_ditrans(verb_lemma, sent_text, ditrans['plantilla'])
     elif caus["causativo"]:
+        diagnosticos = []
         # [do'(x, Ø)] CAUSE [β]: β conserva su Aktionsart. Con léxico, la
         # clase de β viene de aktionsart_base; con heurístico, del
         # clasificador. El vector de 4 rasgos y cls_source NO se tocan.
@@ -1071,19 +1134,21 @@ def map_sentence_to_ls(sentence) -> dict:
         verb_class = _ASPECT_TO_LS.get(base, verb_class)
 
         arg_meta_parts = []
-        id_a_var = {}   # se reasigna: x1/x2 aquí son causante/paciente, no los de roles['core']
+        id_a_var = {}
+        variables = {'x': 'Ø', 'y': patient} if caus["se_anticausativo"] \
+            else {'x': causer or 'x', 'y': patient}
         if caus["se_anticausativo"]:
-            arg_meta_parts.append("x1:Ø,—,causante inespecificado")
+            arg_meta_parts.append("x:Ø,—,causante inespecificado")
         elif causer:
-            arg_meta_parts.append(f"x1:{causer},nsubj,Actor(causante)")
+            arg_meta_parts.append(f"x:{causer},nsubj,Actor(causante)")
             if caus["causer_id"] is not None:
-                id_a_var[caus["causer_id"]] = "x1"
+                id_a_var[caus["causer_id"]] = "x"
         if patient:
             rel = "nsubj" if caus["se_anticausativo"] else "obj"
             psa = "→PSA" if caus["se_anticausativo"] else ""
-            arg_meta_parts.append(f"x2:{patient},{rel},Undergoer(paciente{psa})")
+            arg_meta_parts.append(f"y:{patient},{rel},Undergoer(paciente{psa})")
             if caus["patient_id"] is not None:
-                id_a_var[caus["patient_id"]] = "x2"
+                id_a_var[caus["patient_id"]] = "y"
 
         operador_causativo = ("INGR" if "INGR " in ls["formal"] else
                               "BECOME" if "BECOME " in ls["formal"] else None)
@@ -1101,8 +1166,10 @@ def map_sentence_to_ls(sentence) -> dict:
         # sin argumento semántico inventado. LA1: `estructura` vacía —
         # ninguna posición AUH ocupada → M-transitividad 0 (atransitivo).
         ls = {'formal': f"{verb_lemma}'", 'lexical': f"{verb_lemma}'", 'estructura': []}
+        variables = {}
     else:
         ls = build_ls(verb_lemma, args, verb_class, aux_asp)
+        variables = args
 
     # ── Fase LINKING, Etapa L1b: wrappers de periferia en la LS ───────────
     # Tras build_ls/componer_cause. Anota 'cuantificada' en los items de
@@ -1146,7 +1213,7 @@ def map_sentence_to_ls(sentence) -> dict:
         # que deducirlo de la representación: el mapper ya lo tiene aquí.
         'verb_lemma': verb_lemma,
         'args_map':   '; '.join(arg_meta_parts),
-        'variables':  {k: v for k, v in args.items() if not k.startswith('_')},
+        'variables':  canonical_variables(variables),
         'cls_source': classification_source,   # 'roberta' (o 'lexicon' en copulativas)
         'morph_note': aspect_note,             # vector aspectual [stat dyn tel pun] + confianza
         'vector':     dict(vec),               # {stat,dyn,tel,pun} crudo (L5 §3: línea Rasgos)
@@ -1166,13 +1233,17 @@ def map_sentence_to_ls(sentence) -> dict:
         'agx':                 roles['agx'],
         'impersonal':          roles['impersonal'],
         'id_a_var':            id_a_var,
+        'diagnosticos_analisis': diagnosticos,
         'root_id':             root.id,
         'pruebas_evidencia':   evidencia_estructural['evidencias'],
         'coerciones':          coerciones_notas,
         'wrappers':            wrappers_aplicados,
         'ls_type_clasificador': ls_type_clasificador,
         'ditransitiva': ({'plantilla': ditrans['plantilla'], 'trigger': ditrans['trigger'],
-                         'source': ditrans['source'], 'ambiguo': ditrans['ambiguo']}
+                         'source': ditrans['source'], 'ambiguo': ditrans['ambiguo'],
+                         'subtipo_benefactivo': ditrans.get('subtipo_benefactivo'),
+                         'predicado_resultado': ditrans.get('predicado_resultado'),
+                         'proposito': ditrans.get('proposito')}
                         if ditrans is not None else None),
         'roles_tematicos': (ditrans['roles_tematicos'] if ditrans is not None else {}),
     }

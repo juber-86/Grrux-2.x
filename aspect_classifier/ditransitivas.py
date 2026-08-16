@@ -24,10 +24,14 @@ solo en la plantilla de comunicación, ver abajo):
     [do'(x, Ø)] CAUSE [BECOME have'(y, z)]
     x=efectuador, y=poseedor, z=tema. Clase: accomplishment (causativo).
 
-  BENEFACTIVA/CREACIÓN-OBTENCIÓN ("compró/hizo un regalo para María"):
-    [[do'(x, Ø)] CAUSE [BECOME have'(x, z)]] PURP [have'(y, z)]
-    x obtiene/crea z primero, con el PROPÓSITO de que y lo posea.
-    x=efectuador, y=poseedor/beneficiario, z=tema. Clase: accomplishment.
+  BENEFACTIVA ("compró/hizo/preparó/reparó/buscó z para y"):
+    La entrada léxica selecciona uno de cinco subtipos semánticos:
+    obtención `BECOME have'(x,z)`, preparación `BECOME prepared'(z)`,
+    creación `BECOME exist'(z)`, cambio de estado con un predicado
+    monovalente curado, o actividad `do'(x,[lema'(x,z)])`. El propósito
+    curado se compone como `PURP [BECOME have'(y,z)]`, `PURP [have'(y,z)]`
+    o se omite. x=efectuador, y=poseedor/beneficiario, z=tema; sólo el
+    subtipo actividad es `activity`, los resultativos son `accomplishment`.
 
   COMUNICACIÓN ("le dijo la verdad/que viniera a Pedro") — FORMA SIMPLE:
     do'(x, [<lema>.to.(y)'(x, z)])
@@ -37,9 +41,8 @@ solo en la plantilla de comunicación, ver abajo):
     Clase: activity. ESTO ES UNA SIMPLIFICACIÓN deliberada de la forma
     plena de Van Valin `do'(x, [express(α).to.(β).in.language.(γ)'(x, z)])`
     — Julian pidió dejarla simple por ahora y refinar MUCHO después.
-    TODO(futuro, no implementar aquí): bucle de corrección — si el usuario
-    corrige una LS ditransitiva errónea en gruxx_ai1, el lema debería
-    agregarse automáticamente al léxico curado (data/verbos_ditransitivos.xlsx).
+    El bucle de corrección hace upsert atómico de la especificación
+    estructurada y sólo la conserva si el reanálisis la confirma exactamente.
 
 El clítico/AGX no altera la LS ni la clase (ya garantizado por Etapa 1,
 L1a): siempre UN solo x para el recipiente/receptor, venga como clítico
@@ -50,6 +53,7 @@ tokens; sin Stanza, sin modelos — testeable en frío.
 """
 
 import csv
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -63,6 +67,13 @@ CANDIDATOS_CSV = PKG_DIR / "data" / "ditransitivos_candidatos.csv"
 
 DEFAULT_PLANTILLA = "transferencia"
 DEFAULT_CASE_PARA = "para"
+
+PLANTILLAS = {"transferencia", "benefactiva", "comunicacion"}
+SUBTIPOS_BENEFACTIVOS = {
+    "obtencion", "preparacion", "creacion", "cambio_estado", "actividad",
+}
+PROPOSITOS = {"become_have", "have", "none"}
+_PREDICADO_RESULTADO_RE = re.compile(r"^[a-z][a-z0-9_.-]*'$", re.IGNORECASE)
 
 # Rol temático específico por posición x/y/z, y su macrorrol (Actor/
 # Undergoer/NMR) — lookup DIRECTO (autorizado por Julian: "basta el mapeo
@@ -98,17 +109,62 @@ _CLASE_POR_PLANTILLA = {
 # Carga de datos
 # ---------------------------------------------------------------------------
 def cargar_lexicon(path: Path = LEXICON_XLSX) -> dict[str, dict]:
-    """Léxico curado (lema → plantilla/ambiguo/notas), indexado por lema."""
+    """Carga y valida el léxico curado, indexado por lema.
+
+    Las columnas benefactivas son obligatorias en el libro migrado, pero sólo
+    deben llevar valor en filas de esa familia. Una inconsistencia falla con
+    la fila/lema exactos: nunca degrada silenciosamente a la antigua plantilla
+    rígida basada en ``have'``.
+    """
     df = pd.read_excel(path)
+    requeridas = {"lema", "plantilla", "subtipo_benefactivo",
+                  "predicado_resultado", "proposito", "ambiguo", "notas", "fuente"}
+    faltantes = requeridas - set(df.columns)
+    if faltantes:
+        raise ValueError(f"{Path(path).name}: faltan columnas: {', '.join(sorted(faltantes))}")
     lexicon = {}
-    for _, row in df.iterrows():
-        notas = row.get("notas")
-        lexicon[str(row["lema"]).strip().lower()] = {
-            "plantilla": str(row["plantilla"]).strip().lower(),
+    for indice, row in df.iterrows():
+        fila = indice + 2
+        lema = str(row["lema"]).strip().lower()
+        plantilla = str(row["plantilla"]).strip().lower()
+        if not lema or lema == "nan":
+            raise ValueError(f"{Path(path).name}: fila {fila}: lema vacío")
+        if lema in lexicon:
+            raise ValueError(f"{Path(path).name}: fila {fila}: lema duplicado {lema!r}")
+        if plantilla not in PLANTILLAS:
+            raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): plantilla inválida {plantilla!r}")
+        subtipo = _celda(row.get("subtipo_benefactivo"))
+        predicado = _celda(row.get("predicado_resultado"))
+        proposito = _celda(row.get("proposito"))
+        if plantilla == "benefactiva":
+            if subtipo not in SUBTIPOS_BENEFACTIVOS:
+                raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): subtipo benefactivo inválido {subtipo!r}")
+            if proposito not in PROPOSITOS:
+                raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): propósito inválido {proposito!r}")
+            exige_predicado = subtipo in {"preparacion", "creacion", "cambio_estado"}
+            if exige_predicado and not predicado:
+                raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): falta predicado resultativo")
+            if predicado and not _PREDICADO_RESULTADO_RE.fullmatch(predicado):
+                raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): predicado resultativo inválido {predicado!r}")
+            if subtipo in {"obtencion", "actividad"} and predicado:
+                raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): {subtipo} no admite predicado resultativo")
+        elif subtipo or predicado or proposito:
+            raise ValueError(f"{Path(path).name}: fila {fila} ({lema}): campos benefactivos en {plantilla}")
+        notas = _celda(row.get("notas"))
+        lexicon[lema] = {
+            "plantilla": plantilla,
+            "subtipo_benefactivo": subtipo or None,
+            "predicado_resultado": predicado or None,
+            "proposito": proposito or None,
             "ambiguo": bool(row.get("ambiguo", False)),
-            "notas": "" if pd.isna(notas) else str(notas),
+            "notas": notas,
+            "fuente": _celda(row.get("fuente")) or "curado",
         }
     return lexicon
+
+
+def _celda(valor) -> str:
+    return "" if pd.isna(valor) else str(valor).strip().lower()
 
 
 def cargar_continuum(path: Path = CONTINUUM_XLSX) -> dict[str, list[str]]:
@@ -207,61 +263,107 @@ def elegir_plantilla(verb_lemma: str, trigger_tipo: str, lexicon: dict,
     benefactiva por construcción del propio trigger (decisión 4)."""
     cfg = cfg or {}
     if trigger_tipo == "benefactivo_para":
-        return {"plantilla": "benefactiva", "source": "lexico", "ambiguo": False}
+        entry = lexicon.get(verb_lemma)
+        if entry is None or entry["plantilla"] != "benefactiva":
+            raise ValueError(f"{verb_lemma}: benefactivo con para sin entrada benefactiva")
+        return {**entry, "source": "lexico"}
 
     entry = lexicon.get(verb_lemma)
     if entry is not None:
-        return {"plantilla": entry["plantilla"], "source": "lexico",
-               "ambiguo": entry["ambiguo"]}
+        return {**entry, "source": "lexico"}
 
     default = cfg.get("default_plantilla", DEFAULT_PLANTILLA)
-    return {"plantilla": default, "source": "default", "ambiguo": False}
+    return {"plantilla": default, "subtipo_benefactivo": None,
+            "predicado_resultado": None, "proposito": None,
+            "source": "default", "ambiguo": False, "notas": "", "fuente": "default"}
 
 
 # ---------------------------------------------------------------------------
 # Construcción de la LS
 # ---------------------------------------------------------------------------
 def construir_el(plantilla: str, verb_lemma: str, x_lex: str, y_lex: str,
-                 z_lex: str) -> dict:
-    """LS formal (x1/x2/x3 fijos: x=efectuador/emisor, z=tema/contenido,
-    y=poseedor/receptor — mismo orden que Etapa 1 asigna naturalmente,
-    ver docstring de map_sentence_to_ls) + léxica + `estructura` (Fase
+                 z_lex: str, especificacion: dict | None = None) -> dict:
+    """LS formal (x=efectuador/emisor, y=poseedor/receptor,
+    z=tema/contenido) + léxica + `estructura` (Fase
     LINKING, LA1 §1): x siempre "1_do" (1er arg. del do' externo); z (tema/
     contenido) siempre "2_pred_xy" (2º arg. de have'/del predicado de
     comunicación); y (poseedor/receptor, el dativo español) "1_pred_xy" PERO
     marcado `nmr=True` — decisión ya tomada en L1a/L2.5 (el dativo es NMR,
     no macrorrol), no se re-litiga aquí. En comunicación, y va EMBEBIDO en
-    el nombre del predicado (no es un argumento numerado en esta forma
-    simplificada) y por tanto NO aparece en `estructura`.
+    el nombre del predicado formal como ``y`` y también ocupa su posición
+    estructurada como NMR.
     """
+    especificacion = especificacion or {}
     if plantilla in ("transferencia", "benefactiva"):
         if plantilla == "transferencia":
-            f = "[do'(x1, Ø)] CAUSE [BECOME have'(x3, x2)]"
+            f = "[do'(x, Ø)] CAUSE [BECOME have'(y, z)]"
             l = f"[do'({x_lex}, Ø)] CAUSE [BECOME have'({y_lex}, {z_lex})]"
+            estructura = [
+                linking.frame("do'", linking.arg(x_lex, "1_do", variable="x")),
+                linking.frame("have'", linking.arg(y_lex, "1_pred_xy", nmr=True, variable="y"),
+                              linking.arg(z_lex, "2_pred_xy", variable="z")),
+            ]
         else:
-            f = "[[do'(x1, Ø)] CAUSE [BECOME have'(x1, x2)]] PURP [have'(x3, x2)]"
-            l = (f"[[do'({x_lex}, Ø)] CAUSE [BECOME have'({x_lex}, {z_lex})]]"
-                 f" PURP [have'({y_lex}, {z_lex})]")
-        estructura = [
-            linking.frame("do'", linking.arg(x_lex, "1_do")),
-            linking.frame("have'", linking.arg(y_lex, "1_pred_xy", nmr=True),
-                         linking.arg(z_lex, "2_pred_xy")),
-        ]
+            subtipo = especificacion.get("subtipo_benefactivo")
+            pred = especificacion.get("predicado_resultado")
+            proposito = especificacion.get("proposito")
+            if subtipo not in SUBTIPOS_BENEFACTIVOS or proposito not in PROPOSITOS:
+                raise ValueError(f"especificación benefactiva incompleta: {especificacion}")
+            estructura = [linking.frame("do'", linking.arg(x_lex, "1_do", variable="x"))]
+            if subtipo == "obtencion":
+                nuc_f = "[[do'(x, Ø)] CAUSE [BECOME have'(x, z)]]"
+                nuc_l = f"[[do'({x_lex}, Ø)] CAUSE [BECOME have'({x_lex}, {z_lex})]]"
+                estructura.append(linking.frame(
+                    "have'", linking.arg(x_lex, "1_pred_xy", variable="x"),
+                    linking.arg(z_lex, "2_pred_xy", variable="z")))
+            elif subtipo in {"preparacion", "creacion", "cambio_estado"}:
+                nuc_f = f"[[do'(x, Ø)] CAUSE [BECOME {pred}(z)]]"
+                nuc_l = f"[[do'({x_lex}, Ø)] CAUSE [BECOME {pred}({z_lex})]]"
+                estructura.append(linking.frame(
+                    pred, linking.arg(z_lex, "arg_estado", variable="z")))
+            else:  # actividad: no entraña resultado causado
+                pred_actividad = f"{verb_lemma}'"
+                nuc_f = f"do'(x, [{pred_actividad}(x, z)])"
+                nuc_l = f"do'({x_lex}, [{pred_actividad}({x_lex}, {z_lex})])"
+                estructura.append(linking.frame(
+                    pred_actividad, linking.arg(z_lex, "2_pred_xy", variable="z")))
+            purp_f, purp_l = _construir_proposito(proposito, y_lex, z_lex)
+            if purp_f:
+                f, l = f"{nuc_f} PURP [{purp_f}]", f"{nuc_l} PURP [{purp_l}]"
+                estructura.append(linking.frame(
+                    "have'", linking.arg(y_lex, "1_pred_xy", nmr=True, variable="y"),
+                    linking.arg(z_lex, "2_pred_xy", variable="z")))
+            else:
+                f, l = nuc_f, nuc_l
     elif plantilla == "comunicacion":
-        # y se embebe en el NOMBRE del predicado (no es un argumento
-        # numerado en esta forma simplificada — ver docstring del módulo).
-        pred = f"{verb_lemma}.to.({y_lex})'"
-        f = f"do'(x1, [{pred}(x1, x2)])"
-        l = f"do'({x_lex}, [{pred}({x_lex}, {z_lex})])"
+        pred_formal = f"{verb_lemma}.to.(y)'"
+        pred_lexical = f"{verb_lemma}.to.({y_lex})'"
+        f = f"do'(x, [{pred_formal}(x, z)])"
+        l = f"do'({x_lex}, [{pred_lexical}({x_lex}, {z_lex})])"
         estructura = [
             linking.frame("do'", linking.arg(x_lex, "1_do")),
-            linking.frame(pred, linking.arg(z_lex, "2_pred_xy")),
+            linking.frame(pred_formal,
+                          linking.arg(y_lex, "1_pred_xy", nmr=True),
+                          linking.arg(z_lex, "2_pred_xy")),
         ]
     else:
         raise ValueError(f"plantilla desconocida: {plantilla}")
 
-    return {"formal": f, "lexical": l, "clase": _CLASE_POR_PLANTILLA[plantilla],
+    clase = ("activity" if plantilla == "benefactiva" and
+             especificacion.get("subtipo_benefactivo") == "actividad"
+             else _CLASE_POR_PLANTILLA[plantilla])
+    return {"formal": f, "lexical": l, "clase": clase,
            "estructura": estructura}
+
+
+def _construir_proposito(modo: str, y_lex: str, z_lex: str) -> tuple[str, str]:
+    if modo == "become_have":
+        return "BECOME have'(y, z)", f"BECOME have'({y_lex}, {z_lex})"
+    if modo == "have":
+        return "have'(y, z)", f"have'({y_lex}, {z_lex})"
+    if modo == "none":
+        return "", ""
+    raise ValueError(f"modalidad de propósito desconocida: {modo}")
 
 
 def construir_ditransitiva(roles: dict, verb_lemma: str, lexicon: dict,
@@ -293,35 +395,39 @@ def construir_ditransitiva(roles: dict, verb_lemma: str, lexicon: dict,
     y_lex = y["text"]
     z_lex = z["text"]
 
-    el = construir_el(plantilla, verb_lemma, x_lex, y_lex, z_lex)
+    el = construir_el(plantilla, verb_lemma, x_lex, y_lex, z_lex, plantilla_info)
 
     id_a_var: dict[int, str] = {}
     arg_meta_parts: list[str] = []
     roles_tematicos: dict[int, str] = {}
 
     if x is not None and x["id"] is not None:
-        id_a_var[x["id"]] = "x1"
+        id_a_var[x["id"]] = "x"
         roles_tematicos[x["id"]] = etiquetas["x"]
-        arg_meta_parts.append(f"x1:{x_lex},{x['deprel']},{_MACRORROL_X}({etiquetas['x']})")
+        arg_meta_parts.append(f"x:{x_lex},{x['deprel']},{_MACRORROL_X}({etiquetas['x']})")
     else:
-        arg_meta_parts.append(f"x1:{x_lex},pro-drop,{_MACRORROL_X}({etiquetas['x']})")
+        arg_meta_parts.append(f"x:{x_lex},pro-drop,{_MACRORROL_X}({etiquetas['x']})")
 
     macropapel_z = _MACRORROL_Z_CCOMP if z["es_ccomp"] else _MACRORROL_Z_OBJ
-    id_a_var[z["id"]] = "x2"
+    id_a_var[z["id"]] = "z"
     roles_tematicos[z["id"]] = etiquetas["z"]
-    arg_meta_parts.append(f"x2:{z_lex},{z['deprel']},{macropapel_z}({etiquetas['z']})")
+    arg_meta_parts.append(f"z:{z_lex},{z['deprel']},{macropapel_z}({etiquetas['z']})")
 
     if y["id"] is not None:
-        id_a_var[y["id"]] = "x3"
+        id_a_var[y["id"]] = "y"
         roles_tematicos[y["id"]] = etiquetas["y"]
-    arg_meta_parts.append(f"x3:{y_lex},{y['deprel']},{_MACRORROL_Y}({etiquetas['y']})")
+    arg_meta_parts.append(f"y:{y_lex},{y['deprel']},{_MACRORROL_Y}({etiquetas['y']})")
 
     return {
         "plantilla": plantilla, "trigger": trigger["tipo"],
         "source": plantilla_info["source"], "ambiguo": plantilla_info["ambiguo"],
+        "subtipo_benefactivo": plantilla_info.get("subtipo_benefactivo"),
+        "predicado_resultado": plantilla_info.get("predicado_resultado"),
+        "proposito": plantilla_info.get("proposito"),
         "formal": el["formal"], "lexical": el["lexical"], "clase": el["clase"],
         "estructura": el["estructura"],
         "arg_meta_parts": arg_meta_parts, "id_a_var": id_a_var,
+        "variables": {"x": x_lex, "y": y_lex, "z": z_lex},
         "roles_tematicos": roles_tematicos,
         "y_periferia_id": y["id"] if trigger["tipo"] == "benefactivo_para" else None,
     }
