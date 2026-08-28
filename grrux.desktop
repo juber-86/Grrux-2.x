@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=GRRux GUI
+Comment=Analizador GRR (Role and Reference Grammar) — ud2rrg/rrg_ls_mapper
+Exec=/home/jbj86/proyectos/ud2rrg/grrux-gui
+Icon=/home/jbj86/proyectos/ud2rrg/grrux_logo.png
+Terminal=false
+Categories=Education;Science;Linguistics;

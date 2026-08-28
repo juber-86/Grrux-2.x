@@ -1,0 +1,1872 @@
+[
+ {
+  "row": 0,
+  "lema": "saber",
+  "oracion": "El agente saber el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 1,
+  "lema": "creer",
+  "oracion": "El agente creer el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 2,
+  "lema": "tener",
+  "oracion": "El agente tener el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 3,
+  "lema": "contener",
+  "oracion": "El agente contener el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 4,
+  "lema": "pertenecer",
+  "oracion": "El agente pertenecer.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 5,
+  "lema": "existir",
+  "oracion": "El agente existir.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 6,
+  "lema": "costar",
+  "oracion": "El agente costar.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 7,
+  "lema": "necesitar",
+  "oracion": "El agente necesitar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 8,
+  "lema": "depender",
+  "oracion": "El agente depender.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 9,
+  "lema": "ignorar",
+  "oracion": "El agente ignorar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 10,
+  "lema": "odiar",
+  "oracion": "El agente odiar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 11,
+  "lema": "amar",
+  "oracion": "El agente amar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 12,
+  "lema": "recordar",
+  "oracion": "El agente recordar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 13,
+  "lema": "olvidar",
+  "oracion": "El agente olvidar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 14,
+  "lema": "correr",
+  "oracion": "El agente correr.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 15,
+  "lema": "nadar",
+  "oracion": "El agente nadar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 16,
+  "lema": "hablar",
+  "oracion": "El agente hablar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 17,
+  "lema": "caminar",
+  "oracion": "El agente caminar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 18,
+  "lema": "respirar",
+  "oracion": "El agente respirar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 19,
+  "lema": "trabajar",
+  "oracion": "El agente trabajar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 20,
+  "lema": "estudiar",
+  "oracion": "El agente estudiar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 21,
+  "lema": "jugar",
+  "oracion": "El agente jugar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 22,
+  "lema": "escuchar",
+  "oracion": "El agente escuchar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 23,
+  "lema": "llorar",
+  "oracion": "El agente llorar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 24,
+  "lema": "reír",
+  "oracion": "El agente reír.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 25,
+  "lema": "volar",
+  "oracion": "El agente volar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 26,
+  "lema": "brillar",
+  "oracion": "El agente brillar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 27,
+  "lema": "fluir",
+  "oracion": "El agente fluir.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 28,
+  "lema": "dormir",
+  "oracion": "El agente dormir.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 29,
+  "lema": "mirar",
+  "oracion": "El agente mirar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 30,
+  "lema": "buscar",
+  "oracion": "El agente buscar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 31,
+  "lema": "desear",
+  "oracion": "El agente desear el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 32,
+  "lema": "preferir",
+  "oracion": "El agente preferir el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 33,
+  "lema": "suponer",
+  "oracion": "El agente suponer el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 34,
+  "lema": "entender",
+  "oracion": "El agente entender el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 35,
+  "lema": "comprender",
+  "oracion": "El agente comprender el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 36,
+  "lema": "dudar",
+  "oracion": "El agente dudar.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 37,
+  "lema": "temer",
+  "oracion": "El agente temer el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 38,
+  "lema": "respetar",
+  "oracion": "El agente respetar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 39,
+  "lema": "admirar",
+  "oracion": "El agente admirar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 40,
+  "lema": "envidiar",
+  "oracion": "El agente envidiar el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 41,
+  "lema": "merecer",
+  "oracion": "El agente merecer el objeto.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 42,
+  "lema": "valer",
+  "oracion": "El agente valer.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 43,
+  "lema": "bastar",
+  "oracion": "El agente bastar.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 44,
+  "lema": "sobrar",
+  "oracion": "El agente sobrar.",
+  "clase": "State",
+  "stat": 1.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 45,
+  "lema": "bailar",
+  "oracion": "El agente bailar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 46,
+  "lema": "cantar",
+  "oracion": "El agente cantar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 47,
+  "lema": "leer",
+  "oracion": "El agente leer el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 48,
+  "lema": "escribir",
+  "oracion": "El agente escribir el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 49,
+  "lema": "escribir",
+  "oracion": "El agente escribir el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 50,
+  "lema": "pedalear",
+  "oracion": "El agente pedalear.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 51,
+  "lema": "rodar",
+  "oracion": "El agente rodar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 52,
+  "lema": "temblar",
+  "oracion": "El agente temblar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 53,
+  "lema": "vibrar",
+  "oracion": "El agente vibrar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 54,
+  "lema": "ronronear",
+  "oracion": "El agente ronronear.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 55,
+  "lema": "rugir",
+  "oracion": "El agente rugir.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 56,
+  "lema": "susurrar",
+  "oracion": "El agente susurrar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 57,
+  "lema": "gotear",
+  "oracion": "El agente gotear.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 58,
+  "lema": "escalar",
+  "oracion": "El agente escalar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 59,
+  "lema": "navegar",
+  "oracion": "El agente navegar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 60,
+  "lema": "vagar",
+  "oracion": "El agente vagar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 61,
+  "lema": "merodear",
+  "oracion": "El agente merodear.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 62,
+  "lema": "llegar",
+  "oracion": "El agente se llegar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 63,
+  "lema": "morir",
+  "oracion": "El agente se morir.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 64,
+  "lema": "nacer",
+  "oracion": "El agente nacer.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 65,
+  "lema": "encontrar",
+  "oracion": "El agente se encontrar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 66,
+  "lema": "perder",
+  "oracion": "El agente se perder el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 67,
+  "lema": "ganar",
+  "oracion": "El agente ganar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 68,
+  "lema": "romper",
+  "oracion": "El agente se romper el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 69,
+  "lema": "reconocer",
+  "oracion": "El agente reconocer.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 70,
+  "lema": "descubrir",
+  "oracion": "El agente descubrir el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 71,
+  "lema": "despertar",
+  "oracion": "El agente se despertar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 72,
+  "lema": "caer",
+  "oracion": "El agente se caer el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 73,
+  "lema": "salir",
+  "oracion": "El agente salir.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 74,
+  "lema": "entrar",
+  "oracion": "El agente entrar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 75,
+  "lema": "terminar",
+  "oracion": "El agente terminar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 76,
+  "lema": "empezar",
+  "oracion": "El agente empezar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 77,
+  "lema": "estallar",
+  "oracion": "El agente estallar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 78,
+  "lema": "estornudar",
+  "oracion": "El agente estornudar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 79,
+  "lema": "toser",
+  "oracion": "El agente toser.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 80,
+  "lema": "parpadear",
+  "oracion": "El agente parpadear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 81,
+  "lema": "golpear",
+  "oracion": "El agente golpear el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 82,
+  "lema": "saltar",
+  "oracion": "El agente saltar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 83,
+  "lema": "tocar",
+  "oracion": "El agente tocar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 84,
+  "lema": "gritar",
+  "oracion": "El agente gritar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 85,
+  "lema": "latir",
+  "oracion": "El agente latir.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 86,
+  "lema": "destellar",
+  "oracion": "El agente destellar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 87,
+  "lema": "pitar",
+  "oracion": "El agente pitar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 88,
+  "lema": "disparar",
+  "oracion": "El agente se disparar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 89,
+  "lema": "picar",
+  "oracion": "El agente picar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 90,
+  "lema": "chocar",
+  "oracion": "El agente chocar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 91,
+  "lema": "aparecer",
+  "oracion": "El agente se aparecer.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 92,
+  "lema": "desaparecer",
+  "oracion": "El agente se desaparecer.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 93,
+  "lema": "abrir",
+  "oracion": "El agente se abrir el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 94,
+  "lema": "cerrar",
+  "oracion": "El agente se cerrar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 95,
+  "lema": "aterrizar",
+  "oracion": "El agente aterrizar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 96,
+  "lema": "despegar",
+  "oracion": "El agente despegar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 97,
+  "lema": "arrancar",
+  "oracion": "El agente arrancar el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 98,
+  "lema": "detenerse",
+  "oracion": "El agente se detenerse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 99,
+  "lema": "fallecer",
+  "oracion": "El agente fallecer.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 100,
+  "lema": "vencer",
+  "oracion": "El agente vencer.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 101,
+  "lema": "fracasar",
+  "oracion": "El agente fracasar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 102,
+  "lema": "alcanzar",
+  "oracion": "El agente alcanzar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 103,
+  "lema": "lograr",
+  "oracion": "El agente se lograr.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 104,
+  "lema": "conseguir",
+  "oracion": "El agente conseguir el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 105,
+  "lema": "obtener",
+  "oracion": "El agente obtener.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 106,
+  "lema": "recibir",
+  "oracion": "El agente recibir.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 107,
+  "lema": "ceder",
+  "oracion": "El agente se ceder el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 108,
+  "lema": "rendirse",
+  "oracion": "El agente se rendirse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 109,
+  "lema": "explotar",
+  "oracion": "El agente explotar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 110,
+  "lema": "hundirse",
+  "oracion": "El agente hundirse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 111,
+  "lema": "derrumbarse",
+  "oracion": "El agente se derrumbarse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 112,
+  "lema": "encenderse",
+  "oracion": "El agente se encenderse el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 113,
+  "lema": "apagarse",
+  "oracion": "El agente se apagarse el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 114,
+  "lema": "pestañear",
+  "oracion": "El agente pestañear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 115,
+  "lema": "bostezar",
+  "oracion": "El agente bostezar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 116,
+  "lema": "jadear",
+  "oracion": "El agente jadear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 117,
+  "lema": "sacudir",
+  "oracion": "El agente se sacudir el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 118,
+  "lema": "agitar",
+  "oracion": "El agente se agitar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 119,
+  "lema": "chasquear",
+  "oracion": "El agente se chasquear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 120,
+  "lema": "silbar",
+  "oracion": "El agente silbar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 121,
+  "lema": "asentir",
+  "oracion": "El agente asentir.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 122,
+  "lema": "aullar",
+  "oracion": "El agente aullar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 123,
+  "lema": "maullar",
+  "oracion": "El agente maullar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 124,
+  "lema": "rebotar",
+  "oracion": "El agente rebotar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 125,
+  "lema": "construir",
+  "oracion": "El agente construir el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 126,
+  "lema": "pintar",
+  "oracion": "El agente pintar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 127,
+  "lema": "hornear",
+  "oracion": "El agente hornear el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 128,
+  "lema": "tejer",
+  "oracion": "El agente tejer el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 129,
+  "lema": "diseñar",
+  "oracion": "El agente diseñar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 130,
+  "lema": "componer",
+  "oracion": "El agente componer el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 131,
+  "lema": "traducir",
+  "oracion": "El agente traducir el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 132,
+  "lema": "resolver",
+  "oracion": "El agente resolver el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 133,
+  "lema": "aprender",
+  "oracion": "El agente aprender el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 134,
+  "lema": "memorizar",
+  "oracion": "El agente memorizar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 135,
+  "lema": "preparar",
+  "oracion": "El agente preparar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 136,
+  "lema": "reparar",
+  "oracion": "El agente reparar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 137,
+  "lema": "limpiar",
+  "oracion": "El agente limpiar el objeto.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 138,
+  "lema": "organizar",
+  "oracion": "El agente organizar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 139,
+  "lema": "demoler",
+  "oracion": "El agente demoler el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 140,
+  "lema": "convencer",
+  "oracion": "El agente convencer el objeto.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 141,
+  "lema": "curar",
+  "oracion": "El agente curar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 142,
+  "lema": "restaurar",
+  "oracion": "El agente restaurar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 143,
+  "lema": "reformar",
+  "oracion": "El agente reformar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 144,
+  "lema": "elaborar",
+  "oracion": "El agente elaborar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 145,
+  "lema": "fabricar",
+  "oracion": "El agente fabricar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 146,
+  "lema": "producir",
+  "oracion": "El agente producir el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 147,
+  "lema": "desarrollar",
+  "oracion": "El agente desarrollar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 148,
+  "lema": "redactar",
+  "oracion": "El agente redactar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 149,
+  "lema": "calcular",
+  "oracion": "El agente calcular el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 150,
+  "lema": "planificar",
+  "oracion": "El agente planificar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 151,
+  "lema": "ensamblar",
+  "oracion": "El agente ensamblar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 152,
+  "lema": "fundar",
+  "oracion": "El agente fundar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 153,
+  "lema": "establecer",
+  "oracion": "El agente establecer el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 154,
+  "lema": "erradicar",
+  "oracion": "El agente erradicar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 155,
+  "lema": "sanar",
+  "oracion": "El agente sanar el objeto.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 156,
+  "lema": "cicatrizar",
+  "oracion": "El agente cicatrizar.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 157,
+  "lema": "madurar",
+  "oracion": "El agente madurar.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 158,
+  "lema": "fermentar",
+  "oracion": "El agente fermentar.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 159,
+  "lema": "patear",
+  "oracion": "El agente patear el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 160,
+  "lema": "aplaudir",
+  "oracion": "El agente aplaudir.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 161,
+  "lema": "guiñar",
+  "oracion": "El agente guiñar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 162,
+  "lema": "palmear",
+  "oracion": "El agente palmear el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 163,
+  "lema": "tamborilear",
+  "oracion": "El agente tamborilear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 164,
+  "lema": "repicar",
+  "oracion": "El agente repicar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 165,
+  "lema": "hipar",
+  "oracion": "El agente hipar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 166,
+  "lema": "suspirar",
+  "oracion": "El agente suspirar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 167,
+  "lema": "escupir",
+  "oracion": "El agente escupir.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 168,
+  "lema": "soplar",
+  "oracion": "El agente soplar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 169,
+  "lema": "pellizcar",
+  "oracion": "El agente pellizcar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 170,
+  "lema": "vislumbrar",
+  "oracion": "El agente vislumbrar el objeto.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 171,
+  "lema": "crujir",
+  "oracion": "El agente crujir.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 172,
+  "lema": "chirriar",
+  "oracion": "El agente chirriar.",
+  "clase": "Activity",
+  "stat": 0.0,
+  "dyn": 1.0,
+  "tel": 0.0,
+  "pun": 0.0
+ },
+ {
+  "row": 173,
+  "lema": "cabecear",
+  "oracion": "El agente cabecear.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 174,
+  "lema": "resoplar",
+  "oracion": "El agente resoplar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 175,
+  "lema": "eructar",
+  "oracion": "El agente eructar.",
+  "clase": "Semelfactive",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 0.0,
+  "pun": 1.0
+ },
+ {
+  "row": 176,
+  "lema": "derretirse",
+  "oracion": "El agente se derretirse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 177,
+  "lema": "congelarse",
+  "oracion": "El agente se congelarse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 178,
+  "lema": "evaporarse",
+  "oracion": "El agente se evaporarse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 179,
+  "lema": "oxidarse",
+  "oracion": "El agente se oxidarse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 180,
+  "lema": "disolverse",
+  "oracion": "El agente se disolverse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 181,
+  "lema": "marchitarse",
+  "oracion": "El agente se marchitarse.",
+  "clase": "Accomplishment",
+  "stat": 0.0,
+  "dyn": 0.5,
+  "tel": 1.0,
+  "pun": 0.0
+ },
+ {
+  "row": 182,
+  "lema": "agrietarse",
+  "oracion": "El agente se agrietarse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 183,
+  "lema": "quebrarse",
+  "oracion": "El agente se quebrarse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 184,
+  "lema": "desplomarse",
+  "oracion": "El agente se desplomarse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 185,
+  "lema": "volcarse",
+  "oracion": "El agente se volcarse.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ },
+ {
+  "row": 186,
+  "lema": "reventar",
+  "oracion": "El agente reventar.",
+  "clase": "Achievement",
+  "stat": 0.0,
+  "dyn": 0.0,
+  "tel": 1.0,
+  "pun": 1.0
+ }
+]

@@ -1,0 +1,383 @@
+:root {
+  --bg: #1c1f26;
+  --bg-panel: #242832;
+  --bg-panel-2: #2c313c;
+  --borde: #3a3f4b;
+  --texto: #e6e8ec;
+  --texto-tenue: #9aa1ad;
+  --acento: #5eb3ff;
+  --acento-2: #ffb454;
+  --ok: #4caf50;
+  --alerta: #d9a441;
+  --neutro: #7a8291;
+  --peri: #c97ee0;
+  --operador: #4fd1c5;   /* proyección de operadores (Etapa OPERATORS) */
+  --linking: #ff8a65;    /* macropapeles/PSA/traza (Etapa LINKING, LA1) */
+  --mono: "DejaVu Sans Mono", "Consolas", "Courier New", monospace;
+  /* un color fijo por rasgo aspectual (pedido de Julian, G3 post-checkpoint) */
+  --rasgo-estatico: #2f7dff;
+  --rasgo-dinamico: #ff3b3b;
+  --rasgo-telico: #ffd400;
+  --rasgo-puntual: #2ecc40;
+  --rasgo-confianza: #f5f6f8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+}
+
+header#cabecera {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--borde);
+  background: var(--bg-panel);
+}
+
+h1 { margin: 0 0 .6rem 0; font-size: 1.3rem; display: flex; align-items: center; gap: .5rem; }
+#logo { height: 28px; width: auto; border-radius: 4px; }
+.subtitulo { font-weight: 400; color: var(--texto-tenue); font-size: .85rem; }
+
+#fila-analizar { display: flex; gap: .5rem; }
+#input-oracion {
+  flex: 1; padding: .55rem .7rem; border-radius: 6px; border: 1px solid var(--borde);
+  background: var(--bg); color: var(--texto); font-size: 1rem;
+}
+#btn-analizar {
+  padding: .55rem 1.1rem; border-radius: 6px; border: none; cursor: pointer;
+  background: var(--acento); color: #08131f; font-weight: 600;
+}
+#btn-analizar:disabled { background: var(--neutro); color: var(--bg); cursor: wait; }
+.mensaje { margin: .5rem 0 0; font-size: .85rem; color: var(--texto-tenue); min-height: 1.2em; }
+.mensaje.error { color: #ff8a80; }
+.mensaje.ok { color: var(--ok); }
+
+#cuerpo { display: flex; gap: 1rem; padding: 1rem 1.5rem; align-items: flex-start; }
+#principal { flex: 1; min-width: 0; }
+#panel-lateral { width: 280px; flex-shrink: 0; }
+
+section {
+  background: var(--bg-panel); border: 1px solid var(--borde); border-radius: 8px;
+  padding: .9rem 1rem; margin-bottom: 1rem;
+}
+section h2 { margin: 0 0 .6rem; font-size: 1rem; color: var(--acento); }
+section h3 { margin: 1rem 0 .4rem; font-size: .88rem; color: var(--texto-tenue); text-transform: uppercase; letter-spacing: .03em; }
+
+#tabs-suboraciones { display: flex; gap: .4rem; margin-bottom: .8rem; }
+#tabs-suboraciones button {
+  padding: .35rem .8rem; border-radius: 6px 6px 0 0; border: 1px solid var(--borde);
+  background: var(--bg-panel); color: var(--texto-tenue); cursor: pointer;
+}
+#tabs-suboraciones button.activa { background: var(--bg-panel-2); color: var(--texto); border-bottom-color: var(--bg-panel-2); }
+.oculto { display: none !important; }
+
+#arbol-scroll { overflow-x: auto; padding: .5rem 0; }
+#arbol-svg { display: block; }
+.aviso { color: var(--texto-tenue); font-style: italic; }
+.aviso-inline { color: var(--texto-tenue); font-style: italic; font-weight: 400; font-size: .82rem; }
+
+.arbol-nodo rect { fill: var(--bg-panel-2); stroke: var(--borde); }
+.arbol-nodo text { fill: var(--texto); font: 12px var(--mono); }
+.arbol-linea { stroke: var(--borde); stroke-width: 1.4; }
+
+.arbol-nodo.hoja rect { fill: #1a2530; stroke: var(--acento); }
+.arbol-nodo.hoja text { fill: var(--texto); }
+
+.arbol-nodo.agx rect { fill: #2e2140; stroke: var(--acento-2); stroke-width: 2; }
+.arbol-nodo.agx text { fill: var(--acento-2); font-weight: 700; }
+
+.arbol-nodo.destacado rect { fill: #26333f; stroke: #63c9d9; stroke-width: 2; }
+.arbol-nodo.destacado text { fill: #63c9d9; }
+
+.arbol-nodo.peri rect { fill: #2a1f33; stroke: var(--peri); stroke-dasharray: 4 3; }
+.arbol-nodo.peri text { fill: var(--peri); }
+.arbol-linea.peri { stroke: var(--peri); stroke-dasharray: 4 3; }
+
+.arbol-nodo.ancla-peri rect { stroke: var(--peri); stroke-width: 2.4; }
+
+.arbol-nodo.resaltado rect { stroke: #ffe082; stroke-width: 3; }
+.arbol-nodo.resaltado text { fill: #ffe082; }
+
+/* ── Etapa OPERATORS — proyección de operadores en espejo (fig. 5.2) ──────
+   Color propio (--operador): la proyección de operadores es una estructura
+   DISTINTA de la de constituyentes, y debe leerse como tal de un vistazo.
+   La espina va en trazo discontinuo; la única línea continua que la une al
+   árbol es la de convergencia en la V (donde la teoría dice que convergen). */
+.espejo-nodo rect { fill: #1f2a2a; stroke: var(--operador); }
+.espejo-nodo text { fill: var(--operador); font: 12px var(--mono); }
+.espejo-linea { stroke: var(--operador); stroke-width: 1.4; stroke-dasharray: 5 3; }
+.espejo-convergencia { stroke: var(--operador); stroke-width: 1.6; opacity: .55; }
+.espejo-flecha { stroke: var(--operador); stroke-width: 1.2; opacity: .8; }
+.punta-flecha { fill: var(--operador); }
+
+.op-nodo rect { fill: #24343a; stroke: var(--operador); stroke-width: 1.6; }
+.op-nodo text { fill: var(--operador); font: 12px var(--mono); font-weight: 700; }
+.op-nodo.resaltado rect { stroke: #ffe082; stroke-width: 3; }
+.op-nodo.resaltado text { fill: #ffe082; }
+
+.op-el {
+  cursor: default; color: var(--operador); font-weight: 700;
+  border-bottom: 1px dotted var(--operador); padding: 0 1px; border-radius: 2px;
+}
+.op-el.resaltado { background: #234; color: #ffe082; border-bottom-color: #ffe082; }
+
+#toggle-operadores-label {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .82rem; color: var(--texto-tenue); margin-bottom: .4rem; cursor: pointer;
+}
+
+.el-linea { font-family: var(--mono); font-size: .95rem; margin-bottom: .35rem; word-break: break-word; }
+.el-linea .etiqueta { color: var(--texto-tenue); margin-right: .4rem; }
+.var-el {
+  cursor: default; border-bottom: 1px dotted var(--acento); color: var(--acento);
+  padding: 0 1px; border-radius: 2px;
+}
+.var-el.resaltado { background: #234; color: #ffe082; border-bottom-color: #ffe082; }
+
+#fila-tipo { display: flex; gap: .5rem; margin-bottom: .4rem; flex-wrap: wrap; }
+.badge {
+  display: inline-block; padding: .25rem .6rem; border-radius: 999px; font-size: .82rem;
+  background: var(--acento); color: #08131f; font-weight: 600;
+}
+.badge-secundario { background: var(--bg-panel-2); color: var(--texto-tenue); font-weight: 400; }
+
+table#tabla-argumentos { width: 100%; border-collapse: collapse; font-size: .88rem; }
+table#tabla-argumentos th, table#tabla-argumentos td {
+  text-align: left; padding: .3rem .5rem; border-bottom: 1px solid var(--borde);
+}
+table#tabla-argumentos th { color: var(--texto-tenue); font-weight: 500; }
+table#tabla-argumentos tr.resaltado { background: #223047; }
+table#tabla-argumentos tr { cursor: default; }
+
+/* G3 §0 (fix visual): etiqueta+valor juntos a la izquierda (ancho fijo para
+   que las barras alineen en columna); el riel ocupa el resto del ancho y
+   lleva SU PROPIO fondo + borde para leerse completo (0.00-1.00) aunque el
+   relleno sea chico -- nunca "espacio muerto" sin marcar. */
+.barra-rasgo { display: flex; align-items: center; gap: .6rem; margin-bottom: .35rem; font-size: .85rem; }
+.barra-rasgo .nombre {
+  flex: 0 0 auto; min-width: 132px; color: var(--texto-tenue); font-family: var(--mono);
+}
+.barra-rasgo .valor-inline { color: var(--texto); font-weight: 600; }
+.barra-rasgo .pista {
+  flex: 1; height: 14px; background: var(--bg); border: 1px solid var(--borde);
+  border-radius: 5px; overflow: hidden;
+}
+/* BUG REAL (hallado por Julian con DevTools): <span> es inline por
+   defecto y los elementos inline IGNORAN width/height -- el ancho en % que
+   le poníamos desde JS nunca se aplicaba al layout, con cualquier color.
+   display:block lo convierte en caja de bloque dentro de .pista y ahí sí
+   el ancho porcentual funciona. */
+.barra-rasgo .relleno { display: block; height: 100%; background: var(--acento); }
+.barra-rasgo .relleno-estatico { background: var(--rasgo-estatico); }
+.barra-rasgo .relleno-dinamico { background: var(--rasgo-dinamico); }
+.barra-rasgo .relleno-telico { background: var(--rasgo-telico); }
+.barra-rasgo .relleno-puntual { background: var(--rasgo-puntual); }
+.barra-rasgo .relleno-confianza { background: var(--rasgo-confianza); }
+
+.chip { display: inline-block; padding: .2rem .55rem; border-radius: 999px; font-size: .8rem; margin: .15rem .3rem .15rem 0; }
+.chip.ok, .chip.linking_ok { background: #1f3a24; color: #8ce99a; }
+.chip.no_verificable { background: #333; color: var(--neutro); }
+.chip.falta_en_arbol, .chip.falta_en_ls,
+.chip.linking_falta_en_arbol, .chip.linking_concordancia_error { background: #4a3a17; color: var(--alerta); }
+.chip.sin_arbol { background: #333; color: var(--neutro); }
+
+/* Fase LINKING, Etapa LA1 — macropapeles/PSA/traza de producción */
+#linking-linea { font-size: .88rem; margin-bottom: .5rem; }
+#linking-traza {
+  margin: 0; padding-left: 1.3rem; font-size: .85rem; color: var(--texto-tenue);
+}
+#linking-traza li { margin-bottom: .35rem; }
+#linking-traza li::marker { color: var(--linking); font-weight: 700; }
+.linking-term {
+  cursor: default; color: var(--linking); font-weight: 700;
+  border-bottom: 1px dotted var(--linking); padding: 0 1px; border-radius: 2px;
+}
+
+#causatividad, #crudo { font-size: .88rem; }
+#crudo pre { white-space: pre-wrap; font-family: var(--mono); font-size: .8rem; background: var(--bg-panel-2); padding: .5rem; border-radius: 6px; }
+#toggle-verbose-label { display: block; margin: .8rem 0 .3rem; font-size: .85rem; color: var(--texto-tenue); cursor: pointer; }
+
+#btn-corregir {
+  margin-top: .8rem; padding: .4rem .9rem; border-radius: 6px; border: 1px solid var(--acento);
+  background: transparent; color: var(--acento); cursor: pointer; font-weight: 600;
+}
+#btn-corregir:hover { background: var(--acento); color: #08131f; }
+
+.hint-corregir {
+  margin: .4rem 0 0; padding: .35rem .6rem; border-radius: 6px; font-size: .82rem;
+  background: #4a3a17; color: var(--alerta); cursor: pointer; display: inline-block;
+}
+.hint-corregir:hover { filter: brightness(1.15); }
+
+#panel-lateral section { padding: .7rem .8rem; }
+#buscar-glosario {
+  width: 100%; padding: .4rem .5rem; margin-bottom: .5rem; border-radius: 6px;
+  border: 1px solid var(--borde); background: var(--bg); color: var(--texto);
+}
+#lista-glosario { max-height: 340px; overflow-y: auto; font-size: .82rem; }
+.entrada-glosario { padding: .35rem 0; border-bottom: 1px solid var(--borde); }
+.entrada-glosario .termino { color: var(--acento); font-weight: 600; }
+.entrada-glosario .categoria { color: var(--texto-tenue); font-size: .72rem; }
+.entrada-glosario .definicion { color: var(--texto); margin-top: .15rem; }
+.btn-mini { background: none; border: none; color: var(--texto-tenue); cursor: pointer; font-size: .85rem; float: right; }
+
+#lista-historial { list-style: none; margin: 0; padding: 0; font-size: .85rem; max-height: 260px; overflow-y: auto; }
+#lista-historial li {
+  display: flex; flex-direction: column; gap: .1rem;
+  padding: .4rem .3rem; border-bottom: 1px solid var(--borde); cursor: pointer; color: var(--texto-tenue);
+}
+#lista-historial li:hover { color: var(--texto); background: var(--bg-panel-2); }
+#lista-historial li.activa .historial-oracion { color: var(--acento); }
+.historial-oracion { color: var(--texto); }
+.historial-meta { font-size: .72rem; color: var(--texto-tenue); }
+#panel-historial h2 { display: flex; align-items: center; justify-content: space-between; }
+
+[data-tooltip] { cursor: help; border-bottom: 1px dotted var(--texto-tenue); }
+
+/* ── G2 §3 — modal del bucle de corrección ─────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, .6);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 3rem 1rem; overflow-y: auto; z-index: 100;
+}
+.modal-panel {
+  background: var(--bg-panel); border: 1px solid var(--borde); border-radius: 10px;
+  padding: 1.2rem 1.4rem; width: 100%; max-width: 720px;
+}
+.modal-cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; }
+.modal-cabecera h2 { margin: 0; font-size: 1.05rem; color: var(--acento); }
+.modal-cabecera .btn-mini { font-size: 1.1rem; float: none; }
+
+#tabs-corregir { display: flex; gap: .3rem; margin-bottom: 1rem; border-bottom: 1px solid var(--borde); }
+.tab-corregir {
+  padding: .5rem 1rem; background: none; border: none; color: var(--texto-tenue);
+  cursor: pointer; font-size: .9rem; border-bottom: 2px solid transparent;
+}
+.tab-corregir.activa { color: var(--acento); border-bottom-color: var(--acento); }
+
+.panel-tab label { display: block; margin-bottom: .4rem; color: var(--texto-tenue); font-size: .88rem; }
+.panel-tab select {
+  width: 100%; padding: .45rem .5rem; margin-bottom: .7rem; border-radius: 6px;
+  border: 1px solid var(--borde); background: var(--bg); color: var(--texto);
+  /* sin esto, algunos SO/temas (GTK oscuro incl.) pintan el widget nativo
+     con SU propio fondo e ignoran el color de texto de aquí -- el select
+     se ve "vacío" (texto claro sobre fondo claro del sistema). */
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%239aa1ad' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat; background-position: right .6rem center;
+}
+.panel-tab textarea#editor-el {
+  width: 100%; font-family: var(--mono); font-size: .92rem; padding: .6rem .7rem;
+  border-radius: 6px; border: 1px solid var(--borde); background: var(--bg);
+  color: var(--texto); resize: vertical; margin-bottom: .5rem;
+}
+#paleta-el { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .5rem; }
+#paleta-el button {
+  font-family: var(--mono); font-size: .82rem; padding: .25rem .5rem; border-radius: 5px;
+  border: 1px solid var(--borde); background: var(--bg-panel-2); color: var(--acento);
+  cursor: pointer;
+}
+#paleta-el button:hover { background: var(--borde); }
+
+.validacion-el { min-height: 1.4em; margin-bottom: .6rem; font-size: .85rem; }
+.validacion-el.ok { color: var(--ok); }
+.validacion-el.error { color: var(--alerta); }
+
+.panel-tab button[type="button"]:not(#paleta-el button) {
+  padding: .45rem 1rem; border-radius: 6px; border: none; background: var(--acento);
+  color: #08131f; font-weight: 600; cursor: pointer;
+}
+.panel-tab button[type="button"]:disabled { background: var(--neutro); cursor: not-allowed; }
+
+#lista-enrutado-elementos { list-style: none; margin: 0 0 .8rem; padding: 0; }
+#lista-enrutado-elementos li {
+  padding: .45rem .6rem; border: 1px solid var(--borde); border-radius: 6px;
+  margin-bottom: .35rem; cursor: pointer; font-size: .88rem;
+}
+#lista-enrutado-elementos li:hover { background: var(--bg-panel-2); }
+#lista-enrutado-elementos li.seleccionado { border-color: var(--acento); color: var(--acento); }
+
+.banner {
+  padding: .6rem .8rem; border-radius: 6px; font-size: .88rem; margin: .6rem 0;
+}
+.banner.verde { background: #1f3a24; color: #8ce99a; }
+.banner.ambar { background: #4a3a17; color: var(--alerta); }
+.banner.rojo { background: #4a1f1f; color: #ff8a80; }
+.banner.gris { background: var(--bg-panel-2); color: var(--texto-tenue); }
+
+#diff-corregir { margin-top: 1rem; border-top: 1px solid var(--borde); padding-top: 1rem; }
+.diff-lado-a-lado { display: flex; gap: 1rem; }
+.diff-columna { flex: 1; min-width: 0; }
+.diff-columna h3 { margin: 0 0 .4rem; font-size: .82rem; color: var(--texto-tenue); text-transform: uppercase; }
+.diff-arbol-scroll { overflow-x: auto; border: 1px solid var(--borde); border-radius: 6px; margin-bottom: .5rem; }
+.el-diff { font-family: var(--mono); font-size: .82rem; word-break: break-word; }
+#btn-usar-nuevo {
+  margin-top: .8rem; padding: .45rem 1rem; border-radius: 6px; border: none;
+  background: var(--ok); color: #08240c; font-weight: 600; cursor: pointer;
+}
+
+/* ── G3 — navegación entre vistas ──────────────────────────────────────── */
+#nav-vistas { display: flex; gap: .3rem; padding: 0 1.5rem; background: var(--bg-panel); border-bottom: 1px solid var(--borde); }
+.nav-vista {
+  padding: .6rem 1rem; background: none; border: none; color: var(--texto-tenue);
+  cursor: pointer; font-size: .92rem; border-bottom: 2px solid transparent;
+}
+.nav-vista:hover { color: var(--texto); }
+.nav-vista.activa { color: var(--acento); border-bottom-color: var(--acento); }
+#vista-lote, #vista-curacion { margin: 1rem 1.5rem; }
+
+/* ── G3 §4 — botonera de exportación ───────────────────────────────────── */
+#fila-exportar { margin-top: .6rem; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.etiqueta-exportar { color: var(--texto-tenue); font-size: .82rem; }
+#fila-exportar button {
+  padding: .3rem .7rem; border-radius: 6px; border: 1px solid var(--borde);
+  background: var(--bg-panel-2); color: var(--texto); cursor: pointer; font-size: .82rem;
+}
+#fila-exportar button:hover { border-color: var(--acento); color: var(--acento); }
+
+/* ── G3 §3 — modo lote ──────────────────────────────────────────────────── */
+#lote-textarea {
+  width: 100%; font-family: var(--mono); font-size: .9rem; padding: .6rem .7rem;
+  border-radius: 6px; border: 1px solid var(--borde); background: var(--bg-panel);
+  color: var(--texto); resize: vertical; box-sizing: border-box;
+}
+.lote-controles { display: flex; align-items: center; gap: .8rem; margin: .6rem 0; flex-wrap: wrap; font-size: .88rem; }
+.lote-controles button {
+  padding: .4rem .9rem; border-radius: 6px; border: none; background: var(--acento);
+  color: #08131f; font-weight: 600; cursor: pointer;
+}
+.lote-controles button:disabled { background: var(--neutro); cursor: wait; }
+table#tabla-lote { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: .5rem; }
+table#tabla-lote th, table#tabla-lote td {
+  text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--borde); vertical-align: top;
+}
+table#tabla-lote th { color: var(--texto-tenue); font-weight: 500; }
+table#tabla-lote tbody tr:not(.fila-lote-error) { cursor: pointer; }
+table#tabla-lote tbody tr:not(.fila-lote-error):hover { background: var(--bg-panel-2); }
+table#tabla-lote tr.fila-lote-error { color: #ff8a80; }
+.celda-exportar { white-space: nowrap; }
+.btn-export-mini {
+  font-size: .75rem; padding: .15rem .4rem; margin-right: .2rem; border-radius: 4px;
+  border: 1px solid var(--borde); background: var(--bg-panel-2); color: var(--texto-tenue); cursor: pointer;
+}
+.btn-export-mini:hover { color: var(--acento); border-color: var(--acento); }
+
+/* ── G3 §5 — curación (solo lectura) ────────────────────────────────────── */
+.aviso-curacion {
+  background: #2a2f1f; border: 1px solid var(--alerta); color: var(--alerta);
+  padding: .6rem .8rem; border-radius: 6px; font-size: .85rem; max-width: 60rem;
+}
+#curacion-resumen { margin: .6rem 0; font-size: .88rem; color: var(--texto-tenue); }
+.curacion-bloque { margin-top: 1.2rem; }
+.curacion-bloque h3 { color: var(--acento); font-size: .92rem; margin-bottom: .4rem; }
+table.tabla-curacion {
+  width: 100%; border-collapse: collapse; font-size: .8rem; display: block;
+  overflow-x: auto; white-space: nowrap;
+}
+table.tabla-curacion th, table.tabla-curacion td {
+  text-align: left; padding: .3rem .5rem; border-bottom: 1px solid var(--borde);
+}
+table.tabla-curacion th { color: var(--texto-tenue); font-weight: 500; position: sticky; top: 0; background: var(--bg-panel); }

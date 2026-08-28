@@ -1,0 +1,142 @@
+{
+ "n": 463,
+ "cv": "StratifiedGroupKFold(5, seed=42) por lema",
+ "thresholds": {
+  "stat": 0.5,
+  "dyn": 0.4,
+  "tel": 0.35,
+  "pun": 0.45,
+  "dyn_ambiguous_band": 0.15
+ },
+ "labels": [
+  "Accomplishment",
+  "Achievement",
+  "Active_Accomplishment",
+  "Activity",
+  "Semelfactive",
+  "State",
+  "State_Activity"
+ ],
+ "confusion_matrix": [
+  [
+   19,
+   12,
+   11,
+   5,
+   0,
+   0,
+   0
+  ],
+  [
+   15,
+   56,
+   7,
+   1,
+   7,
+   5,
+   1
+  ],
+  [
+   15,
+   8,
+   78,
+   6,
+   0,
+   1,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   59,
+   22,
+   2,
+   0
+  ],
+  [
+   2,
+   18,
+   4,
+   15,
+   34,
+   0,
+   0
+  ],
+  [
+   6,
+   3,
+   3,
+   3,
+   1,
+   43,
+   1
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ ],
+ "classification_report": {
+  "Accomplishment": {
+   "precision": 0.3333333333333333,
+   "recall": 0.40425531914893614,
+   "f1-score": 0.36538461538461536,
+   "support": 47.0
+  },
+  "Achievement": {
+   "precision": 0.5773195876288659,
+   "recall": 0.6086956521739131,
+   "f1-score": 0.5925925925925926,
+   "support": 92.0
+  },
+  "Active_Accomplishment": {
+   "precision": 0.7572815533980582,
+   "recall": 0.7222222222222222,
+   "f1-score": 0.7393364928909952,
+   "support": 108.0
+  },
+  "Activity": {
+   "precision": 0.6629213483146067,
+   "recall": 0.7108433734939759,
+   "f1-score": 0.686046511627907,
+   "support": 83.0
+  },
+  "Semelfactive": {
+   "precision": 0.53125,
+   "recall": 0.4657534246575342,
+   "f1-score": 0.49635036496350365,
+   "support": 73.0
+  },
+  "State": {
+   "precision": 0.8431372549019608,
+   "recall": 0.7166666666666667,
+   "f1-score": 0.7747747747747747,
+   "support": 60.0
+  },
+  "State_Activity": {
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1-score": 0.0,
+   "support": 0.0
+  },
+  "accuracy": 0.6241900647948164,
+  "macro avg": {
+   "precision": 0.5293204396538321,
+   "recall": 0.5183480940518926,
+   "f1-score": 0.522069336033484,
+   "support": 463.0
+  },
+  "weighted avg": {
+   "precision": 0.6370592520512799,
+   "recall": 0.6241900647948164,
+   "f1-score": 0.6289457025221631,
+   "support": 463.0
+  }
+ }
+}

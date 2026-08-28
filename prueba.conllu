@@ -1,0 +1,7 @@
+# sent_id = 1
+# text = The cat sleeps.
+1	The	the	DET	DT	Definite=Def|PronType=Art	2	det	_	_
+2	cat	cat	NOUN	NN	Number=Sing	3	nsubj	_	_
+3	sleeps	sleep	VERB	VBZ	Number=Sing|Person=3|Tense=Pres	0	root	_	SpaceAfter=No
+4	.	.	PUNCT	.	_	3	punct	_	_
+

@@ -1,0 +1,35 @@
+lema,stat,dyn,tel,pun,clase,transitivo,pronominal,confianza,notas,hoja,clase_original
+hipo / hipar?,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactive 
+negar (gesto),0,0.0,0,1,Semelfactive,0,1,2.0,,Grupo A — States y Activities,semelfative
+correr 5km,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+leer el libro,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+comer la sopa,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+beber el vaso,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+dibujar el mapa,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+cruzar el río,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+escalar el cerro,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+cocinar el arroz,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+buscar las llaves,0,1.0,0,0,Activity,1,0,1.0,Actividad sin límite natural inherente,Grupo A — States y Activities,Activity
+traducir el texto,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+limpiar la casa,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+escribir la carta,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+hacer la tarea,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+pintar la barda,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+construir el muro,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+armar el mueble,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+plantar el árbol,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+consumir el tanque,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+recorrer el camino,0,1.0,1,0,Active_Accomplishment,1,0,1.0,"El objeto mide la trayectoria, dándole telicidad",Grupo A — States y Activities,Active Acc.
+terminar el proyecto,0,0.0,1,1,Achievement,1,0,1.0,Enfoque en el punto final del evento,Grupo A — States y Activities,Achievement
+vaciar la botella,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+llenar el formulario,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+agotar las reservas,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+revisar el documento,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+demoler el edificio,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto delimitado,Grupo A — States y Activities,Active Acc.
+recorrer la ciudad,0,1.0,1,0,Active_Accomplishment,1,0,1.0,"El objeto mide la trayectoria, dándole telicidad",Grupo A — States y Activities,Active Acc.
+aprender la lección,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+ganar el partido,0,0.0,1,1,Achievement,1,0,1.0,Puntual,Grupo A — States y Activities,Achievement
+resolver el problema,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+completar el curso,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+cubrir la distancia,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.
+agotar el tiempo,0,1.0,1,0,Active_Accomplishment,1,0,1.0,Actividad delimitada por un objeto o meta,Grupo A — States y Activities,Active Acc.

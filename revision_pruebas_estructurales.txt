@@ -1,0 +1,21 @@
+# R1: semelfactivo + P1/P4 -> activity (lectura iterativa)
+tosió durante una hora
+está tosiendo
+
+# R2: accomplishment/AA + P4 sin P5 -> activity (lectura atélica)
+Juan leyó el libro durante una hora
+leyó el libro durante una hora
+
+# P5 / avisos: evidencia sin cambio de clase
+la ropa se secó en una hora
+corrió vigorosamente
+los invitados llegaron durante una hora
+
+# Controles: sin evidencia, cero ruido en el Vector
+Juan sabe la respuesta
+Juan corrió cinco kilómetros
+Juan corre todos los días
+
+# Regresión: mecanismos previos (Etapa 1 / Paso 4) siguen intactos
+estudié tres horas anoche
+el jarrón se rompió

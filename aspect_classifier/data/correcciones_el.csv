@@ -1,0 +1,12 @@
+fecha,oracion,lema,el,plantilla,fuente
+2026-07-12 09:02:55,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,"yestreday'(vigorosamente'(do' (Juan, [run' (Juan)])) & INGR be-at' (parque, Juan))",achievement,correccion_usuario
+2026-07-12 09:04:59,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,"yesterday' (vigorosamente' (do' (Juan, [run' (Juan)])) & INGR be-at' (parque, Juan))",achievement,correccion_usuario
+2026-07-14 12:59:56,juan le da un regalo a maria,dar,"[do'(juan, Ø)] CAUSE [BECOME have'(3sg, regalo)]",ditrans_transferencia,correccion_usuario
+2026-07-14 13:00:10,juan le da un regalo a maria,dar,"[do'(juan, Ø)] CAUSE [BECOME have'(3sg, regalo)]",ditrans_transferencia,correccion_usuario
+2026-07-14 17:43:33,El perro corrió hasta la casa,correr,"do'(perro, [correr'(perro)]) & INGR be-at'(casa, perro)",achievement,correccion_usuario
+2026-07-14 17:43:40,El perro corrió hasta la casa,correr,"do'(perro, [correr'(perro)]) & INGR be-at'(casa, perro)",achievement,correccion_usuario
+2026-07-20 19:38:46,se venden tacos,vender,"[do'(Ø, Ø)] CAUSE [BECOME vendido' (tacos)]",causativa,correccion_usuario
+2026-07-20 19:47:18,se venden tacos,vender,"[do'(Ø, Ø)] CAUSE [BECOME vendido' (tacos)]",causativa,correccion_usuario
+2026-07-20 20:43:07,se venden casas,vender,"[do'(Ø,Ø)] CAUSE [BECOME sold'(casas)]o",causativa,correccion_usuario
+2026-07-23 20:02:00,la bomba explotó,explotar,INGR explotar' (bomba),achievement,correccion_usuario
+2026-07-23 20:03:46,el globo explotó,explotar,INGR explotar' (globo),achievement,correccion_usuario

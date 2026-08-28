@@ -1,0 +1,500 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1664.0" width="1920" height="1664.0" font-family="Verdana, Arial, sans-serif">
+<rect x="0.0" y="0.0" width="1920.0" height="1664.0" rx="0" fill="#FFFFFF" stroke="none" stroke-width="0"/>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
+  <marker id="arrowLoop" markerWidth="12" markerHeight="12" refX="9" refY="3.5" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,7 L10,3.5 z" fill="#D9531E"/></marker>
+  <marker id="arrowGray" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L8,3 z" fill="#9AA0A6"/></marker>
+</defs>
+<text x="960.0" y="40.0" font-family="Verdana, Arial, sans-serif" font-size="27" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="960.0" dy="0.0">gruxx — de la oración a la Estructura Lógica y el árbol sintáctico RRG</tspan>
+</text>
+<text x="960.0" y="66.0" font-family="Verdana, Arial, sans-serif" font-size="15" font-weight="normal" fill="#6B7280" text-anchor="middle" >
+<tspan x="960.0" dy="0.0">Flujo completo del analizador RRG (uso: presentación) · verificado contra el código</tspan>
+</text>
+<rect x="1472.0" y="6.0" width="440.0" height="90.0" rx="8" fill="#FFFFFF" stroke="#C9CDD3" stroke-width="1.2"/>
+<rect x="1486" y="17" width="15" height="15" rx="3" fill="#3B4E8C"/>
+<text x="1507.0" y="29.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1507.0" dy="0.0">① Arranque</tspan>
+</text>
+<rect x="1631" y="17" width="15" height="15" rx="3" fill="#1E7A56"/>
+<text x="1652.0" y="29.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1652.0" dy="0.0">② Semántico</tspan>
+</text>
+<rect x="1776" y="17" width="15" height="15" rx="3" fill="#6A3FA0"/>
+<text x="1797.0" y="29.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1797.0" dy="0.0">③ Sintáctico</tspan>
+</text>
+<rect x="1486" y="47" width="15" height="15" rx="3" fill="#B96C15"/>
+<text x="1507.0" y="59.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1507.0" dy="0.0">④ Verificación</tspan>
+</text>
+<rect x="1631" y="47" width="15" height="15" rx="3" fill="#1F6FA8"/>
+<text x="1652.0" y="59.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1652.0" dy="0.0">⑤ Interacción</tspan>
+</text>
+<rect x="1776" y="47" width="15" height="15" rx="3" fill="#7A6A55"/>
+<text x="1797.0" y="59.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1797.0" dy="0.0">⑥ Datos/léxicos</tspan>
+</text>
+<line x1="1486" y1="76" x2="1520" y2="76" stroke="#D9531E" stroke-width="3" stroke-dasharray="7,4"/>
+<text x="1528.0" y="80.0" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1528.0" dy="0.0">ciclo de aprendizaje (corrección → léxico → próximo análisis)</tspan>
+</text>
+<rect x="100.0" y="108.0" width="1780.0" height="170.4" rx="12" fill="#E7ECFB" stroke="#3B4E8C" stroke-width="1.8"/>
+<text x="118.0" y="134.0" font-family="Verdana, Arial, sans-serif" font-size="19" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="118.0" dy="0.0">① Arranque</tspan>
+</text>
+<text x="118.0" y="152.0" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="normal" fill="#6B7280" text-anchor="start" >
+<tspan x="118.0" dy="0.0">gruxx_ai1.py</tspan>
+</text>
+<rect x="118.0" y="162.0" width="424.0" height="96.4" rx="8" fill="#FFFFFF" stroke="#3B4E8C" stroke-width="1" opacity="0.85"/>
+<text x="130.0" y="182.0" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Carga de modelos</tspan>
+</text>
+<text x="130.0" y="202.0" font-family="Verdana, Arial, sans-serif" font-size="11.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Parser Stanza (español) · clasificador aspectual roBERTa/BERTIN</tspan>
+<tspan x="130.0" dy="14.8">(cabeza léxica + cabeza contextual, embeddings del complejo</tspan>
+<tspan x="130.0" dy="14.8">verbal).</tspan>
+</text>
+<rect x="558.0" y="162.0" width="424.0" height="96.4" rx="8" fill="#FFFFFF" stroke="#3B4E8C" stroke-width="1" opacity="0.85"/>
+<text x="570.0" y="182.0" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="570.0" dy="0.0">Carga de léxicos curados</tspan>
+</text>
+<text x="570.0" y="202.0" font-family="Verdana, Arial, sans-serif" font-size="11.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="570.0" dy="0.0">Semilla de clases · oraciones contextuales · ditransitivos ·</tspan>
+<tspan x="570.0" dy="14.8">causativos · listas de config · glosario  (ver ⑥, abajo).</tspan>
+</text>
+<rect x="998.0" y="162.0" width="424.0" height="96.4" rx="8" fill="#FFFFFF" stroke="#3B4E8C" stroke-width="1" opacity="0.85"/>
+<text x="1010.0" y="182.0" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="1010.0" dy="0.0">Tres modos de entrada</tspan>
+</text>
+<text x="1010.0" y="202.0" font-family="Verdana, Arial, sans-serif" font-size="11.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1010.0" dy="0.0">① Oración interactiva</tspan>
+<tspan x="1010.0" dy="14.8">② Lote de oraciones (.txt)</tspan>
+<tspan x="1010.0" dy="14.8">③ Archivo .conllu ya anotado</tspan>
+</text>
+<rect x="1438.0" y="162.0" width="424.0" height="96.4" rx="8" fill="#FFFFFF" stroke="#3B4E8C" stroke-width="1" opacity="0.85"/>
+<text x="1450.0" y="182.0" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="1450.0" dy="0.0">Anuncio del comando</tspan>
+</text>
+<text x="1450.0" y="202.0" font-family="Verdana, Arial, sans-serif" font-size="11.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1450.0" dy="0.0">"escribe -help para el glosario completo o -help término</tspan>
+<tspan x="1450.0" dy="14.8">para buscarlo" — visible en todos los prompts del flujo.</tspan>
+</text>
+<path d="M 900.0 280.4 L 900.0 304.4" fill="none" stroke="#3B4E8C" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="914.0" y="300.4" font-family="Verdana, Arial, sans-serif" font-size="12.5" font-weight="bold" fill="#3B4E8C" text-anchor="start" >
+<tspan x="914.0" dy="0.0">por cada oración analizada →</tspan>
+</text>
+<rect x="100.0" y="308.4" width="1780.0" height="108.0" rx="10" fill="#FFF8DE" stroke="#D9B84A" stroke-width="1.6"/>
+<text x="116.0" y="330.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#7A5B00" text-anchor="start" >
+<tspan x="116.0" dy="0.0">Ejemplo guía — síguelo en cada etapa: “Juan le dio flores a María”</tspan>
+</text>
+<text x="114.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
+<tspan x="114.0" dy="0.0">②  x=Juan (Actor) · ‘le’→AGX dativo · y=María (NMR/Poseedor) · ‘dar’→transferencia</tspan>
+<tspan x="114.0" dy="14.5">EL: [[do'(Juan,Ø)] CAUSE [BECOME have'(María,flores)]]</tspan>
+</text>
+<text x="811.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
+<tspan x="811.0" dy="0.0">③  AGX bajo NUC (‘le’) · PP “a María” en el centro</tspan>
+</text>
+<text x="1197.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
+<tspan x="1197.0" dy="0.0">④  Integridad: ✓ x↔NP · z↔NP · y↔PP ·</tspan>
+<tspan x="1197.0" dy="14.5">concordancia (AGX) ✓</tspan>
+</text>
+<text x="1505.0" y="354.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#5B4400" text-anchor="start" >
+<tspan x="1505.0" dy="0.0">⑤  árbol → EL léxica → tipo Realización → argumentos y</tspan>
+<tspan x="1505.0" dy="14.5">rasgos traducidos</tspan>
+</text>
+<rect x="100.0" y="430.4" width="681.0" height="627.6" rx="12" fill="#E3F3EC" stroke="#1E7A56" stroke-width="2"/>
+<path d="M 100 490.4 L 100 442.4 Q 100 430.4 112 430.4 L 769 430.4 Q 781 430.4 781 442.4 L 781 490.4 Z" fill="#1E7A56"/>
+<text x="118.0" y="455.4" font-family="Verdana, Arial, sans-serif" font-size="17" font-weight="bold" fill="white" text-anchor="start" >
+<tspan x="118.0" dy="0.0">② Análisis semántico</tspan>
+</text>
+<text x="118.0" y="474.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#FFFFFFCC" text-anchor="start" >
+<tspan x="118.0" dy="0.0">rrg_ls_mapper.py · nucleo_periferia.py</tspan>
+</text>
+<rect x="797.0" y="430.4" width="370.0" height="627.6" rx="12" fill="#EFE7F7" stroke="#6A3FA0" stroke-width="2"/>
+<path d="M 797 490.4 L 797 442.4 Q 797 430.4 809 430.4 L 1155 430.4 Q 1167 430.4 1167 442.4 L 1167 490.4 Z" fill="#6A3FA0"/>
+<text x="815.0" y="455.4" font-family="Verdana, Arial, sans-serif" font-size="17" font-weight="bold" fill="white" text-anchor="start" >
+<tspan x="815.0" dy="0.0">③ Análisis sintáctico</tspan>
+</text>
+<text x="815.0" y="474.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#FFFFFFCC" text-anchor="start" >
+<tspan x="815.0" dy="0.0">canal MISC · ud2rrg.py (capa 'es')</tspan>
+</text>
+<rect x="1183.0" y="430.4" width="292.0" height="627.6" rx="12" fill="#FCEFDD" stroke="#B96C15" stroke-width="2"/>
+<path d="M 1183 490.4 L 1183 442.4 Q 1183 430.4 1195 430.4 L 1463 430.4 Q 1475 430.4 1475 442.4 L 1475 490.4 Z" fill="#B96C15"/>
+<text x="1201.0" y="455.4" font-family="Verdana, Arial, sans-serif" font-size="17" font-weight="bold" fill="white" text-anchor="start" >
+<tspan x="1201.0" dy="0.0">④ Verificación</tspan>
+</text>
+<text x="1201.0" y="474.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#FFFFFFCC" text-anchor="start" >
+<tspan x="1201.0" dy="0.0">completeness.py</tspan>
+</text>
+<rect x="1491.0" y="430.4" width="389.0" height="627.6" rx="12" fill="#E1EEF8" stroke="#1F6FA8" stroke-width="2"/>
+<path d="M 1491 490.4 L 1491 442.4 Q 1491 430.4 1503 430.4 L 1868 430.4 Q 1880 430.4 1880 442.4 L 1880 490.4 Z" fill="#1F6FA8"/>
+<text x="1509.0" y="455.4" font-family="Verdana, Arial, sans-serif" font-size="17" font-weight="bold" fill="white" text-anchor="start" >
+<tspan x="1509.0" dy="0.0">⑤ Resultado + interacción</tspan>
+</text>
+<text x="1509.0" y="474.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#FFFFFFCC" text-anchor="start" >
+<tspan x="1509.0" dy="0.0">display_grr · glosario · correccion.py</tspan>
+</text>
+<rect x="114.0" y="502.4" width="653.0" height="70.6" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="524.4" r="14" fill="#1E7A56"/>
+<text x="136" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<text x="158.0" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Stanza: dependencias</tspan>
+</text>
+<text x="130.0" y="546.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Tokens, lemas, árbol de dependencias (UD).</tspan>
+</text>
+<rect x="114.0" y="581.0" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="603.0" r="14" fill="#1E7A56"/>
+<text x="136" y="608.0" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<text x="158.0" y="608.0" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Núcleo vs. periferia</tspan>
+</text>
+<text x="130.0" y="625.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Argumento (x/y/z) vs. adjunto (temporal/locativo/modo/otro) · pro-drop desde la</tspan>
+<tspan x="130.0" dy="15.6">morfología · clíticos → AGX (dativo, se-pasivo/impersonal/aspectual, reflexivo).</tspan>
+</text>
+<rect x="114.0" y="675.2" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="697.2" r="14" fill="#1E7A56"/>
+<text x="136" y="702.2" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<text x="158.0" y="702.2" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Clasificación aspectual</tspan>
+</text>
+<text x="130.0" y="719.2" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Embeddings del complejo verbal → 2 cabezas (léxica+contextual) → vector de 4 rasgos</tspan>
+<tspan x="130.0" dy="15.6">(estático/dinámico/télico/puntual) → árbol de decisión → clase de Vendler/Van Valin.</tspan>
+</text>
+<rect x="114.0" y="769.4" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="791.4000000000001" r="14" fill="#1E7A56"/>
+<text x="136" y="796.4000000000001" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">4</text>
+<text x="158.0" y="796.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Correcciones estructurales (gates)</tspan>
+</text>
+<text x="130.0" y="813.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">Causatividad · telicidad del objeto (sin determinante→Actividad; de medida→Realización</tspan>
+<tspan x="130.0" dy="15.6">activa) · pruebas de Van Valin (“durante una hora”→iterativo) · impersonales y pro-drop.</tspan>
+</text>
+<rect x="114.0" y="863.6" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="885.6000000000001" r="14" fill="#1E7A56"/>
+<text x="136" y="890.6000000000001" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">5</text>
+<text x="158.0" y="890.6" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Construcciones ditransitivas</tspan>
+</text>
+<text x="130.0" y="907.6" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">3 plantillas del léxico curado: transferencia (dar), benefactiva (comprar/hacer +</tspan>
+<tspan x="130.0" dy="15.6">propósito), comunicación (decir).</tspan>
+</text>
+<rect x="114.0" y="957.8" width="653.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1E7A56" stroke-width="1.2" opacity="0.94"/>
+<circle cx="136" cy="979.8000000000002" r="14" fill="#1E7A56"/>
+<text x="136" y="984.8000000000002" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">6</text>
+<text x="158.0" y="984.8" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1E7A56" text-anchor="start" >
+<tspan x="158.0" dy="0.0">Estructura Lógica (EL)</tspan>
+</text>
+<text x="130.0" y="1001.8" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="130.0" dy="0.0">EL formal + léxica; wrappers por fuera: be-in' (locativo), during'/for' (temporal),</tspan>
+<tspan x="130.0" dy="15.6">yesterday' (adverbio).</tspan>
+</text>
+<rect x="811.0" y="502.4" width="342.0" height="101.8" rx="8" fill="#FFFFFF" stroke="#6A3FA0" stroke-width="1.2" opacity="0.94"/>
+<circle cx="833" cy="524.4" r="14" fill="#6A3FA0"/>
+<text x="833" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<text x="855.0" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#6A3FA0" text-anchor="start" >
+<tspan x="855.0" dy="0.0">Canal MISC</tspan>
+</text>
+<text x="827.0" y="546.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="827.0" dy="0.0">Las decisiones de ② se escriben POR PALABRA</tspan>
+<tspan x="827.0" dy="15.6">en el .conllu (metadatos invisibles) — única</tspan>
+<tspan x="827.0" dy="15.6">fuente de verdad para el conversor.</tspan>
+</text>
+<rect x="811.0" y="612.2" width="342.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#6A3FA0" stroke-width="1.2" opacity="0.94"/>
+<circle cx="833" cy="634.1999999999999" r="14" fill="#6A3FA0"/>
+<text x="833" y="639.1999999999999" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<text x="855.0" y="639.2" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#6A3FA0" text-anchor="start" >
+<tspan x="855.0" dy="0.0">ud2rrg dibuja el árbol</tspan>
+</text>
+<text x="827.0" y="656.2" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="827.0" dy="0.0">Árbol de constituyentes RRG por estratos:</tspan>
+<tspan x="827.0" dy="15.6">SENTENCE &gt; CLAUSE &gt; CORE &gt; NUC.</tspan>
+</text>
+<rect x="811.0" y="706.4" width="342.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#6A3FA0" stroke-width="1.2" opacity="0.94"/>
+<circle cx="833" cy="728.4" r="14" fill="#6A3FA0"/>
+<text x="833" y="733.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<text x="855.0" y="733.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#6A3FA0" text-anchor="start" >
+<tspan x="855.0" dy="0.0">Nodo AGX bajo el núcleo</tspan>
+</text>
+<text x="827.0" y="750.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="827.0" dy="0.0">Los clíticos son concordancia, no argumentos:</tspan>
+<tspan x="827.0" dy="15.6">cuelgan de un nodo AGX hermano del predicado.</tspan>
+</text>
+<rect x="811.0" y="800.6" width="342.0" height="101.8" rx="8" fill="#FFFFFF" stroke="#6A3FA0" stroke-width="1.2" opacity="0.94"/>
+<circle cx="833" cy="822.6" r="14" fill="#6A3FA0"/>
+<text x="833" y="827.6" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">4</text>
+<text x="855.0" y="827.6" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#6A3FA0" text-anchor="start" >
+<tspan x="855.0" dy="0.0">Periferia anclada por estrato</tspan>
+</text>
+<text x="827.0" y="844.6" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="827.0" dy="0.0">Temporal → hija de la cláusula; locativo/modo</tspan>
+<tspan x="827.0" dy="15.6">→ hija del centro; posición destacada (LDP)</tspan>
+<tspan x="827.0" dy="15.6">para “Ayer, …”.</tspan>
+</text>
+<rect x="1197.0" y="502.4" width="264.0" height="101.8" rx="8" fill="#FFFFFF" stroke="#B96C15" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1219" cy="524.4" r="14" fill="#B96C15"/>
+<text x="1219" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<text x="1241.0" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#B96C15" text-anchor="start" >
+<tspan x="1241.0" dy="0.0">EL ↔ árbol</tspan>
+</text>
+<text x="1213.0" y="546.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1213.0" dy="0.0">Compara la Estructura Lógica</tspan>
+<tspan x="1213.0" dy="15.6">contra el árbol: ¿cada argumento</tspan>
+<tspan x="1213.0" dy="15.6">tiene su constituyente?</tspan>
+</text>
+<rect x="1197.0" y="612.2" width="264.0" height="101.8" rx="8" fill="#FFFFFF" stroke="#B96C15" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1219" cy="634.1999999999999" r="14" fill="#B96C15"/>
+<text x="1219" y="639.1999999999999" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<text x="1241.0" y="639.2" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#B96C15" text-anchor="start" >
+<tspan x="1241.0" dy="0.0">Satisfacciones válidas</tspan>
+</text>
+<text x="1213.0" y="656.2" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1213.0" dy="0.0">Pro-drop y clítico solo (nodo AGX</tspan>
+<tspan x="1213.0" dy="15.6">sin sintagma pleno) cuentan como</tspan>
+<tspan x="1213.0" dy="15.6">satisfechos, no como error.</tspan>
+</text>
+<rect x="1197.0" y="722.0" width="264.0" height="135.4" rx="8" fill="#FFFFFF" stroke="#B96C15" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1219" cy="743.9999999999999" r="14" fill="#B96C15"/>
+<text x="1219" y="748.9999999999999" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<text x="1241.0" y="749.0" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#B96C15" text-anchor="start" >
+<tspan x="1241.0" dy="0.0">Periferia y</tspan>
+<tspan x="1241.0" dy="18.0">concordancia</tspan>
+</text>
+<text x="1213.0" y="784.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1213.0" dy="0.0">Cada wrapper ↔ su rama de</tspan>
+<tspan x="1213.0" dy="15.6">periferia en el estrato correcto;</tspan>
+<tspan x="1213.0" dy="15.6">cada AGX de la EL ↔ su nodo en el</tspan>
+<tspan x="1213.0" dy="15.6">árbol (y viceversa).</tspan>
+</text>
+<rect x="811.0" y="916.4" width="342.0" height="118.0" rx="8" fill="#FFFFFF" stroke="#6A3FA0" stroke-width="1.2" opacity="0.94"/>
+<text x="823.0" y="934.4" font-family="Verdana, Arial, sans-serif" font-size="12.5" font-weight="bold" fill="#6A3FA0" text-anchor="start" >
+<tspan x="823.0" dy="0.0">Esquema del árbol RRG</tspan>
+</text>
+<line x1="982.0" y1="958.4" x2="982.0" y2="966.4" stroke="#6A3FA0" stroke-width="1.4"/>
+<line x1="982.0" y1="978.4" x2="982.0" y2="986.4" stroke="#6A3FA0" stroke-width="1.4"/>
+<text x="982.0" y="954.4" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="982.0" dy="0.0">SENTENCE</tspan>
+</text>
+<text x="982.0" y="974.4" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="982.0" dy="0.0">CLAUSE</tspan>
+</text>
+<text x="982.0" y="994.4" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="982.0" dy="0.0">CORE</tspan>
+</text>
+<line x1="982.0" y1="998.4" x2="922.0" y2="1008.4" stroke="#6A3FA0" stroke-width="1.4"/>
+<line x1="982.0" y1="998.4" x2="1042.0" y2="1008.4" stroke="#6A3FA0" stroke-width="1.4"/>
+<text x="922.0" y="1016.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="bold" fill="#6A3FA0" text-anchor="middle" >
+<tspan x="922.0" dy="0.0">NUC{AGX,V}</tspan>
+</text>
+<text x="1042.0" y="1016.4" font-family="Verdana, Arial, sans-serif" font-size="10.8" font-weight="normal" fill="#1B1F24" text-anchor="middle" >
+<tspan x="1042.0" dy="0.0">NP “a María”</tspan>
+</text>
+<rect x="1505.0" y="502.4" width="361.0" height="133.0" rx="8" fill="#FFFFFF" stroke="#1F6FA8" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1527" cy="524.4" r="14" fill="#1F6FA8"/>
+<text x="1527" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<text x="1549.0" y="529.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1F6FA8" text-anchor="start" >
+<tspan x="1549.0" dy="0.0">Salida en orden GRR</tspan>
+</text>
+<text x="1521.0" y="546.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1521.0" dy="0.0">Árbol sintáctico → EL léxica debajo → tipo, EL</tspan>
+<tspan x="1521.0" dy="15.6">formal, argumentos (Actor/Efectuador,</tspan>
+<tspan x="1521.0" dy="15.6">Undergoer/Tema, NMR/Poseedor…), rasgos e</tspan>
+<tspan x="1521.0" dy="15.6">Integridad traducidos. Detalle técnico con</tspan>
+<tspan x="1521.0" dy="15.6">--verbose.</tspan>
+</text>
+<rect x="1505.0" y="643.4" width="361.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1F6FA8" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1527" cy="665.4" r="14" fill="#1F6FA8"/>
+<text x="1527" y="670.4" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<text x="1549.0" y="670.4" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1F6FA8" text-anchor="start" >
+<tspan x="1549.0" dy="0.0">-help / -help término</tspan>
+</text>
+<text x="1521.0" y="687.4" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1521.0" dy="0.0">Glosario: 62 términos, 7 categorías —</tspan>
+<tspan x="1521.0" dy="15.6">disponible en TODOS los prompts.</tspan>
+</text>
+<rect x="1505.0" y="737.6" width="361.0" height="86.2" rx="8" fill="#FFFFFF" stroke="#1F6FA8" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1527" cy="759.6" r="14" fill="#1F6FA8"/>
+<text x="1527" y="764.6" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<text x="1549.0" y="764.6" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1F6FA8" text-anchor="start" >
+<tspan x="1549.0" dy="0.0">Guardar en .txt</tspan>
+</text>
+<text x="1521.0" y="781.6" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1521.0" dy="0.0">El análisis completo (árbol + EL) se guarda en</tspan>
+<tspan x="1521.0" dy="15.6">texto plano.</tspan>
+</text>
+<rect x="1505.0" y="831.8" width="361.0" height="182.2" rx="8" fill="#FFFFFF" stroke="#1F6FA8" stroke-width="1.2" opacity="0.94"/>
+<circle cx="1527" cy="853.8000000000001" r="14" fill="#1F6FA8"/>
+<text x="1527" y="858.8000000000001" font-family="Verdana, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">4</text>
+<text x="1549.0" y="858.8" font-family="Verdana, Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#1F6FA8" text-anchor="start" >
+<tspan x="1549.0" dy="0.0">(c) Corregir — el ciclo de</tspan>
+<tspan x="1549.0" dy="18.0">aprendizaje</tspan>
+</text>
+<text x="1521.0" y="893.8" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1521.0" dy="0.0">Menú: clase / EL completa / enrutado →</tspan>
+<tspan x="1521.0" dy="15.6">validación en 3 niveles (formalismo,</tspan>
+<tspan x="1521.0" dy="15.6">consistencia, plantilla; rechazo explicado) →</tspan>
+<tspan x="1521.0" dy="15.6">enrutado automático (léxico vivo auditado, o</tspan>
+<tspan x="1521.0" dy="15.6">staging) → re-análisis de confirmación (si no</tspan>
+<tspan x="1521.0" dy="15.6">confirma, se revierte). Alimenta el PRÓXIMO</tspan>
+<tspan x="1521.0" dy="15.6">análisis.</tspan>
+</text>
+<rect x="1197.0" y="869.4" width="264.0" height="100.0" rx="8" fill="#FFFFFF" stroke="#B96C15" stroke-width="1.6"/>
+<text x="1209.0" y="889.4" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="bold" fill="#B96C15" text-anchor="start" >
+<tspan x="1209.0" dy="0.0">Métricas (AnCora / PUD)</tspan>
+</text>
+<text x="1209.0" y="909.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="normal" fill="#1B1F24" text-anchor="start" >
+<tspan x="1209.0" dy="0.0">Conversión: 98% (AnCora, n=300) · 94%</tspan>
+<tspan x="1209.0" dy="15.0">(PUD, examen a ciegas)</tspan>
+</text>
+<text x="1209.0" y="939.4" font-family="Verdana, Arial, sans-serif" font-size="11.8" font-weight="bold" fill="#1B1F24" text-anchor="start" >
+<tspan x="1209.0" dy="0.0">Integridad (AnCora): 94.9%</tspan>
+</text>
+<rect x="100.0" y="1092.0" width="1780.0" height="196.0" rx="12" fill="#EFEAE2" stroke="#7A6A55" stroke-width="1.8"/>
+<text x="118.0" y="1118.0" font-family="Verdana, Arial, sans-serif" font-size="17" font-weight="bold" fill="#7A6A55" text-anchor="start" >
+<tspan x="118.0" dy="0.0">⑥ Datos y léxicos curados</tspan>
+</text>
+<text x="118.0" y="1136.0" font-family="Verdana, Arial, sans-serif" font-size="11" font-weight="normal" fill="#6B7280" text-anchor="start" >
+<tspan x="118.0" dy="0.0">aspect_classifier/data/*</tspan>
+</text>
+<path d="M 166.28571428571428 1178.72 L 166.28571428571428 1241.28 A 78 14.72 0 0 0 322.2857142857143 1241.28 L 322.2857142857143 1178.72 A 78 14.72 0 0 0 166.28571428571428 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="244.28571428571428" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="244.3" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="244.3" dy="0.0">Semilla de clases</tspan>
+<tspan x="244.3" dy="15.0">aspectuales</tspan>
+</text>
+<path d="M 414.85714285714283 1178.72 L 414.85714285714283 1241.28 A 78 14.72 0 0 0 570.8571428571429 1241.28 L 570.8571428571429 1178.72 A 78 14.72 0 0 0 414.85714285714283 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="492.85714285714283" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="492.9" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="492.9" dy="0.0">Oraciones</tspan>
+<tspan x="492.9" dy="15.0">contextuales</tspan>
+<tspan x="492.9" dy="15.0">(curadas a mano,</tspan>
+<tspan x="492.9" dy="15.0">append-only)</tspan>
+</text>
+<path d="M 663.4285714285714 1178.72 L 663.4285714285714 1241.28 A 78 14.72 0 0 0 819.4285714285714 1241.28 L 819.4285714285714 1178.72 A 78 14.72 0 0 0 663.4285714285714 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="741.4285714285714" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="741.4" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="741.4" dy="0.0">Léxico</tspan>
+<tspan x="741.4" dy="15.0">ditransitivo</tspan>
+</text>
+<path d="M 912.0000000000001 1178.72 L 912.0000000000001 1241.28 A 78 14.72 0 0 0 1068.0 1241.28 L 1068.0 1178.72 A 78 14.72 0 0 0 912.0000000000001 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="990.0000000000001" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="990.0" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="990.0" dy="0.0">Léxico</tspan>
+<tspan x="990.0" dy="15.0">causativo</tspan>
+</text>
+<path d="M 1160.5714285714284 1178.72 L 1160.5714285714284 1241.28 A 78 14.72 0 0 0 1316.5714285714284 1241.28 L 1316.5714285714284 1178.72 A 78 14.72 0 0 0 1160.5714285714284 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="1238.5714285714284" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="1238.6" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="1238.6" dy="0.0">Listas de config</tspan>
+<tspan x="1238.6" dy="15.0">(movimiento,</tspan>
+<tspan x="1238.6" dy="15.0">duración,</tspan>
+<tspan x="1238.6" dy="15.0">adverbios)</tspan>
+</text>
+<path d="M 1409.142857142857 1178.72 L 1409.142857142857 1241.28 A 78 14.72 0 0 0 1565.142857142857 1241.28 L 1565.142857142857 1178.72 A 78 14.72 0 0 0 1409.142857142857 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="1487.142857142857" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="1487.1" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="1487.1" dy="0.0">Glosario</tspan>
+<tspan x="1487.1" dy="15.0">(62 términos)</tspan>
+</text>
+<path d="M 1657.7142857142858 1178.72 L 1657.7142857142858 1241.28 A 78 14.72 0 0 0 1813.7142857142858 1241.28 L 1813.7142857142858 1178.72 A 78 14.72 0 0 0 1657.7142857142858 1178.72 Z" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<ellipse cx="1735.7142857142858" cy="1178.72" rx="78" ry="14.72" fill="#FFFFFF" stroke="#7A6A55" stroke-width="1.6"/>
+<text x="1735.7" y="1204.0" font-family="Verdana, Arial, sans-serif" font-size="12.6" font-weight="bold" fill="#1B1F24" text-anchor="middle" >
+<tspan x="1735.7" dy="0.0">Staging de</tspan>
+<tspan x="1735.7" dy="15.0">correcciones</tspan>
+<tspan x="1735.7" dy="15.0">+ log maestro</tspan>
+</text>
+<path d="M 244.28571428571428 1148.0 L 244.28571428571428 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<path d="M 492.85714285714283 1148.0 L 492.85714285714283 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<path d="M 741.4285714285714 1148.0 L 741 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<path d="M 990.0000000000001 1148.0 L 741 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<path d="M 1238.5714285714284 1148.0 L 741 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<path d="M 1487.142857142857 1148.0 L 1588.25 1064.0" fill="none" stroke="#9AA0A6" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+<text x="741.4" y="1280.0" font-family="Verdana, Arial, sans-serif" font-size="10.6" font-weight="normal" fill="#6B7280" text-anchor="middle" font-style="italic">
+<tspan x="741.4" dy="0.0">alimentan la clasificación, los gates, las ditransitivas y la causatividad</tspan>
+</text>
+<path d="M 1794.42 1058.0 L 1794.42 1306.0 L 46 1306.0" fill="none" stroke="#D9531E" stroke-width="3.4" stroke-dasharray="9,6" marker-end="none"/>
+<text x="920.2" y="1298.0" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="bold" fill="#D9531E" text-anchor="middle" >
+<tspan x="920.2" dy="0.0">correcciones → léxicos vivos / staging</tspan>
+</text>
+<path d="M 46 1306.0 L 46 470.4 L 94 470.4" fill="none" stroke="#D9531E" stroke-width="3.4" stroke-dasharray="9,6" marker-end="url(#arrowLoop)"/>
+<text x="36" y="888.2" font-family="Verdana, Arial, sans-serif" font-size="12" font-weight="bold" fill="#D9531E" text-anchor="middle" transform="rotate(-90 36 888.2)">alimenta el próximo análisis</text>
+<text x="920.2" y="1298.0" font-family="Verdana, Arial, sans-serif" font-size="11.5" font-weight="bold" fill="#D9531E" text-anchor="middle" >
+<tspan x="920.2" dy="0.0">correcciones → léxicos vivos / staging</tspan>
+</text>
+<rect x="100.0" y="1334.0" width="1780.0" height="296.0" rx="12" fill="#EDEDED" stroke="#8A8A8A" stroke-width="2.4" stroke-dasharray="10,7"/>
+<text x="118.0" y="1364.0" font-family="Verdana, Arial, sans-serif" font-size="19" font-weight="bold" fill="#6B6B6B" text-anchor="start" >
+<tspan x="118.0" dy="0.0">FUTURO — no implementado</tspan>
+</text>
+<text x="118.0" y="1384.0" font-family="Verdana, Arial, sans-serif" font-size="12" font-weight="normal" fill="#8A8A8A" text-anchor="start" font-style="italic">
+<tspan x="118.0" dy="0.0">fuera del flujo real de arriba — pendientes y mejoras propuestas</tspan>
+</text>
+<text x="120.0" y="1400.0" font-family="Verdana, Arial, sans-serif" font-size="13.5" font-weight="bold" fill="#5A5A5A" text-anchor="start" >
+<tspan x="120.0" dy="0.0">Sintaxis-semántica</tspan>
+</text>
+<text x="132.0" y="1422.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Oraciones compuestas (teoría de juntura-nexo RRG; cadenas de xcomp)</tspan>
+</text>
+<text x="132.0" y="1440.6" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Plantilla interna del ‘se’ pasivo (BECOME estado')</tspan>
+</text>
+<text x="132.0" y="1459.2" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Sintagmas completos en la EL (“casas baratas”, no solo “casas”)</tspan>
+</text>
+<text x="132.0" y="1477.8" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Depictivos a periferia (“duerme enroscado”)</tspan>
+</text>
+<text x="132.0" y="1496.4" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Guardas anti-sobredisparo de causatividad</tspan>
+</text>
+<text x="132.0" y="1515.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Periferia tipo “otro” en la EL + mejor tipado (frecuencia: “los fines de semana”)</tspan>
+</text>
+<text x="132.0" y="1533.6" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Wrapper de frecuencia</tspan>
+</text>
+<text x="132.0" y="1552.2" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Impersonal refleja por animacidad</tspan>
+</text>
+<text x="132.0" y="1570.8" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Complemento agente con “por” como cadena causal secundaria</tspan>
+</text>
+<text x="132.0" y="1589.4" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="132.0" dy="0.0">• Migración de lo/la a AGX</tspan>
+</text>
+<text x="704.0" y="1400.0" font-family="Verdana, Arial, sans-serif" font-size="13.5" font-weight="bold" fill="#5A5A5A" text-anchor="start" >
+<tspan x="704.0" dy="0.0">Nivel pragmático (fase futura)</tspan>
+</text>
+<text x="716.0" y="1422.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="716.0" dy="0.0">• Operadores: &lt;TNS&gt; &lt;ASP&gt; &lt;MOD&gt; &lt;FI&gt;</tspan>
+</text>
+<text x="716.0" y="1440.6" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="716.0" dy="0.0">• Estructura informativa (foco / tópico)</tspan>
+</text>
+<text x="716.0" y="1459.2" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="716.0" dy="0.0">• Homógrafos del parser</tspan>
+</text>
+<text x="1288.0" y="1400.0" font-family="Verdana, Arial, sans-serif" font-size="13.5" font-weight="bold" fill="#5A5A5A" text-anchor="start" >
+<tspan x="1288.0" dy="0.0">Herramientas</tspan>
+</text>
+<text x="1300.0" y="1422.0" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="1300.0" dy="0.0">• “Corregir todo” (EL + clase juntas) en el bucle</tspan>
+</text>
+<text x="1300.0" y="1440.6" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="1300.0" dy="0.0">• Lote de datos de medidas</tspan>
+</text>
+<text x="1300.0" y="1459.2" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="1300.0" dy="0.0">• Fallback con probe para verbos desconocidos</tspan>
+</text>
+<text x="1300.0" y="1477.8" font-family="Verdana, Arial, sans-serif" font-size="11.3" font-weight="normal" fill="#6E6E6E" text-anchor="start" >
+<tspan x="1300.0" dy="0.0">• Forma plena de los verbos de comunicación</tspan>
+</text>
+</svg>

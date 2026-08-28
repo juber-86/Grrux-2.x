@@ -1,0 +1,235 @@
+{
+  "fecha": "2026-07-12",
+  "generado": "2026-07-12T08:21:52",
+  "treebank": "ancora-dev",
+  "muestra_n": 300,
+  "verificacion_obl_arg_pre_fix": {
+    "entrada": "Le compró un regalo a María",
+    "core": [
+      [
+        "regalo",
+        "obj",
+        "Undergoer"
+      ],
+      [
+        "María",
+        "obl:arg",
+        "NMR(dativo)"
+      ]
+    ],
+    "periferia": [],
+    "actor_implicito": {
+      "persona": "3",
+      "numero": "sg",
+      "etiqueta": "3sg"
+    },
+    "notas_mismatch": [
+      "clítico dativo 'Le' → agx (doblado, argumento en el sintagma pleno)",
+      "pro-drop: actor implícito 3sg (de la morfología verbal)"
+    ],
+    "conclusion": "obl:arg NO está en CORE_DEPRELS ni en PERIFERIA_DEPRELS (que solo reconoce el string exacto 'obl' o el set fijo {obl, advmod, obl:tmod, nmod:tmod, obl:mod, advcl}): 'Le' y 'María' NO aparecen ni en core ni en periferia — se pierden por completo. Efecto secundario: al no detectar sujeto, dispara pro-drop (actor_implicito=3sg), que en este caso es casualmente correcto pero por la razón equivocada."
+  },
+  "kpi1_tasa_fallos_ud2rrg": {
+    "xpos_intacto_metodologia_L0": {
+      "pct_ok": 98.0,
+      "pct_fail": 2.0,
+      "ok": 294,
+      "fail": 6,
+      "total": 300,
+      "resumen_linea": "Convertidas: 294 | Fallidas: 6"
+    },
+    "xpos_stripped_pipeline_real": {
+      "pct_ok": 98.0,
+      "pct_fail": 2.0,
+      "ok": 294,
+      "fail": 6,
+      "total": 300,
+      "resumen_linea": "Convertidas: 294 | Fallidas: 6"
+    },
+    "nota": "No se observó categoría 'dummy tree/plano' en el path real (convertir.py): NotHandled se propaga sin captura local hasta el except de nivel oración; la oración se pierde entera (hard fail), no se sustituye por un árbol plano. La spec técnica describe ese fallback pero no se materializa en este pipeline."
+  },
+  "kpi2_desacuerdo_periferia_sin_misc": {
+    "oraciones_con_periferia_etapa1": 185,
+    "de_esas_con_arbol_ud2rrg": 181,
+    "items_periferia_comparados": 306,
+    "acuerdos": 88,
+    "desacuerdos": 218,
+    "pct_acuerdo": 28.8,
+    "ejemplos_desacuerdo": [
+      {
+        "texto": "pasado",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "discurso",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "silencio",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "boca",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "de",
+        "tipo": "otro",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "vez",
+        "tipo": "temporal",
+        "deprel": "obl"
+      },
+      {
+        "texto": "marcará",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "remedia",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "criterio",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "hace",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "incompetencia",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "pasado",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "soportar",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "Ahora",
+        "tipo": "temporal",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "Mientras",
+        "tipo": "temporal",
+        "deprel": "advmod"
+      }
+    ],
+    "limitacion": "Comparación in-process (import directo de ud2rrg), no parseo del ASCII-art de DrawTree — ver docstring de kpi2_desacuerdo_periferia. Solo cubre oraciones donde ud2rrg (xpos stripped) produjo árbol Y donde Etapa 1 detectó periferia; con la tasa de fallos medida en KPI1, esta cobertura es parcial."
+  },
+  "kpi3_contadores": {
+    "doblado_clitico_pleno": 9,
+    "clitico_dativo_solo": 27,
+    "obl_arg_total": 126,
+    "periferia_por_tipo": {
+      "otro": 233,
+      "temporal": 30,
+      "locativo": 40,
+      "modo": 7
+    }
+  },
+  "kpi4_pipeline_hibrido_l4": {
+    "muestra_n": 300,
+    "fallos_mapper": 0,
+    "conversion": {
+      "ok": 294,
+      "total": 300,
+      "pct_ok": 98.0
+    },
+    "acuerdo_periferia_por_estrato": {
+      "items_periferia": 257,
+      "ok_estrato": 130,
+      "pct_acuerdo": 50.6
+    },
+    "tasa_completeness": {
+      "con_arbol": 294,
+      "ok": 279,
+      "pct_ok": 94.9
+    },
+    "desglose_advertencias": {
+      "agx_arbol_gt_ls": 0,
+      "agx_ls_gt_arbol": 0,
+      "arg_falta_en_arbol": 3,
+      "peri_falta_en_arbol": 12
+    },
+    "ejemplos_completeness_advertencia": [
+      {
+        "texto": "Miquilena , mientras tanto , se ha convertido una vez más desde que Chávez ocupa la Presidencia en el \" comodín \" de la partida , pues marcará la pauta sobre el inmediato futuro político .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔PP · mientras'↔PERI@CLAUSE · for': se esperaba PERI@CLAUSE (sin rama -PERI en el árbol) · \"marcar\": periferia sin wrapper, no verificable"
+      },
+      {
+        "texto": "Y , en la mesa , se acabó eso de usar los palillos una sola vez y tirar los .",
+        "resumen": "Completeness: ⚠ x1↔NP · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "El sábado pasado , sobre la hierba blaugrana de el Nou Camp , esta yegua viejorra y pendedera que es ahora el Real Madrid se llevó un puñado de zurriagazos de los que dejan mataduras hasta el día de la extremaunción .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP x3↔NP · \"sábado\": periferia sin wrapper, no verificable · be-on': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "Pero anoche , sobre el césped rojiblanco , la burraca maleada y retorcida en que se ha convertido el Madrid tuvo el coraje y la vergüenza necesaria para alzar se contra su decrepitud , su desnorte y su mal fario con las armas de los desheredados : muchas glándulas , mucho nervio , mucha embestida y el arsenal de músculos , fulgores y tosquedades que la desgracia y la desesperación pone en mano de los combatientes campesinos .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP · \"pero\": periferia sin wrapper, no verificable · last.night'↔LDP · be-on': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "Esperemos que muy pronto .",
+        "resumen": "Completeness: ⚠ x1(morf) x2 (\"pronto\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "En la jornada que doblaba el ecuador de la prueba , el principio de la cuenta atrás , el suizo ratificó de la forma más rotunda su supremacía .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol) · \"forma\"↔PERI"
+      },
+      {
+        "texto": "Ante estas dificultades , las aves costeras han llegado a un acuerdo .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔PP · be-in-front-of': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "Sus intereses y los de su compañera no son necesariamente los mismos : tanto él como ella intentan maximizar la transmisión de sus propios genes .",
+        "resumen": "Completeness: ⚠ x1↔NP · \"no\"↔PERI · necesariamente': se esperaba PERI@CORE (estrato incorrecto) · \"intentar\": periferia sin wrapper, no verificable"
+      },
+      {
+        "texto": "Aunque el zar Nicolás I intentó resarcir a su viuda con una renta anual de 11.000 rublos y la edición de sus obras completas , entre la rancia nobleza reinaba la complacencia : habían callado para siempre a un poeta - non grato - .",
+        "resumen": "Completeness: ⚠ x1↔NP · \"intentar\": periferia sin wrapper, no verificable · be-between': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "En muchas tan sólo se encuentra un saco con ropa .",
+        "resumen": "Completeness: ⚠ x1: sin id de token rastreable · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol) · \"tan\": periferia sin wrapper, no verificable"
+      },
+      {
+        "texto": "Mientras , en Durban , a poco más de 15 minutos de los - campos de batalla - de los - townships - la vida continúa sin sobresaltos .",
+        "resumen": "Completeness: ⚠ x1↔NP · mientras'↔LDP · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol) · at'↔LDP · \"sobresalto\"↔PERI"
+      },
+      {
+        "texto": "- ¿ Qué han conseguido ?",
+        "resumen": "Completeness: ⚠ x1(morf) x2 (\"Qué\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "En mi caso Jorge Manrique se equivoca .",
+        "resumen": "Completeness: ⚠ x1↔NP · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "En el cuarto de estar , una grácil patinadora rubia anunciaba una marca de chocolates de Valladolid desde una vieja chapa publicitaria de hojalata , sus esquinas de color cobre ya oxidadas , las letras de la zona inferior rotas y arañadas , ilegibles .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP · be-in': se esperaba PERI@CORE (sin rama -PERI en el árbol) · \"chapa\"↔PERI"
+      },
+      {
+        "texto": "El huerto estaba allí , arrogante e imposible como siempre , pero encima de el muro de ladrillo que lo escondía a los ojos de los peatones , alguien había fijado un cartel de metal amarillo presidido por el nombre de una empresa constructora .",
+        "resumen": "Completeness: ⚠ x1↔NP x2 (\"allí\") sin constituyente en el árbol x3↔NP"
+      }
+    ]
+  }
+}

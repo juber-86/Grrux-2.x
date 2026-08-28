@@ -1,0 +1,51 @@
+lema,causativo_lexico,tipo_alternancia,pareja_supletiva,aktionsart_base,predicado_base,toma_se_anticausativo,notas
+romper,True,anticausativo_deriv,,Achievement,broken',True,Pedro rompió el vaso / El vaso se rompió; clase β cruzada con semilla (Achievement)
+abrir,True,anticausativo_deriv,,Achievement,open',True,cruzada con semilla
+cerrar,True,anticausativo_deriv,,Achievement,closed',True,cruzada con semilla
+encender,True,anticausativo_deriv,,Achievement,encendido',True,semilla tiene 'encenderse' Achievement; clave sin -se (lema de Stanza)
+apagar,True,anticausativo_deriv,,Achievement,apagado',True,semilla 'apagarse' Achievement
+hundir,True,anticausativo_deriv,,Achievement,hundido',True,semilla 'hundirse' Achievement
+quebrar,True,anticausativo_deriv,,Achievement,quebrado',True,semilla 'quebrarse' Achievement
+volcar,True,anticausativo_deriv,,Achievement,volcado',True,semilla 'volcarse' Achievement
+agrietar,True,anticausativo_deriv,,Achievement,agrietado',True,semilla 'agrietarse' Achievement
+derrumbar,True,anticausativo_deriv,,Achievement,derrumbado',True,semilla 'derrumbarse' Achievement
+desplomar,True,anticausativo_deriv,,Achievement,desplomado',True,REVISADO:  transitivo causativo marginal ('el sismo desplomó el techo'); casi siempre pronominal
+detener,True,anticausativo_deriv,,Achievement,detenido',True,semilla 'detenerse' Achievement
+iniciar,True,anticausativo_deriv,,Achievement,iniciado',True,'la ceremonia se inició'
+arrancar,True,anticausativo_deriv,,Achievement,arrancado'/encendido',True,'el motor arrancó' también lábil; REVISADO: TIPO ACHIEVEMENT -  cuando tiene OD: ‘Juan arrancó el carro’
+reventar,True,labil,,Achievement,reventado'/popped',True,'el globo reventó' (lábil sin se) y 'se reventó'; semilla Achievement; caso de la EL de referencia
+destrozar,True,anticausativo_deriv,,Achievement,destrozado',True,no está en semilla; β Achievement
+derribar,True,-,,Achievement,derribado',False,sin anticausativo natural (*'el muro se derribó' es pasiva-se); solo marco transitivo
+matar,True,supletivo,morir,Achievement,muerto'/dead',True,"El argumento padecedor humano se selecciona como Sujeto (PSA), y el se marca que el efectuador original (la causa) ha sido inespecificado . Esto genera una Estructura Lógica (EL) con coindexación: [do' (Ø_i, Ø)] CAUSE [INGR dead' (Pedro_i)] RRG distingue formalmente la semántica de ambos verbos: ""morir"" es un logro simple (INGR dead'(x)), mientras que ""matarse"" retiene el componente de causalidad en su EL ([do' (Ø_i, Ø)] CAUSE [INGR dead' (x_i)])"
+morir,False,supletivo,matar,Achievement,muerto',False,"miembro incoativo del par supletivo; 'se murió' actúan como anticausativos/reflexivo-incoativos, no como meras construcciones del ""se"" aspectual (como en ""se comió la pizza"")."
+derretir,True,anticausativo_deriv,,Accomplishment,melted'/derretido',True,semilla 'derretirse' Accomplishment
+congelar,True,anticausativo_deriv,,Accomplishment,frozen'/congelado',True,semilla Accomplishment
+disolver,True,anticausativo_deriv,,Accomplishment,disuelto',True,semilla Accomplishment
+evaporar,True,anticausativo_deriv,,Accomplishment,evaporado',True,semilla Accomplishment
+oxidar,True,anticausativo_deriv,,Accomplishment,oxidado',True,semilla Accomplishment
+marchitar,True,anticausativo_deriv,,Accomplishment,marchito',True,semilla Accomplishment
+secar,True,anticausativo_deriv,,Accomplishment,seco'/dry',True,clásico RRG (dry')
+quemar,True,anticausativo_deriv,,Accomplishment,quemado',True,'se quemó'
+fundir,True,anticausativo_deriv,,Accomplishment,fundido',True,
+enfriar,True,anticausativo_deriv,,Accomplishment,frío'/cold',True,
+calentar,True,anticausativo_deriv,,Accomplishment,caliente'/hot',True,
+mojar,True,anticausativo_deriv,,Accomplishment,mojado',True,
+llenar,True,anticausativo_deriv,,Accomplishment,lleno'/full',True,"REVISADO:  ES causativo β=Accomplishment; con Estructura Lógica: [do'(x, Ø)] CAUSE [BECOME full'(y)]."
+vaciar,True,anticausativo_deriv,,Accomplishment,vacío'/empty',True,"REVISADO:  ES causativo β=Accomplishment; con Estructura Lógica: [do'(x, Ø)] CAUSE [BECOME empty'(y)]."
+inflar,True,anticausativo_deriv,,Accomplishment,inflado',True,
+envenenar,True,anticausativo_deriv,,Accomplishment,envenenado',True,'se envenenó' puede ser reflexivo intencional; genuinamente ambiguo
+curar,True,anticausativo_deriv,,Accomplishment,curado'/sano',True,semilla Accomplishment; 'el médico curó / la herida se curó'
+sanar,True,labil,,Accomplishment,sano',False,'la herida sanó' lábil sin se; semilla Accomplishment
+cansar,True,anticausativo_deriv,,State,cansado',True,psicológico/condición: β = estado ('se cansó' REVISADO: es State
+asustar,True,anticausativo_deriv,,State,asustado'/afraid',True,"psych-causativo: [do'(x,∅)] CAUSE [feel'(y,[asustado'])]; REVISADO:  es State"
+alegrar,True,anticausativo_deriv,,State,alegre'/contento',True,"psych-causativo: [do'(x,∅)] CAUSE [feel'(y,[asustado'])]; REVISADO:  es State"
+entristecer,True,anticausativo_deriv,,State,triste',True,"psych-causativo: [do'(x,∅)] CAUSE [feel'(y,[asustado'])]; REVISADO:  es State"
+confundir,True,anticausativo_deriv,,State,confundido',True,"psych-causativo: [do'(x,∅)] CAUSE [feel'(y,[asustado'])]; REVISADO:  es State"
+iluminar,True,anticausativo_deriv,,Achievement,iluminado',True,'la sala se iluminó'; REVISAR ¿State o Achievement?
+dormir,True,labil,,State,dormido'/asleep',False,"causativo lábil ('durmió al bebé'); 'se durmió' es INCOATIVO ASPECTUAL, no anticausativo; REVISADO: actúa como anticausativos/reflexivo-incoativos, no como meras construcciones del ""se"" aspectual aktionsart_base (¿State o Activity?)"
+rodar,True,labil,,Activity,rodar',False,causativo de movimiento marginal ('rodó la pelota'); β Activity (semilla)
+pasear,True,labil,,Activity,pasear',False,'paseó al perro'; con camino/medida β=Active_Accomplishment; no está en semilla
+destellar,True,-,,Semelfactive,destello',False,REVISADO: se  mantiene. Es Semelfactivo Causativo prototípico
+sacudir,True,-,,Semelfactive,,False,NO causativo-anticausativo: 'se sacudió' es se MEDIO/reflexivo sin cambio de estado → gate Semelfactive (4D); semilla Semelfactive
+agitar,True,-,,Semelfactive,,False,"ídem sacudir: 'se agitó' medio, sin resultado → gate 4D"
+chasquear,True,-,,Semelfactive,,False,'chasqueó los dedos'; transitivo NO causativo (el OD no cambia de estado)

@@ -1,0 +1,29 @@
+fecha,oracion,lema,tipo,accion,destino,detalle,fuente
+2026-07-12 09:02:55,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,EL,staging,correcciones_el.csv,achievement,correccion_usuario
+2026-07-12 09:03:20,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,clase,staging,correcciones_clase.csv,activity->active_accomplishment,correccion_usuario
+2026-07-12 09:04:23,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,clase,staging,correcciones_clase.csv,activity->active_accomplishment,correccion_usuario
+2026-07-12 09:04:59,ayer Juan corrió vigorosamente hasta el parque,vigorosamente,EL,staging,correcciones_el.csv,achievement,correccion_usuario
+2026-07-13 21:43:07,Juan le da un beso a maria,,enrutado,staging,correcciones_enrutado.csv,maria->argumento del core (el re-análisis no reflejó la corrección),correccion_usuario
+2026-07-13 21:43:53,Juan le da un beso a maria,,enrutado,staging,correcciones_enrutado.csv,maria->argumento del core (el re-análisis no reflejó la corrección),correccion_usuario
+2026-07-13 21:43:56,Juan le da un beso a maria,,enrutado,staging,correcciones_enrutado.csv,maria->argumento del core (el re-análisis no reflejó la corrección),correccion_usuario
+2026-07-13 21:43:57,Juan le da un beso a maria,,enrutado,staging,correcciones_enrutado.csv,maria->argumento del core (el re-análisis no reflejó la corrección),correccion_usuario
+2026-07-14 12:36:45,Juan le dio un regalo a María,dar,clase,staging,correcciones_clase.csv,accomplishment->accomplishment,correccion_usuario
+2026-07-14 12:36:45,Juan le dio un regalo a María,dar,EL,persistido,verbos_ditransitivos.xlsx,ditrans_transferencia,correccion_usuario
+2026-07-14 12:57:32,juan le da un regalo a maria,dar,enrutado,persistido,config:verbos_movimiento,maria->argumento del core,correccion_usuario
+2026-07-14 12:59:56,juan le da un regalo a maria,dar,EL,staging,correcciones_el.csv,ditrans_transferencia,correccion_usuario
+2026-07-14 13:00:10,juan le da un regalo a maria,dar,EL,staging,correcciones_el.csv,ditrans_transferencia,correccion_usuario
+2026-07-14 17:43:33,El perro corrió hasta la casa,correr,clase,staging,correcciones_clase.csv,activity->active_accomplishment,correccion_usuario
+2026-07-14 17:43:33,El perro corrió hasta la casa,correr,EL,staging,correcciones_el.csv,achievement,correccion_usuario
+2026-07-14 17:43:40,El perro corrió hasta la casa,correr,clase,staging,correcciones_clase.csv,activity->active_accomplishment,correccion_usuario
+2026-07-14 17:43:40,El perro corrió hasta la casa,correr,EL,staging,correcciones_el.csv,achievement,correccion_usuario
+2026-07-19 09:05:39,Juan le dio un regalo a Maria,accomplishment,clase,staging,correcciones_clase.csv,accomplishment->achievement,correccion_usuario
+2026-07-20 19:38:46,se venden tacos,vender,clase,staging,correcciones_clase.csv,activity->accomplishment,correccion_usuario
+2026-07-20 19:38:46,se venden tacos,vender,EL,staging,correcciones_el.csv,causativa,correccion_usuario
+2026-07-20 19:47:18,se venden tacos,vender,clase,staging,correcciones_clase.csv,activity->accomplishment,correccion_usuario
+2026-07-20 19:47:18,se venden tacos,vender,EL,staging,correcciones_el.csv,causativa,correccion_usuario
+2026-07-20 20:43:07,se venden casas,vender,clase,staging,correcciones_clase.csv,activity->accomplishment,correccion_usuario
+2026-07-20 20:43:07,se venden casas,vender,EL,staging,correcciones_el.csv,causativa,correccion_usuario
+2026-07-23 20:02:00,la bomba explotó,explotar,clase,staging,correcciones_clase.csv,activity->achievement,correccion_usuario
+2026-07-23 20:02:00,la bomba explotó,explotar,EL,staging,correcciones_el.csv,achievement,correccion_usuario
+2026-07-23 20:03:46,el globo explotó,explotar,clase,staging,correcciones_clase.csv,activity->achievement,correccion_usuario
+2026-07-23 20:03:46,el globo explotó,explotar,EL,staging,correcciones_el.csv,achievement,correccion_usuario

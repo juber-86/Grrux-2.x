@@ -1,0 +1,148 @@
+{
+  "fecha": "2026-07-10",
+  "generado": "2026-07-10T09:21:49",
+  "treebank": "ancora-dev",
+  "muestra_n": 300,
+  "verificacion_obl_arg_pre_fix": {
+    "entrada": "Le compró un regalo a María",
+    "core": [
+      [
+        "regalo",
+        "obj",
+        "Undergoer"
+      ],
+      [
+        "María",
+        "obl:arg",
+        "NMR(dativo)"
+      ]
+    ],
+    "periferia": [],
+    "actor_implicito": {
+      "persona": "3",
+      "numero": "sg",
+      "etiqueta": "3sg"
+    },
+    "notas_mismatch": [
+      "clítico dativo 'Le' → agx (doblado, argumento en el sintagma pleno)",
+      "pro-drop: actor implícito 3sg (de la morfología verbal)"
+    ],
+    "conclusion": "obl:arg NO está en CORE_DEPRELS ni en PERIFERIA_DEPRELS (que solo reconoce el string exacto 'obl' o el set fijo {obl, advmod, obl:tmod, nmod:tmod, obl:mod, advcl}): 'Le' y 'María' NO aparecen ni en core ni en periferia — se pierden por completo. Efecto secundario: al no detectar sujeto, dispara pro-drop (actor_implicito=3sg), que en este caso es casualmente correcto pero por la razón equivocada."
+  },
+  "kpi1_tasa_fallos_ud2rrg": {
+    "xpos_intacto_metodologia_L0": {
+      "pct_ok": 87.0,
+      "pct_fail": 13.0,
+      "ok": 261,
+      "fail": 39,
+      "total": 300,
+      "resumen_linea": "Convertidas: 261 | Fallidas: 39"
+    },
+    "xpos_stripped_pipeline_real": {
+      "pct_ok": 87.0,
+      "pct_fail": 13.0,
+      "ok": 261,
+      "fail": 39,
+      "total": 300,
+      "resumen_linea": "Convertidas: 261 | Fallidas: 39"
+    },
+    "nota": "No se observó categoría 'dummy tree/plano' en el path real (convertir.py): NotHandled se propaga sin captura local hasta el except de nivel oración; la oración se pierde entera (hard fail), no se sustituye por un árbol plano. La spec técnica describe ese fallback pero no se materializa en este pipeline."
+  },
+  "kpi2_desacuerdo_periferia": {
+    "oraciones_con_periferia_etapa1": 185,
+    "de_esas_con_arbol_ud2rrg": 164,
+    "items_periferia_comparados": 278,
+    "acuerdos": 80,
+    "desacuerdos": 198,
+    "pct_acuerdo": 28.8,
+    "ejemplos_desacuerdo": [
+      {
+        "texto": "silencio",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "boca",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "de",
+        "tipo": "otro",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "vez",
+        "tipo": "temporal",
+        "deprel": "obl"
+      },
+      {
+        "texto": "marcará",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "remedia",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "criterio",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "hace",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "incompetencia",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "Ahora",
+        "tipo": "temporal",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "Mientras",
+        "tipo": "temporal",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "rueda",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "esperar",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "opiniones",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "establece",
+        "tipo": "otro",
+        "deprel": "advcl"
+      }
+    ],
+    "limitacion": "Comparación in-process (import directo de ud2rrg), no parseo del ASCII-art de DrawTree — ver docstring de kpi2_desacuerdo_periferia. Solo cubre oraciones donde ud2rrg (xpos stripped) produjo árbol Y donde Etapa 1 detectó periferia; con la tasa de fallos medida en KPI1, esta cobertura es parcial."
+  },
+  "kpi3_contadores": {
+    "doblado_clitico_pleno": 9,
+    "clitico_dativo_solo": 27,
+    "obl_arg_total": 126,
+    "periferia_por_tipo": {
+      "otro": 233,
+      "temporal": 30,
+      "locativo": 40,
+      "modo": 7
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+ "antes": {
+  "macro_f1": 0.8381014704544115,
+  "por_clase": {
+   "Accomplishment": 0.6363636363636364,
+   "Achievement": 0.8888888888888888,
+   "Active_Accomplishment": 0.7027027027027027,
+   "Activity": 0.9117647058823529,
+   "Semelfactive": 0.8888888888888888,
+   "State": 1.0
+  },
+  "por_rasgo": {
+   "tel": 0.9423076923076923,
+   "pun": 0.9315068493150684
+  }
+ },
+ "despues": {
+  "macro_f1": 0.8429105444030817,
+  "por_clase": {
+   "Accomplishment": 0.6363636363636364,
+   "Achievement": 0.8888888888888888,
+   "Active_Accomplishment": 0.717948717948718,
+   "Activity": 0.9253731343283582,
+   "Semelfactive": 0.8888888888888888,
+   "State": 1.0
+  },
+  "por_rasgo": {
+   "tel": 0.9433962264150944,
+   "pun": 0.9315068493150684
+  }
+ },
+ "ganadores": {
+  "bias_mask": 2.5,
+  "peso_p6_en_tel": 0.2,
+  "lambdas": {
+   "stat": 0.1,
+   "dyn": 0.0,
+   "tel": 0.3,
+   "pun": 0.0
+  }
+ },
+ "guardarrail_ok": true,
+ "w_fijo": 0.55
+}

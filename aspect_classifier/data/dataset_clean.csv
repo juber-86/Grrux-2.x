@@ -1,0 +1,188 @@
+lema,stat,dyn,tel,pun,clase,transitivo,pronominal,confianza,notas,hoja,clase_original,ambiguo_lexico
+saber,1,0.0,0,0,State,1,0,1.0,Estado cognitivo puro.,Grupo A — States y Activities,State,False
+creer,1,0.0,0,0,State,1,0,1.0,Estado cognitivo / doxástico.,Grupo A — States y Activities,State,False
+tener,1,0.0,0,0,State,1,0,1.0,Estado de posesión o pertenencia.,Grupo A — States y Activities,State,False
+contener,1,0.0,0,0,State,1,0,1.0,Estado relacional / espacial.,Grupo A — States y Activities,State,False
+pertenecer,1,0.0,0,0,State,0,0,1.0,"Estado relacional (intransitivo, rige preposición a).",Grupo A — States y Activities,State,False
+existir,1,0.0,0,0,State,0,0,1.0,Estado existencial.,Grupo A — States y Activities,State,False
+costar,1,0.0,0,0,State,0,0,1.0,Estado de valor o precio.,Grupo A — States y Activities,State,False
+necesitar,1,0.0,0,0,State,1,0,1.0,Estado de carencia psicológica o material.,Grupo A — States y Activities,State,False
+depender,1,0.0,0,0,State,0,0,1.0,Estado relacional (rige preposición de).,Grupo A — States y Activities,State,False
+ignorar,1,0.0,0,0,State,1,0,1.0,Estado cognitivo (desconocimiento).,Grupo A — States y Activities,State,False
+odiar,1,0.0,0,0,State,1,0,1.0,Estado emotivo / psicológico.,Grupo A — States y Activities,State,False
+amar,1,0.0,0,0,State,1,0,1.0,Estado emotivo / psicológico.,Grupo A — States y Activities,State,False
+recordar,1,0.5,0,0,State,1,0,0.5,Aislado como Estado aquí (retener en memoria). Puede ser Achievement (acordarse de pronto).,Grupo A — States y Activities,State,False
+olvidar,1,0.5,0,0,State,1,0,0.5,Aislado como Estado aquí (no saber). Frecuentemente Achievement (perder de pronto).,Grupo A — States y Activities,State,False
+correr,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento motriz.,Grupo A — States y Activities,Activity,False
+nadar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento motriz. (Aparecía duplicado en la imagen).,Grupo A — States y Activities,Activity,False
+hablar,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión (frecuentemente intransitivo).,Grupo A — States y Activities,Activity,False
+caminar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento motriz.,Grupo A — States y Activities,Activity,False
+respirar,0,1.0,0,0,Activity,0,0,1.0,Actividad fisiológica.,Grupo A — States y Activities,Activity,False
+trabajar,0,1.0,0,0,Activity,0,0,1.0,Actividad general durativa.,Grupo A — States y Activities,Activity,False
+estudiar,0,1.0,0,0,Activity,1,0,1.0,Actividad intelectual (puede o no llevar objeto).,Grupo A — States y Activities,Activity,False
+jugar,0,1.0,0,0,Activity,0,0,1.0,Actividad lúdica (típicamente intransitivo / preposicional).,Grupo A — States y Activities,Activity,False
+escuchar,0,1.0,0,0,Activity,1,0,1.0,Actividad perceptual dirigida.,Grupo A — States y Activities,Activity,False
+llorar,0,1.0,0,0,Activity,0,0,1.0,Actividad expresiva / fisiológica.,Grupo A — States y Activities,Activity,False
+reír,0,1.0,0,0,Activity,0,0,1.0,Actividad expresiva / fisiológica.,Grupo A — States y Activities,Activity,False
+volar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento.,Grupo A — States y Activities,Activity,False
+brillar,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión de luz (a veces conceptualizado como Estado).,Grupo A — States y Activities,Activity,False
+fluir,0,1.0,0,0,Activity,0,0,1.0,Actividad de movimiento continuo.,Grupo A — States y Activities,Activity,False
+dormir,0,1.0,0,0,Activity,0,0,1.0,Estado fisiológico que la gramática trata típicamente como Actividad por su dinamismo temporal.,Grupo A — States y Activities,Activity,False
+mirar,0,1.0,0,0,Activity,1,0,1.0,Actividad perceptual dirigida.,Grupo A — States y Activities,Activity,False
+buscar,0,1.0,0,0,Activity,1,0,1.0,Actividad de indagación.,Grupo A — States y Activities,Activity,False
+desear,1,0.0,0,0,State,1,0,1.0,Estado emotivo / volitivo.,Grupo A — States y Activities,State,False
+preferir,1,0.0,0,0,State,1,0,1.0,Estado volitivo.,Grupo A — States y Activities,State,False
+suponer,1,0.0,0,0,State,1,0,1.0,Estado cognitivo.,Grupo A — States y Activities,State,False
+entender,1,0.0,0,0,State,1,0,1.0,Estado cognitivo (a menudo resultativo).,Grupo A — States y Activities,State,False
+comprender,1,0.0,0,0,State,1,0,1.0,Estado cognitivo profundo.,Grupo A — States y Activities,State,False
+dudar,1,0.5,0,0,State,0,0,1.0,"Estado cognitivo; puede enmarcarse como proceso activo (""estar dudando"").",Grupo A — States y Activities,State,False
+temer,1,0.0,0,0,State,1,0,1.0,Estado emotivo.,Grupo A — States y Activities,State,False
+respetar,1,0.0,0,0,State,1,0,1.0,Estado emotivo / social.,Grupo A — States y Activities,State,False
+admirar,1,0.0,0,0,State,1,0,1.0,Estado emotivo.,Grupo A — States y Activities,State,False
+envidiar,1,0.0,0,0,State,1,0,1.0,Estado emotivo.,Grupo A — States y Activities,State,False
+merecer,1,0.0,0,0,State,1,0,1.0,Estado relacional / de valor.,Grupo A — States y Activities,State,False
+valer,1,0.0,0,0,State,0,0,1.0,"Estado de valor (el peso/precio actúa como argumento de medida, no objeto directo).",Grupo A — States y Activities,State,False
+bastar,1,0.0,0,0,State,0,0,1.0,Estado de suficiencia.,Grupo A — States y Activities,State,False
+sobrar,1,0.0,0,0,State,0,0,1.0,Estado de exceso.,Grupo A — States y Activities,State,False
+bailar,0,1.0,0,0,Activity,0,0,1.0,Actividad motriz (frecuentemente intransitiva en su base).,Grupo A — States y Activities,Activity,False
+cantar,0,1.0,0,0,Activity,1,0,1.0,Actividad de emisión sonora (admite objeto léxico).,Grupo A — States y Activities,Activity,False
+leer,0,1.0,0,0,Activity,1,0,1.0,Sin objeto delimitado se clasifica como Actividad cognitiva pura.,Grupo A — States y Activities,Activity,False
+escribir,0,1.0,0,0,Activity,1,0,1.0,Sin objeto delimitado se clasifica como Actividad de creación.,Grupo A — States y Activities,Activity,True
+escribir,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,True
+pedalear,0,1.0,0,0,Activity,0,0,1.0,Actividad motriz continuada.,Grupo A — States y Activities,Activity,False
+rodar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento o rotación.,Grupo A — States y Activities,Activity,False
+temblar,0,1.0,0,0,Activity,0,0,1.0,Actividad motriz / vibratoria biológica o física.,Grupo A — States y Activities,Activity,False
+vibrar,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión mecánica / física.,Grupo A — States y Activities,Activity,False
+ronronear,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión sonora.,Grupo A — States y Activities,Activity,False
+rugir,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión sonora.,Grupo A — States y Activities,Activity,False
+susurrar,0,1.0,0,0,Activity,1,0,1.0,Actividad de emisión comunicativa.,Grupo A — States y Activities,Activity,False
+gotear,0,1.0,0,0,Activity,0,0,1.0,Actividad de emisión de sustancia.,Grupo A — States y Activities,Activity,False
+escalar,0,1.0,0,0,Activity,1,0,1.0,Actividad de desplazamiento (se vuelve Accomplishment sólo si se le da una meta/objeto delimitado).,Grupo A — States y Activities,Activity,False
+navegar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento direccional.,Grupo A — States y Activities,Activity,False
+vagar,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento carente de rumbo.,Grupo A — States y Activities,Activity,False
+merodear,0,1.0,0,0,Activity,0,0,1.0,Actividad de desplazamiento / vigilancia.,Grupo A — States y Activities,Activity,False
+llegar,0,0.0,1,1,Achievement,1,1,2.0,"De manera figurada ""llegar a una conclusion",Grupo A — States y Activities,achivemet ,False
+morir,0,0.0,1,1,Achievement,0,1,2.0,"En expresiones como: ""Se murió de risa o de hambre "" sirve solo para engrandecer a las emociones ",Grupo A — States y Activities,achivemet ,False
+nacer,0,0.0,1,1,Achievement,0,0,3.0,,Grupo A — States y Activities,achivemet ,False
+encontrar,0,0.0,1,1,Achievement,1,1,3.0,"En expresiones figurativas como: "" se encontro a si mismo""",Grupo A — States y Activities,achivemet ,False
+perder,0,0.0,1,1,Achievement,1,1,2.0,"perdieron el partido = no ganar, perdió el interés = dejar de tener un emoción ",Grupo A — States y Activities,achivement ,False
+ganar,0,0.0,1,1,Achievement,1,0,2.0,,Grupo A — States y Activities,achivement ,False
+romper,0,0.0,1,1,Achievement,1,1,1.0,Paso 3A (curado Julian): CONFIRMADO JULIAN: Achievement; reemplaza la entrada Semelfactive de la semilla vía resolución por confianza,Grupo A — States y Activities,Achievement,False
+reconocer,0,0.0,1,1,Achievement,0,0,2.0,,Grupo A — States y Activities,achivement ,False
+descubrir,0,0.0,1,1,Achievement,1,0,2.0,,Grupo A — States y Activities,achivement ,False
+despertar,0,0.0,1,1,Achievement,0,1,2.0,"En oraciones como: ""la película despertó interés"" se utiliza de manera figurada para indicar que provoco algo ",Grupo A — States y Activities,achivement ,False
+caer,0,0.0,1,1,Achievement,1,1,3.0,"me cae bien = me agrada, mi cumpleaños cae en sabádo = coincidir, caí en la trampa = caer en algo ",Grupo A — States y Activities,achivement ,False
+salir,0,0.0,1,1,Achievement,0,0,3.0,"todo salió bien = resultado de algo, la noticia salió a la luz = difundirse, salirse de control = perder el control, salir de dudad = aclarar algo ",Grupo A — States y Activities,achivement ,False
+entrar,0,0.0,1,1,Achievement,0,0,2.0,"Entró a la Universidad = fue aceptado, la mesa no entra por la puerta= no cabe, entró en depresión = pasar por una situción,  entrar en razón = comenzar a actuar de manera sensata ",Grupo A — States y Activities,achivement ,False
+terminar,0,0.0,1,1,Achievement,1,0,3.0,Terminó viviendo en Sonora = resultado final.,Grupo A — States y Activities,achivemet ,False
+empezar,0,0.0,1,1,Achievement,1,0,3.0,,Grupo A — States y Activities,achivement ,False
+estallar,0,0.0,1,1,Achievement,0,0,2.0,Estalló de ira = emoción intensa,Grupo A — States y Activities,achivement ,False
+estornudar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactivo ,False
+toser,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactivo ,False
+parpadear,0,0.0,0,1,Semelfactive,0,0,,El viaje terminó en un parapadear  de ojos = ocurrió muy rápido ,Grupo A — States y Activities,semelfactivo ,False
+golpear,0,0.5,0,1,Semelfactive,1,0,3.0,La crisis golpeó la econonomía = afectar,Grupo A — States y Activities,semelfactivo ,False
+saltar,0,0.0,0,1,Semelfactive,1,0,2.0,"saltó de alegría = emoción intensa, me saltó =  pasar a alguien ",Grupo A — States y Activities,semelfactivo ,False
+tocar,0,0.0,0,1,Semelfactive,1,0,3.0,"tocar un instumento, me toca pagar = asignar un turno, me tocó vivir esta estapa = coincidir, tocarón el tema = hablar de algo ",Grupo A — States y Activities,semelfactivo ,False
+gritar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactivo ,False
+latir,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactivo ,False
+destellar,0,0.0,0,1,Semelfactive,0,0,2.0,En sus ojos había destellos de tristeza = aparición de emociones ,Grupo A — States y Activities,semelfactivo ,False
+pitar,0,0.0,0,1,Semelfactive,1,0,,,Grupo A — States y Activities,semelfactivo ,False
+disparar,0,0.5,0,1,Semelfactive,0,1,3.0,Se dispararón los precios = aumento rápido ,Grupo A — States y Activities,semelfactivo ,False
+picar,0,0.5,0,1,Semelfactive,0,0,3.0,"me pica la mano = comezón, ",Grupo A — States y Activities,semelfactivo ,False
+chocar,0,0.0,1,1,Achievement,0,0,3.0,"chocamos en la calle = encontrarse de frente, sus personalidades chocan = incompatibilidad, me choca esa actitud = molestar algo. ",Grupo A — States y Activities,achivement ,False
+aparecer,0,0.0,1,0,Accomplishment,0,1,3.0, | Paso 3 (Julian): Semelfactive->Accomplishment,Grupo A — States y Activities,Accomplishment,False
+desaparecer,0,0.0,1,0,Accomplishment,0,1,3.0, | Paso 3 (Julian): Semelfactive->Accomplishment,Grupo A — States y Activities,Accomplishment,False
+abrir,0,0.0,1,1,Achievement,1,1,2.0,"abrió un negoció = comenzar, abrió su corazón = permir que lo conozcan emocionalmente, abre los ojos = darse cuenta de las cosas.",Grupo A — States y Activities,achivement ,False
+cerrar,0,0.0,1,1,Achievement,1,1,2.0,"cerró el trato = terminar algo, cerro sus heridad emocionales = sanar emocionalmente, cierra  la boca = callarse, está cerrado de ojos = muy inocente.",Grupo A — States y Activities,achivement ,False
+aterrizar,0,0.0,1,1,Achievement,0,0,2.0,"aterrizar ideas = concretar ideas, ",Grupo A — States y Activities,achivement ,False
+despegar,0,0.0,1,1,Achievement,0,0,3.0,"el negoció despego = tener éxito,se despegó el zapato = soltarse algo adeherido  ",Grupo A — States y Activities,achivement ,False
+arrancar,0,0.0,1,1,Achievement,1,0,3.0,"el coche arrancó = poner en mracha el motor, el proyecto arrancó este mes = comenzar algo, se arrancó a corre = iniciar repentinamente.",Grupo A — States y Activities,achivement ,False
+detenerse,0,0.0,1,1,Achievement,0,1,3.0,se detuvo a pensar = reflexionar ,Grupo A — States y Activities,achivement ,False
+fallecer,0,0.0,0,0,Achievement,0,0,2.0,,Grupo A — States y Activities,achivement ,False
+vencer,0,0.0,1,1,Achievement,0,0,3.0,,Grupo A — States y Activities,achivement ,False
+fracasar,0,0.0,1,1,Achievement,0,0,2.0,,Grupo A — States y Activities,achivement ,False
+alcanzar,0,0.0,1,1,Achievement,0,0,2.0,,Grupo A — States y Activities,achivement ,False
+lograr,0,0.0,1,1,Achievement,0,1,2.0,,Grupo A — States y Activities,achivement ,False
+conseguir,0,0.0,1,1,Achievement,1,0,2.0,,Grupo A — States y Activities,achivement ,False
+obtener,0,0.0,1,1,Achievement,0,0,2.0,,Grupo A — States y Activities,achivement ,False
+recibir,0,0.0,1,1,Achievement,0,0,2.0,"Recibieron a los invitados = dar la bienvenida, ",Grupo A — States y Activities,achivement ,False
+ceder,0,0.0,1,1,Achievement,1,1,3.0,"Finalmente, cedió a la presión = rendirse ante algo o alguien ",Grupo A — States y Activities,achivement ,False
+rendirse,0,0.0,1,1,Achievement,0,1,2.0,,Grupo A — States y Activities,achivement ,False
+explotar,0,0.0,1,1,Achievement,0,0,2.0,"explotó de ira = emoción intensa, la empresa explota la mina= utilizar recursos naturales para beneficio propio ",Grupo A — States y Activities,achivement ,False
+hundirse,0,0.0,1,1,Achievement,0,0,2.0,se  hundió en tristeza = estado de fracaso/  negativo ,Grupo A — States y Activities,achivement ,False
+derrumbarse,0,0.0,1,1,Achievement,0,1,2.0,se derrumbó al saber la noticia = venirse abajo emocionalmente ,Grupo A — States y Activities,achivement ,False
+encenderse,0,0.0,1,1,Achievement,1,1,2.0,sus palabras encendirerón la discusión =  hacer surgir una emoción fuerte ,Grupo A — States y Activities,achivement ,False
+apagarse,0,0.0,1,1,Achievement,1,1,2.0,"la esperanza se apago = desparecer alguna emoción,",Grupo A — States y Activities,achivement ,False
+pestañear,0,0.0,0,1,Semelfactive,0,0,2.0,aceptó la oferta sin pestañear = acptar algo sin dudar ,Grupo A — States y Activities,semelfactive ,False
+bostezar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactive,False
+jadear,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfactive,False
+sacudir,0,0.5,0,1,Semelfactive,1,1,2.0,"la noticia sacudió al país = causar gran impacto emocional, se sacudió la tristeza = cambio de estado emocional ",Grupo A — States y Activities,semelfactive ,False
+agitar,0,0.5,0,1,Semelfactive,1,1,2.0,se agitó el ambiente político = provocar tensión o emción intensa ,Grupo A — States y Activities,semelfactive ,False
+chasquear,0,0.0,0,1,Semelfactive,0,1,2.0,,Grupo A — States y Activities,semelfative,False
+silbar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfative,False
+asentir,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfative,False
+aullar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfative,False
+maullar,0,0.0,0,1,Semelfactive,0,0,2.0,,Grupo A — States y Activities,semelfative,False
+rebotar,0,0.0,0,1,Semelfactive,1,0,2.0,la contraseña rebotó = fue rechazada ,Grupo A — States y Activities,semelfative,False
+construir,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+pintar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+hornear,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+tejer,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+diseñar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+componer,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+traducir,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+resolver,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+aprender,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante – puede usar “se” cuando el proceso enfatiza el auto-aprendizaje o cuando enfatiza el esfuerzo individual,Grupo A — States y Activities,Accomplishment,False
+memorizar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante,Grupo A — States y Activities,Accomplishment,False
+preparar,0,0.0,1,0,Accomplishment,1,0,1.0,"Proceso que culmina en un cambio de estado – puede ser actividad cuando enfatiza el proceso de preparación, por ejemplo para un evento deportivo",Grupo A — States y Activities,Accomplishment,False
+reparar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+limpiar,0,1.0,0,0,Activity,1,0,1.0,Actividad sin límite natural inherente – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Activity,False
+organizar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede ser actividad cuando enfatiza el proceso de organizar a un grupo de personas dandoles tareas especificas de un proceso,Grupo A — States y Activities,Accomplishment,False
+demoler,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+convencer,0,0.0,1,1,Achievement,1,0,1.0,Cambio de estado mental puntual,Grupo A — States y Activities,Achievement,False
+curar,0,0.5,1,0,Accomplishment,1,0,1.0,Cambio de estado que puede perfilarse como gradual – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+restaurar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+reformar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+elaborar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado,Grupo A — States y Activities,Accomplishment,False
+fabricar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+producir,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+desarrollar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+redactar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+calcular,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso culminante – puede ,Grupo A — States y Activities,Accomplishment,False
+planificar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+ensamblar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+fundar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+establecer,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+erradicar,0,0.0,1,0,Accomplishment,1,0,1.0,Proceso que culmina en un cambio de estado – puede volverse Active  Accomplishment si se agrega un objeto directo,Grupo A — States y Activities,Accomplishment,False
+sanar,0,0.5,1,0,Accomplishment,1,0,1.0,Cambio de estado que puede perfilarse como gradual,Grupo A — States y Activities,Accomplishment,False
+cicatrizar,0,0.5,1,0,Accomplishment,0,0,1.0,Cambio de estado inacusativo,Grupo A — States y Activities,Accomplishment,False
+madurar,0,0.5,1,0,Accomplishment,0,0,1.0,Cambio de estado inacusativo,Grupo A — States y Activities,Accomplishment,False
+fermentar,0,0.5,1,0,Accomplishment,0,0,1.0,Cambio de estado inacusativo,Grupo A — States y Activities,Accomplishment,False
+patear,0,0.5,0,1,Semelfactive,1,0,1.0,"Paso 3A (curado Julian): una patada; dyn=0.5 propuesto (agentivo), confirmar ±dynamic",Grupo A — States y Activities,Semelfactive,False
+aplaudir,0,1.0,0,0,Activity,0,0,1.0,Paso 3A (curado Julian): DECISIÓN JULIAN: Activity por defecto (acción continua repetitiva); una sola palmada sería Semelfactive,Grupo A — States y Activities,Activity,False
+guiñar,0,0.5,0,1,Semelfactive,1,0,1.0,Paso 3A (curado Julian): dyn=0.5 propuesto (agentivo),Grupo A — States y Activities,Semelfactive,False
+palmear,0,0.5,0,1,Semelfactive,1,0,1.0,Paso 3A (curado Julian): una palmada sobre superficie,Grupo A — States y Activities,Semelfactive,False
+tamborilear,0,0.5,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): CONFIRMADO JULIAN: Semelfactive,Grupo A — States y Activities,Semelfactive,False
+repicar,0,0.0,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): CONFIRMADO JULIAN: Semelfactive; sujeto inanimado,Grupo A — States y Activities,Semelfactive,False
+hipar,0,0.0,0,1,Semelfactive,0,0,1.0,"Paso 3A (curado Julian): un hipo; involuntario, dyn=0 (cf. estornudar en semilla)",Grupo A — States y Activities,Semelfactive,False
+suspirar,0,0.0,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): un suspiro; era OOV y es oración diana del pipeline,Grupo A — States y Activities,Semelfactive,False
+escupir,0,0.5,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): un escupitajo; agentivo,Grupo A — States y Activities,Semelfactive,False
+soplar,0,1.0,0,0,Activity,0,0,1.0,Paso 3A (curado Julian): DECISIÓN JULIAN: Activity,Grupo A — States y Activities,Activity,False
+pellizcar,0,0.5,0,1,Semelfactive,1,0,1.0,Paso 3A (curado Julian): un pellizco,Grupo A — States y Activities,Semelfactive,False
+vislumbrar,0,0.0,0,1,Semelfactive,1,0,1.0,"Paso 3A (curado Julian): CONFIRMADO JULIAN: Semelfactive (percepción puntual, glimpse)",Grupo A — States y Activities,Semelfactive,False
+crujir,0,0.0,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): un crujido; sujeto inanimado,Grupo A — States y Activities,Semelfactive,False
+chirriar,0,1.0,0,0,Activity,0,0,1.0,Paso 3A (curado Julian): DECISIÓN JULIAN: Activity,Grupo A — States y Activities,Activity,False
+cabecear,0,0.5,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): una cabezada (asentimiento/sueño); en fútbol sería otra acepción,Grupo A — States y Activities,Semelfactive,False
+resoplar,0,0.0,0,1,Semelfactive,0,0,1.0,Paso 3A (curado Julian): un resoplido,Grupo A — States y Activities,Semelfactive,False
+eructar,0,0.0,0,1,Semelfactive,0,0,1.0,"Paso 3A (curado Julian): involuntario, dyn=0",Grupo A — States y Activities,Semelfactive,False
+derretirse,0,0.5,1,0,Accomplishment,0,1,1.0,"Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual que hoy se sobredispara como Semelfactive (error conocido del pipeline); dyn=0.5 sigue convención semilla de graduales (cf. madurar, curar)",Grupo A — States y Activities,Accomplishment,False
+congelarse,0,0.5,1,0,Accomplishment,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual,Grupo A — States y Activities,Accomplishment,False
+evaporarse,0,0.5,1,0,Accomplishment,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual,Grupo A — States y Activities,Accomplishment,False
+oxidarse,0,0.5,1,0,Accomplishment,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual lento,Grupo A — States y Activities,Accomplishment,False
+disolverse,0,0.5,1,0,Accomplishment,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual,Grupo A — States y Activities,Accomplishment,False
+marchitarse,0,0.5,1,0,Accomplishment,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado gradual,Grupo A — States y Activities,Accomplishment,False
+agrietarse,0,0.0,1,1,Achievement,0,1,1.0,Paso 3A (curado Julian): CONTRASTE; CONFIRMADO JULIAN: Achievement,Grupo A — States y Activities,Achievement,False
+quebrarse,0,0.0,1,1,Achievement,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado puntual con resultado (≠ Semelfactive sin cambio),Grupo A — States y Activities,Achievement,False
+desplomarse,0,0.0,1,1,Achievement,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: colapso puntual,Grupo A — States y Activities,Achievement,False
+volcarse,0,0.0,1,1,Achievement,0,1,1.0,Paso 3A (curado Julian): CONTRASTE: cambio de estado puntual,Grupo A — States y Activities,Achievement,False
+reventar,0,0.0,1,1,Achievement,0,0,1.0,Paso 3A (curado Julian): CONTRASTE: explosión con resultado (cf. estallar ya en semilla como Achievement),Grupo A — States y Activities,Achievement,False

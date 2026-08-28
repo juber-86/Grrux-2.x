@@ -1,0 +1,36 @@
+# Entornos virtuales (se reconstruyen con pip; nunca al repo)
+/venv/
+/new_vn/
+/.deps/
+
+# Treebanks externos: no se redistribuyen con GRRux.
+/treebanks/
+
+# Bytecode de Python
+__pycache__/
+*.pyc
+
+# Salidas regenerables de GRRux
+# (el conllu temporal de la CLI en la raíz; el de aspect_classifier/data/ es
+# un FIXTURE de tests y SÍ va al repo)
+/input_estudiante.conllu
+analisis_*.txt
+sesion_*.txt
+batch_*.txt
+/grrux-gui.log
+
+# Locks de LibreOffice (archivo curado abierto en Calc)
+.~lock.*#
+
+# Config local de herramientas
+/.claude/
+
+# Cache local de Stanza (regenerable)
+/.stanza_cache/
+
+# Carpeta transitoria para archivos que la sesión remota no puede unlink
+/_to_delete/
+
+# Logs append-only de análisis (no versionados; ver ESTADO §5)
+/aspect_classifier/data/ditransitivos_candidatos.csv
+/aspect_classifier/data/linking_discrepancias.csv

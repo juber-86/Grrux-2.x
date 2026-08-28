@@ -1,0 +1,229 @@
+{
+  "fecha": "2026-07-10",
+  "generado": "2026-07-10T16:11:48",
+  "treebank": "pud-test",
+  "muestra_n": 1000,
+  "verificacion_obl_arg_pre_fix": {
+    "entrada": "Le compró un regalo a María",
+    "core": [
+      [
+        "regalo",
+        "obj",
+        "Undergoer"
+      ],
+      [
+        "María",
+        "obl:arg",
+        "NMR(dativo)"
+      ]
+    ],
+    "periferia": [],
+    "actor_implicito": {
+      "persona": "3",
+      "numero": "sg",
+      "etiqueta": "3sg"
+    },
+    "notas_mismatch": [
+      "clítico dativo 'Le' → agx (doblado, argumento en el sintagma pleno)",
+      "pro-drop: actor implícito 3sg (de la morfología verbal)"
+    ],
+    "conclusion": "obl:arg NO está en CORE_DEPRELS ni en PERIFERIA_DEPRELS (que solo reconoce el string exacto 'obl' o el set fijo {obl, advmod, obl:tmod, nmod:tmod, obl:mod, advcl}): 'Le' y 'María' NO aparecen ni en core ni en periferia — se pierden por completo. Efecto secundario: al no detectar sujeto, dispara pro-drop (actor_implicito=3sg), que en este caso es casualmente correcto pero por la razón equivocada."
+  },
+  "kpi1_tasa_fallos_ud2rrg": {
+    "xpos_intacto_metodologia_L0": {
+      "pct_ok": 94.1,
+      "pct_fail": 5.9,
+      "ok": 941,
+      "fail": 59,
+      "total": 1000,
+      "resumen_linea": "Convertidas: 941 | Fallidas: 59"
+    },
+    "xpos_stripped_pipeline_real": {
+      "pct_ok": 94.1,
+      "pct_fail": 5.9,
+      "ok": 941,
+      "fail": 59,
+      "total": 1000,
+      "resumen_linea": "Convertidas: 941 | Fallidas: 59"
+    },
+    "nota": "No se observó categoría 'dummy tree/plano' en el path real (convertir.py): NotHandled se propaga sin captura local hasta el except de nivel oración; la oración se pierde entera (hard fail), no se sustituye por un árbol plano. La spec técnica describe ese fallback pero no se materializa en este pipeline."
+  },
+  "kpi2_desacuerdo_periferia_sin_misc": {
+    "oraciones_con_periferia_etapa1": 691,
+    "de_esas_con_arbol_ud2rrg": 639,
+    "items_periferia_comparados": 1009,
+    "acuerdos": 228,
+    "desacuerdos": 781,
+    "pct_acuerdo": 22.6,
+    "ejemplos_desacuerdo": [
+      {
+        "texto": "haya",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "$",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "principios",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "Club",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "aplicando",
+        "tipo": "otro",
+        "deprel": "advcl"
+      },
+      {
+        "texto": "media",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "curso",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "lado",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "competición",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "policía",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "juegos",
+        "tipo": "locativo",
+        "deprel": "obl"
+      },
+      {
+        "texto": "Hoy",
+        "tipo": "temporal",
+        "deprel": "advmod"
+      },
+      {
+        "texto": "países",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "intento",
+        "tipo": "otro",
+        "deprel": "obl"
+      },
+      {
+        "texto": "raro",
+        "tipo": "otro",
+        "deprel": "advcl"
+      }
+    ],
+    "limitacion": "Comparación in-process (import directo de ud2rrg), no parseo del ASCII-art de DrawTree — ver docstring de kpi2_desacuerdo_periferia. Solo cubre oraciones donde ud2rrg (xpos stripped) produjo árbol Y donde Etapa 1 detectó periferia; con la tasa de fallos medida en KPI1, esta cobertura es parcial."
+  },
+  "kpi3_contadores": {
+    "doblado_clitico_pleno": 16,
+    "clitico_dativo_solo": 32,
+    "obl_arg_total": 53,
+    "periferia_por_tipo": {
+      "otro": 627,
+      "modo": 68,
+      "locativo": 263,
+      "temporal": 138
+    }
+  },
+  "kpi4_pipeline_hibrido_l4": {
+    "muestra_n": 1000,
+    "fallos_mapper": 0,
+    "conversion": {
+      "ok": 941,
+      "total": 1000,
+      "pct_ok": 94.1
+    },
+    "acuerdo_periferia_por_estrato": {
+      "items_periferia": 986,
+      "ok_estrato": 650,
+      "pct_acuerdo": 65.9
+    },
+    "tasa_completeness": {
+      "con_arbol": 941,
+      "ok": 582,
+      "pct_ok": 61.8
+    },
+    "ejemplos_completeness_advertencia": [
+      {
+        "texto": "No me complace tener que presionar les , pero el futuro de la república recae en ustedes , dijo a el público que estaba reunido en un campo de deportes en la Universidad de Carolina de el Norte .",
+        "resumen": "Completeness: ⚠ x1↔NP x2 (\"tener\") sin constituyente en el árbol · \"no\"↔PERI · nodo AGX en el árbol pero sin agx en la LS"
+      },
+      {
+        "texto": "A principios de octubre , el equipo de transición utilizó el mismo lugar para reunir se con miembros de grupos de presión de el sector tecnológico e invitó a representantes de Uber , de la Asociación Cinematográfica de Estados Unidos y de la Asociación de Consumidores de tecnología , entre otros .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP x3 (\"reunir\") sin constituyente en el árbol · \"principio\": periferia sin wrapper, no verificable"
+      },
+      {
+        "texto": "La reunión se programó inicialmente en el Metropolitan Club de Washington ; Este club privado se encuentra a tan solo unas manzanas en H Street .",
+        "resumen": "Completeness: ⚠ x1↔NP · inicialmente'↔PERI@CORE · be-in'↔PERI@CORE · nodo AGX en el árbol pero sin agx en la LS"
+      },
+      {
+        "texto": "Por ejemplo , en lugar de enseñar el método científico como una unidad aparte , los estudiantes aprenden el contenido científico aplicando lo .",
+        "resumen": "Completeness: ⚠ x1 (\"enseñar\") sin constituyente en el árbol x2↔NP x3↔NP · \"aplicar\": periferia sin wrapper, no verificable"
+      },
+      {
+        "texto": "Por otro lado , la estación de metro NoMa , que fue inaugurada en 2004 y se construyó sobre la línea existente , costó 103,7 millones de dólares .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP · \"lado\": periferia sin wrapper, no verificable · nodo AGX en el árbol pero sin agx en la LS"
+      },
+      {
+        "texto": "El estudio de viabilidad calcula que los pasajeros tardarían unos cuatro minutos en cruzar el río Potomac en la góndola .",
+        "resumen": "Completeness: ⚠ x1↔NP x2 (\"tardarían\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "Un testigo contó a la policía que la víctima había atacado a el sospechoso en abril .",
+        "resumen": "Completeness: ⚠ x1↔NP x2 (\"atacado\") sin constituyente en el árbol · \"policía\"↔PERI"
+      },
+      {
+        "texto": "Se pueden establecer paralelismos entre los juegos y nuestras vidas cotidianas .",
+        "resumen": "Completeness: ⚠ x1↔NP · be-between'↔PERI@CORE · nodo AGX en el árbol pero sin agx en la LS"
+      },
+      {
+        "texto": "Ese porcentaje ha ido aumentando constantemente durante los años — únicamente votó el 11 por ciento de el electorado antes de el día de las elecciones en 1996 , según la Oficina de el Censo — y parece que volverá a aumentar de nuevo este año .",
+        "resumen": "Completeness: ⚠ x1(morf) x2 (\"aumentando\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "Hoy en día Khanzir puede parecer un madero solitario , pero no está siempre solo .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP · today': se esperaba PERI@CLAUSE (sin rama -PERI en el árbol)"
+      },
+      {
+        "texto": "Hemos pedido a otros países que nos ayuden a poblar el zoo con diferentes especies de animales , entre las que se incluye un cerdo , dijo Saqib .",
+        "resumen": "Completeness: ⚠ x1(morf) · \"país\"↔PERI · nodo AGX en el árbol pero sin agx en la LS"
+      },
+      {
+        "texto": "El señor Panvalkar dijo que llegó un momento en el que sintió que debía abandonar el edificio .",
+        "resumen": "Completeness: ⚠ x1↔NP x2 (\"llegó\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "Voy a ir a la cárcel de todas formas ; espero que mereciese la pena .",
+        "resumen": "Completeness: ⚠ x1(morf) x2 (\"ir\") sin constituyente en el árbol"
+      },
+      {
+        "texto": "Pero empezó a llorar una de las mujeres yazidíes ; después , una de sus amigas .",
+        "resumen": "Completeness: ⚠ x1 (\"llorar\") sin constituyente en el árbol x2↔NP"
+      },
+      {
+        "texto": "Osborne firmó un contrato con una agencia de oradores estadounidense tras ser despedido en julio .",
+        "resumen": "Completeness: ⚠ x1↔NP x2↔NP x3 (\"despedido\") sin constituyente en el árbol"
+      }
+    ]
+  }
+}
